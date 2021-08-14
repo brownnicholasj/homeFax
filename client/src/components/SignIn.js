@@ -49,6 +49,12 @@ const useStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
+	modal: {
+		width: '50%',
+		justifyContent: 'center',
+		backgroundColor: theme.palette.background.paper,
+		borderRadius: '1rem',
+	},
 }));
 
 export default function SignInSide() {
@@ -62,6 +68,12 @@ export default function SignInSide() {
 	};
 
 	const [open, setOpen] = useState(false);
+
+	const modal = (
+		<div className={classes.modal}>
+			<SignUp></SignUp>
+		</div>
+	);
 
 	return (
 		<Grid container component="main" className={classes.root}>
@@ -125,9 +137,13 @@ export default function SignInSide() {
 								onClose={handleClose}
 								aria-labelledby="simple-modal-title"
 								aria-describedby="simple-modal-description"
-								BackdropComponent={classes.submit}
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
 							>
-								<SignUp></SignUp>
+								{modal}
 							</Modal>
 						</Grid>
 					</Grid>
