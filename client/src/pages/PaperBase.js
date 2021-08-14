@@ -12,6 +12,8 @@ import Link from '@material-ui/core/Link';
 import Navigator from '../components/Navigator';
 import Content from '../components/Content';
 import Header from '../components/Header';
+import { useState } from 'react';
+import SignInSide from '../components/SignIn';
 
 function Copyright() {
 	return (
@@ -173,6 +175,8 @@ function Paperbase(props) {
 		setMobileOpen(!mobileOpen);
 	};
 
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<div className={classes.root}>
@@ -193,7 +197,7 @@ function Paperbase(props) {
 				<div className={classes.app}>
 					<Header onDrawerToggle={handleDrawerToggle} />
 					<main className={classes.main}>
-						<Content />
+						{isLoggedIn ? <Content /> : <SignInSide></SignInSide>}
 					</main>
 					<footer className={classes.footer}>
 						<Copyright />
