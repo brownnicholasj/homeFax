@@ -53,16 +53,25 @@ export const QUERY_USER = gql`
     user {
       firstName
       lastName
-      orders {
+      homes {
         _id
-        purchaseDate
-        products {
-          _id
+        address {
+          street1
+          street2
+          city
+          state
+          zip
+        }
+        areas {
           name
-          description
-          price
-          quantity
-          image
+          icon
+          attributes {
+            type
+            detail {
+              key
+              value
+            }
+          }
         }
       }
     }
