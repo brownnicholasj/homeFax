@@ -23,11 +23,44 @@ const typeDefs = gql`
   }
 
   type User {
-    _id: ID
-    firstName: String
-    lastName: String
-    email: String
+    _id: ID!
+    firstName: String!
+    lastName: String!
+    dob: String!
+    email: String!
     orders: [Order]
+    homes: [Home]
+  }
+
+  type Home {
+    _id: ID!
+    address: Address
+    areas: [Area]
+  }
+
+  type Address {
+    _id: ID!
+    street1: String!
+    street2: String
+    city: String!
+    state: String!
+    zip: String!
+  }
+
+  type Area {
+    name: String!
+    icon: String
+    attributes: [Attribute]
+  }
+
+  type Attribute {
+    type: String!
+    detail: [Detail]
+  }
+  
+  type Detail {
+    key: String!
+    value: String!
   }
 
   type Checkout {
@@ -40,6 +73,7 @@ const typeDefs = gql`
   }
 
   type Query {
+    home(_id: ID!): Home
     categories: [Category]
     products(category: ID, name: String): [Product]
     product(_id: ID!): Product

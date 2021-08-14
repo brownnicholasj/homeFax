@@ -8,6 +8,9 @@ const resolvers = {
     categories: async () => {
       return await Category.find();
     },
+    home: async (parent, { _id }) => {
+      return await Category.findById(_id);
+    },
     products: async (parent, { category, name }) => {
       const params = {};
 

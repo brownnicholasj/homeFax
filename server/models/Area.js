@@ -13,7 +13,7 @@ const areaSchema = new Schema({
     type: String,
     trim: true
   },
-  attributes: attributeSchema,
+  attributes: [attributeSchema],
 });
 
 

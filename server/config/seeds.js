@@ -1,5 +1,5 @@
 const db = require('./connection');
-const { User, Product, Category } = require('../models');
+const { User, Product, Category, Home } = require('../models');
 
 db.once('open', async () => {
   await Category.deleteMany();
@@ -128,26 +128,75 @@ db.once('open', async () => {
 
   console.log('products seeded');
 
+  await Home.deleteMany();
+
+  const homes = await Home.insertMany([
+    {
+      address: {
+        street1: '6137 sw 38th ter',
+        city: 'Topeka',
+        state: 'KS',
+        zip: '66610'
+      },
+      areas: [
+        {
+          name: 'kitchen',
+          icon: '',
+          attributes: [
+            {
+              type: 'Paint',
+              detail: [
+                {
+                  key: 'color',
+                  value: 'periwinkle'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: 'bathroom',
+          icon: '',
+          attributes: [
+            {
+              type: 'floor',
+              detail: [
+                {
+                  key: 'model number',
+                  value: '#11324'
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+  ]);
+
+  console.log('products seeded');
+
   await User.deleteMany();
 
   await User.create({
     firstName: 'Pamela',
     lastName: 'Washington',
+    dob: '1980-05-19',
     email: 'pamela@testmail.com',
     password: 'password12345',
     orders: [
       {
         products: [products[0]._id, products[0]._id, products[1]._id]
       }
-    ]
+    ],
+    homes: []
   });
 
-  await User.create({
-    firstName: 'Elijah',
-    lastName: 'Holt',
-    email: 'eholt@testmail.com',
-    password: 'password12345'
-  });
+  // await User.create({
+  //   firstName: 'Elijah',
+  //   lastName: 'Holt',
+  //   email: 'eholt@testmail.com',
+  //   password: 'password12345'
+  // });
 
   console.log('users seeded');
 

@@ -31,7 +31,12 @@ const userSchema = new Schema({
     minlength: 5
   },
   orders: [Order.schema],
-  homes: [Home.schema]
+  homes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Home'
+    }
+  ]
 });
 
 // set up pre-save middleware to create password
