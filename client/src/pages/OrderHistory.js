@@ -6,12 +6,13 @@ import { QUERY_USER } from '../utils/queries';
 
 function OrderHistory() {
   const { data } = useQuery(QUERY_USER);
+  console.log(data)
   let user;
 
   if (data) {
     user = data.user;
   }
-
+  console.log(user)
   return (
     <>
       <div className="container my-1">
@@ -20,26 +21,38 @@ function OrderHistory() {
         {user ? (
           <>
             <h2>
-              Order History for {user.firstName} {user.lastName}
+              Homes belonging to {user.firstName} {user.lastName}
             </h2>
-            {user.orders.map((order) => (
-              <div key={order._id} className="my-2">
-                <h3>
-                  {new Date(parseInt(order.purchaseDate)).toLocaleDateString()}
-                </h3>
+            {user.homes.map((home) => (
+              <div key={home._id} className="my-2">
                 <div className="flex-row">
-                  {order.products.map(({ _id, image, name, price }, index) => (
-                    <div key={index} className="card px-1 py-1">
-                      <Link to={`/products/${_id}`}>
-                        <img alt={name} src={`/images/${image}`} />
-                        <p>{name}</p>
-                      </Link>
-                      <div>
-                        <span>${price}</span>
-                      </div>
-                    </div>
-                  ))}
+                  <ul>
+                    <li>{home.address.street1}</li>
+                    {home.address.street2 ? (
+                      <li>{home.address.street2}</li>
+                    ) : null}
+                    <li>{home.address.city}</li>
+                    <li>{home.address.state}</li>
+                    <li>{home.address.zip}</li>
+                    <li>Areas:</li>
+                    {home.areas.map(area => (
+                      <ul>
+                        <li>{area.name}</li>
+                        {area.attributes.map(att => (
+                          <ul>
+                            <li>{att.type}</li>
+                            {att.detail.map(detail => (
+                              <ul>
+                                <li><label>{detail.key}: </label><span>{detail.value}</span></li>
+                              </ul>
+                            ))}
+                          </ul>
+                        ))}
+                      </ul>
+                    ))}
+                  </ul>
                 </div>
+
               </div>
             ))}
           </>

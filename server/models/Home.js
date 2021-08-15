@@ -7,7 +7,7 @@ const { Schema } = mongoose;
 
 const homeSchema = new Schema({
   address: addressSchema,
-  area: areaSchema,
+  areas: [areaSchema],
 });
 
 const Home = mongoose.model('Home', homeSchema);

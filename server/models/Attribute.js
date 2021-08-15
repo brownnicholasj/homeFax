@@ -9,7 +9,7 @@ const attributeSchema = new Schema({
     required: true,
     trim: true
   },
-  detail: detailSchema,
+  detail: [detailSchema],
 });
 
 

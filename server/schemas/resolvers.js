@@ -8,6 +8,9 @@ const resolvers = {
     categories: async () => {
       return await Category.find();
     },
+    home: async (parent, { _id }) => {
+      return await Category.findById(_id);
+    },
     products: async (parent, { category, name }) => {
       const params = {};
 
@@ -31,7 +34,8 @@ const resolvers = {
         const user = await User.findById(context.user._id).populate({
           path: 'orders.products',
           populate: 'category'
-        });
+        }
+        ).populate('homes');
 
         user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
