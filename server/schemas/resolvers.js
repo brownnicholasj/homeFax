@@ -32,7 +32,6 @@ const resolvers = {
     user: async (parent, args, context) => {
       if (context.user) {
         const user = await User.findById(context.user._id).populate('homes');
-        console.log(user);
         user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
         return user;
@@ -43,7 +42,6 @@ const resolvers = {
     home: async (parent, { homeId }) => {
       console.log(homeId)
       const home = await Home.findById(homeId);
-      console.log(home);
 
       return home;
     },
@@ -108,6 +106,44 @@ const resolvers = {
       const home = await Home.create(args);
       return home;
 
+    },
+    addArea: async (parent, { homeId, name, icon }) => {
+      const home = await Home.findByIdAndUpdate(homeId, {
+        $addToSet: { areas: { name, icon } },
+      }, { new: true });
+      return home;
+
+    },
+    addAttribute: async (parent, { areaId, type }) => {
+      const home = await Home.findOne({ 'areas._id': areaId });
+      const areas = home.areas.map((area) => {
+        if (area._id == areaId) {
+          area.attributes.push({ type: type })
+        }
+        return area;
+      });
+      const updatedHome = await Home.findOneAndUpdate({ 'areas._id': areaId }, {
+        'areas': areas
+      }, { new: true });
+      return updatedHome;
+    },
+    addDetail: async (parent, { attributeId, key, value }) => {
+      const home = await Home.findOne({ 'areas.attributes._id': attributeId });
+      console.log(home);
+      const areas = home.areas.map((area) => {
+        const attributes = area.attributes.map((attribute) => {
+          if (attribute._id == attributeId) {
+            attribute.detail.push({ key, value });
+          };
+          return attribute;
+        });
+        return area;
+      });
+      const updatedHome = await Home.findOneAndUpdate({ 'areas.attributes._id': attributeId }, {
+        'areas': areas
+      }, { new: true });
+
+      return updatedHome;
     },
     transferHome: async (parent, args, context) => {
       if (context.user) {
