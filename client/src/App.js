@@ -34,6 +34,14 @@ function App() {
 			<Router>
 				<Switch>
 					<Route exact path="/" component={PaperBase} />
+					<Route exact path="/home" component={PaperBase} />
+					<Route exact path="/settings" component={PaperBase} />
+					<Route exact path="/myhomes" component={PaperBase} />
+					<Route exact path="/misc" component={PaperBase} />
+					<Route exact path="/profile" component={PaperBase} />
+					<Route exact path="/friends" component={PaperBase} />
+					<Route exact path="/zillow" component={PaperBase} />
+					<Route exact path="/twitter" component={PaperBase} />
 				</Switch>
 			</Router>
 		</ApolloProvider>

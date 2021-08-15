@@ -12,34 +12,13 @@ import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
 import DnsRoundedIcon from '@material-ui/icons/DnsRounded';
 import PermMediaOutlinedIcon from '@material-ui/icons/PhotoSizeSelectActual';
-import PublicIcon from '@material-ui/icons/Public';
-import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
-
-const categories = [
-	{
-		id: 'Develop',
-		children: [
-			{ id: 'Authentication', icon: <PeopleIcon />, active: true },
-			{ id: 'Database', icon: <DnsRoundedIcon /> },
-			{ id: 'Storage', icon: <PermMediaOutlinedIcon /> },
-			{ id: 'Hosting', icon: <PublicIcon /> },
-			{ id: 'Functions', icon: <SettingsEthernetIcon /> },
-			{ id: 'ML Kit', icon: <SettingsInputComponentIcon /> },
-		],
-	},
-	{
-		id: 'Quality',
-		children: [
-			{ id: 'Analytics', icon: <SettingsIcon /> },
-			{ id: 'Performance', icon: <TimerIcon /> },
-			{ id: 'Test Lab', icon: <PhonelinkSetupIcon /> },
-		],
-	},
-];
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+const token = null;
 
 const styles = (theme) => ({
 	categoryHeader: {
@@ -81,9 +60,55 @@ const styles = (theme) => ({
 		marginTop: theme.spacing(2),
 	},
 });
+const categories = [
+	{
+		id: 'Home Section',
+		children: [
+			{
+				id: 'Settings',
+				icon: <DnsRoundedIcon />,
+				path: '/settings',
+				active: false,
+			},
+			{
+				id: 'My Homes',
+				icon: <PermMediaOutlinedIcon />,
+				path: '/myhomes',
+				active: false,
+			},
+			{
+				id: 'Misc',
+				icon: <SettingsInputComponentIcon />,
+				path: '/misc',
+				active: false,
+			},
+			{
+				id: 'Profile',
+				icon: <PeopleIcon />,
+				path: `/${token?.me}`,
+				active: false,
+			},
+		],
+	},
+	{
+		id: 'Social',
+		children: [
+			{ id: 'Friends', icon: <SettingsIcon />, path: '/friends', active: false },
+			{ id: 'Zillow', icon: <TimerIcon />, path: '/zillow', active: false },
+			{
+				id: 'Twitter',
+				icon: <PhonelinkSetupIcon />,
+				path: '/twitter',
+				active: false,
+			},
+		],
+	},
+];
 
 function Navigator(props) {
 	const { classes, ...other } = props;
+
+	const isActive = (value) => window.location.pathname === value;
 
 	return (
 		<Drawer variant="permanent" {...other}>
@@ -91,19 +116,15 @@ function Navigator(props) {
 				<ListItem
 					className={clsx(classes.firebase, classes.item, classes.itemCategory)}
 				>
-					Paperbase
-				</ListItem>
-				<ListItem className={clsx(classes.item, classes.itemCategory)}>
 					<ListItemIcon className={classes.itemIcon}>
-						<HomeIcon />
+						<Link
+							to={'/home'}
+							style={{ color: 'inherit', textDecoration: 'inherit' }}
+						>
+							<HomeIcon></HomeIcon>
+						</Link>
 					</ListItemIcon>
-					<ListItemText
-						classes={{
-							primary: classes.itemPrimary,
-						}}
-					>
-						Project Overview
-					</ListItemText>
+					HomeFax
 				</ListItem>
 				{categories.map(({ id, children }) => (
 					<React.Fragment key={id}>
@@ -116,11 +137,13 @@ function Navigator(props) {
 								{id}
 							</ListItemText>
 						</ListItem>
-						{children.map(({ id: childId, icon, active }) => (
+						{children.map(({ id: childId, icon, active, path }, index) => (
 							<ListItem
 								key={childId}
+								component={Link}
+								to={path}
 								button
-								className={clsx(classes.item, active && classes.itemActiveItem)}
+								className={clsx(classes.item, isActive(path) && classes.itemActiveItem)}
 							>
 								<ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
 								<ListItemText
