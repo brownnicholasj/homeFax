@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function SignInSide() {
+export default function SignIn() {
 	const classes = useStyles();
 	const handleOpen = () => {
 		setOpen(true);
@@ -76,7 +76,7 @@ export default function SignInSide() {
 	);
 
 	return (
-		<Grid container component="main" className={classes.root}>
+		<div>
 			<CssBaseline />
 
 			<div className={classes.paper}>
@@ -152,6 +152,6 @@ export default function SignInSide() {
 					</Box>
 				</form>
 			</div>
-		</Grid>
+		</div>
 	);
 }

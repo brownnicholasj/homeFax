@@ -13,8 +13,8 @@ import Navigator from '../components/Navigator';
 import Content from '../components/Content';
 import Header from '../components/Header';
 import { useState } from 'react';
-import SignInSide from '../components/SignIn';
-import { Backdrop } from '@material-ui/core';
+import SignIn from '../components/SignIn';
+import { Grid } from '@material-ui/core';
 
 function Copyright() {
 	return (
@@ -198,19 +198,24 @@ function Paperbase(props) {
 				<div className={classes.app}>
 					<Header onDrawerToggle={handleDrawerToggle} />
 					<main className={classes.main}>
-						{isLoggedIn ? (
-							<Content />
-						) : (
-							<div
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-								}}
-							>
-								<SignInSide></SignInSide>
-							</div>
-						)}
+						<Grid container alignContent="center" justifyContent="center">
+							<Grid item xs={12}>
+								{isLoggedIn ? (
+									<Content />
+								) : (
+									<div
+										style={{
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+										}}
+									>
+										{/* <h1>test</h1> */}
+										<SignIn align="center"></SignIn>
+									</div>
+								)}
+							</Grid>
+						</Grid>
 					</main>
 					<footer className={classes.footer}>
 						<Copyright />
