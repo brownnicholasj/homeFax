@@ -29,6 +29,21 @@ export const ADD_ORDER = gql`
   }
 `;
 
+export const ADD_HOME = gql`
+mutation Addhome($address: HomeAddress!) {
+  addHome(address: $address) {
+    _id
+    address {
+      street1
+      street2
+      city
+      state
+      zip
+    }
+  }
+}
+`
+
 export const ADD_USER = gql`
   mutation addUser(
     $firstName: String!

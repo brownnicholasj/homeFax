@@ -34,7 +34,7 @@ const typeDefs = gql`
 
   type Home {
     _id: ID!
-    address: Address
+    address: Address!
     areas: [Area]
   }
 
@@ -47,18 +47,29 @@ const typeDefs = gql`
     zip: String!
   }
 
+  input HomeAddress {
+    street1: String!
+    street2: String
+    city: String!
+    state: String!
+    zip: String!
+  }
+
   type Area {
+    _id: ID!
     name: String!
     icon: String
     attributes: [Attribute]
   }
 
   type Attribute {
+    _id: ID!
     type: String!
     detail: [Detail]
   }
   
   type Detail {
+    _id: ID!
     key: String!
     value: String!
   }
@@ -73,21 +84,18 @@ const typeDefs = gql`
   }
 
   type Query {
-    home(_id: ID!): Home
-    categories: [Category]
-    products(category: ID, name: String): [Product]
-    product(_id: ID!): Product
     user: User
-    order(_id: ID!): Order
-    checkout(products: [ID]!): Checkout
+    home(homeId: ID!): Home
   }
 
   type Mutation {
     addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
+    addHome(address: HomeAddress!): Home
     addOrder(products: [ID]!): Order
     updateUser(firstName: String, lastName: String, email: String, password: String): User
     updateProduct(_id: ID!, quantity: Int!): Product
     login(email: String!, password: String!): Auth
+    transferHome(transferer: [ID], receiver: [ID], home: ID!): [User]
   }
 `;
 

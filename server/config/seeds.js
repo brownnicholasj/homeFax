@@ -155,6 +155,28 @@ db.once('open', async () => {
                   value: 'May of 2019'
                 }
               ]
+            },
+            {
+              type: 'Stove',
+              detail: [
+                {
+                  key: 'Model',
+                  value: 'BA1100N'
+                },
+              ]
+            },
+            {
+              type: 'Refridgerator',
+              detail: [
+                {
+                  key: 'Model',
+                  value: 'ID10T'
+                },
+                {
+                  key: 'Water Filter',
+                  value: '11223344'
+                }
+              ]
             }
           ]
         },
