@@ -9,6 +9,14 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import PaperBase from './pages/PaperBase.js';
 import Content from './components/Content';
+import Home from './pages/Home';
+import Settings from './pages/Settings.js';
+import Homes from './pages/Homes.js';
+import Misc from './pages/Misc.js';
+import Profile from './pages/Profile.js';
+import Friends from './pages/Friends.js';
+import Zillow from './pages/Zillow.js';
+import Twitter from './pages/Twitter.js';
 
 const httpLink = createHttpLink({
 	uri: '/graphql',
@@ -38,28 +46,28 @@ function App(props) {
 						<PaperBase content={<Content></Content>}></PaperBase>
 					</Route>
 					<Route exact path="/home">
-						<PaperBase content={<Content></Content>}></PaperBase>
+						<PaperBase content={<Home></Home>}></PaperBase>
 					</Route>
 					<Route exact path="/settings">
-						<PaperBase content={<Content></Content>}></PaperBase>
+						<PaperBase content={<Settings></Settings>}></PaperBase>
 					</Route>
 					<Route exact path="/myhomes">
-						<PaperBase content={<Content></Content>}></PaperBase>
+						<PaperBase content={<Homes></Homes>}></PaperBase>
 					</Route>
 					<Route exact path="/misc">
-						<PaperBase content={<Content></Content>}></PaperBase>
+						<PaperBase content={<Misc></Misc>}></PaperBase>
 					</Route>
 					<Route exact path="/profile">
-						<PaperBase content={<Content></Content>}></PaperBase>
+						<PaperBase content={<Profile></Profile>}></PaperBase>
 					</Route>
 					<Route exact path="/friends">
-						<PaperBase content={<Content></Content>}></PaperBase>
+						<PaperBase content={<Friends></Friends>}></PaperBase>
 					</Route>
 					<Route exact path="/zillow">
-						<PaperBase content={<Content></Content>}></PaperBase>
+						<PaperBase content={<Zillow></Zillow>}></PaperBase>
 					</Route>
 					<Route exact path="/twitter">
-						<PaperBase content={<Content></Content>}></PaperBase>
+						<PaperBase content={<Twitter></Twitter>}></PaperBase>
 					</Route>
 				</Switch>
 			</Router>
