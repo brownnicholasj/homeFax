@@ -1,5 +1,57 @@
 import { gql } from '@apollo/client';
 
+export const QUERY_USER = gql`
+  {
+    user {
+      firstName
+      lastName
+      homes {
+        _id
+        address {
+          _id
+          street1
+          street2
+          city
+          state
+          zip
+        }
+        areas {
+          _id
+          name
+          icon
+          attributes {
+            _id
+            type
+            detail {
+              _id
+              key
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const QUERY_GET_HOME = gql`
+query getHome($homeId: ID!) {
+  home(homeId: $homeId) {
+    _id
+    address {
+      street1
+      street2
+      city
+      state
+      zip
+    }
+    areas {
+      name
+    }
+  }
+}
+`
+
 export const QUERY_PRODUCTS = gql`
   query getProducts($category: ID) {
     products(category: $category) {
@@ -11,10 +63,10 @@ export const QUERY_PRODUCTS = gql`
       image
       category {
         _id
-      }
-    }
-  }
-`;
+      }  
+    }  
+  }  
+`;  
 
 export const QUERY_CHECKOUT = gql`
   query getCheckout($products: [ID]!) {
@@ -48,32 +100,3 @@ export const QUERY_CATEGORIES = gql`
   }
 `;
 
-export const QUERY_USER = gql`
-  {
-    user {
-      firstName
-      lastName
-      homes {
-        _id
-        address {
-          street1
-          street2
-          city
-          state
-          zip
-        }
-        areas {
-          name
-          icon
-          attributes {
-            type
-            detail {
-              key
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-`;

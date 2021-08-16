@@ -6,7 +6,6 @@ import { QUERY_USER } from '../utils/queries';
 
 function OrderHistory() {
   const { data } = useQuery(QUERY_USER);
-  console.log(data)
   let user;
 
   if (data) {
@@ -16,7 +15,7 @@ function OrderHistory() {
   return (
     <>
       <div className="container my-1">
-        <Link to="/">← Back to Products</Link>
+        <Link to="/">← Back to the Future</Link>
 
         {user ? (
           <>
@@ -37,15 +36,15 @@ function OrderHistory() {
                     <li>Areas:</li>
                     {home.areas.map(area => (
                       <ul>
-                        <li>{area.name}</li>
+                        <li key={area._id}>{area.name}</li>
                         {area.attributes.map(att => (
                           <ul>
-                            <li>{att.type}</li>
+                            <li key={att._id}>{att.type}</li>
+                            <ul>
                             {att.detail.map(detail => (
-                              <ul>
-                                <li><label>{detail.key}: </label><span>{detail.value}</span></li>
-                              </ul>
-                            ))}
+                                <li key={detail._id}><label>{detail.key}: </label><span>{detail.value}</span></li>
+                                ))}
+                            </ul>
                           </ul>
                         ))}
                       </ul>
