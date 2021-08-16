@@ -92,8 +92,11 @@ const typeDefs = gql`
     addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
     addHome(address: HomeAddress!): Home
     addArea(homeId: ID!, name: String!, icon: String): Home
+    editArea(areaId: ID!, name: String, icon: String): Home
     addAttribute(areaId: ID!, type: String!): Home
+    editAttribute(attributeId: ID!, type: String!): Home
     addDetail(attributeId: ID!, key: String!, value: String!): Home
+    editDetail(detailId: ID!, key: String, value: String): Home
     transferHome(transferer: ID, receiver: ID, home: ID!): User
 
 
