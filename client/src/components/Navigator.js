@@ -108,7 +108,12 @@ const categories = [
 function Navigator(props) {
 	const { classes, ...other } = props;
 
-	const isActive = (value) => window.location.pathname === value;
+	const isActive = (value) => {
+		console.log('value :>> ', value);
+		return window.location.pathname === value;
+	};
+	const [isLoggedIn, setIsLoggedIn] = useState(true);
+	console.log('isLoggedIn :>> ', isLoggedIn);
 
 	return (
 		<Drawer variant="permanent" {...other}>
@@ -126,39 +131,45 @@ function Navigator(props) {
 					</ListItemIcon>
 					HomeFax
 				</ListItem>
-				{categories.map(({ id, children }) => (
-					<React.Fragment key={id}>
-						<ListItem className={classes.categoryHeader}>
-							<ListItemText
-								classes={{
-									primary: classes.categoryHeaderPrimary,
-								}}
-							>
-								{id}
-							</ListItemText>
-						</ListItem>
-						{children.map(({ id: childId, icon, active, path }, index) => (
-							<ListItem
-								key={childId}
-								component={Link}
-								to={path}
-								button
-								className={clsx(classes.item, isActive(path) && classes.itemActiveItem)}
-							>
-								<ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+
+				{categories.map(({ id, children }) =>
+					isLoggedIn ? (
+						<React.Fragment key={id}>
+							<ListItem className={classes.categoryHeader}>
 								<ListItemText
 									classes={{
-										primary: classes.itemPrimary,
+										primary: classes.categoryHeaderPrimary,
 									}}
 								>
-									{childId}
+									{id}
 								</ListItemText>
 							</ListItem>
-						))}
+							{children.map(({ id: childId, icon, active, path }, index) => (
+								<ListItem
+									key={childId}
+									component={Link}
+									to={path}
+									button
+									className={clsx(
+										classes.item,
+										isActive(path) && classes.itemActiveItem
+									)}
+								>
+									<ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+									<ListItemText
+										classes={{
+											primary: classes.itemPrimary,
+										}}
+									>
+										{childId}
+									</ListItemText>
+								</ListItem>
+							))}
 
-						<Divider className={classes.divider} />
-					</React.Fragment>
-				))}
+							<Divider className={classes.divider} />
+						</React.Fragment>
+					) : null
+				)}
 			</List>
 		</Drawer>
 	);

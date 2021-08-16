@@ -19,8 +19,8 @@ function Copyright() {
 	return (
 		<Typography variant="body2" color="textSecondary" align="center">
 			{'Copyright © '}
-			<Link color="inherit" href="https://material-ui.com/">
-				Your Website
+			<Link color="inherit" href="/">
+				HomeFax
 			</Link>{' '}
 			{new Date().getFullYear()}
 			{'.'}
@@ -109,10 +109,7 @@ export default function SignIn() {
 						id="password"
 						autoComplete="current-password"
 					/>
-					<FormControlLabel
-						control={<Checkbox value="remember" color="primary" />}
-						label="Remember me"
-					/>
+					<br></br>
 					<Button
 						type="submit"
 						fullWidth
@@ -130,7 +127,7 @@ export default function SignIn() {
 						</Grid>
 						<Grid item>
 							<button type="button" onClick={handleOpen}>
-								Open Modal
+								Or Sign Up
 							</button>
 							<Modal
 								open={open}

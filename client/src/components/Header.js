@@ -10,8 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
+// import Tab from '@material-ui/core/Tab';
+// import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
@@ -42,6 +42,7 @@ const styles = (theme) => ({
 });
 
 function Header(props) {
+	console.log('props :>> ', props);
 	const { classes, onDrawerToggle } = props;
 
 	return (
@@ -123,12 +124,12 @@ function Header(props) {
 				position="static"
 				elevation={0}
 			>
-				<Tabs value={0} textColor="inherit">
+				{/* <Tabs value={0} textColor="inherit">
 					<Tab textColor="inherit" label="Users" />
 					<Tab textColor="inherit" label="Sign-in method" />
 					<Tab textColor="inherit" label="Templates" />
 					<Tab textColor="inherit" label="Usage" />
-				</Tabs>
+				</Tabs> */}
 			</AppBar>
 		</React.Fragment>
 	);

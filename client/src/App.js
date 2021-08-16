@@ -8,6 +8,7 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import PaperBase from './pages/PaperBase.js';
+import Content from './components/Content';
 
 const httpLink = createHttpLink({
 	uri: '/graphql',
@@ -28,20 +29,38 @@ const client = new ApolloClient({
 	cache: new InMemoryCache(),
 });
 
-function App() {
+function App(props) {
 	return (
 		<ApolloProvider client={client}>
 			<Router>
 				<Switch>
-					<Route exact path="/" component={PaperBase} />
-					<Route exact path="/home" component={PaperBase} />
-					<Route exact path="/settings" component={PaperBase} />
-					<Route exact path="/myhomes" component={PaperBase} />
-					<Route exact path="/misc" component={PaperBase} />
-					<Route exact path="/profile" component={PaperBase} />
-					<Route exact path="/friends" component={PaperBase} />
-					<Route exact path="/zillow" component={PaperBase} />
-					<Route exact path="/twitter" component={PaperBase} />
+					<Route exact path="/">
+						<PaperBase content={<Content></Content>}></PaperBase>
+					</Route>
+					<Route exact path="/home">
+						<PaperBase content={<Content></Content>}></PaperBase>
+					</Route>
+					<Route exact path="/settings">
+						<PaperBase content={<Content></Content>}></PaperBase>
+					</Route>
+					<Route exact path="/myhomes">
+						<PaperBase content={<Content></Content>}></PaperBase>
+					</Route>
+					<Route exact path="/misc">
+						<PaperBase content={<Content></Content>}></PaperBase>
+					</Route>
+					<Route exact path="/profile">
+						<PaperBase content={<Content></Content>}></PaperBase>
+					</Route>
+					<Route exact path="/friends">
+						<PaperBase content={<Content></Content>}></PaperBase>
+					</Route>
+					<Route exact path="/zillow">
+						<PaperBase content={<Content></Content>}></PaperBase>
+					</Route>
+					<Route exact path="/twitter">
+						<PaperBase content={<Content></Content>}></PaperBase>
+					</Route>
 				</Switch>
 			</Router>
 		</ApolloProvider>

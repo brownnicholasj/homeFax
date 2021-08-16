@@ -20,8 +20,8 @@ function Copyright() {
 	return (
 		<Typography variant="body2" color="textSecondary" align="center">
 			{'Copyright © '}
-			<Link color="inherit" href="https://material-ui.com/">
-				Your Website
+			<Link color="inherit" href="/">
+				HomeFax
 			</Link>{' '}
 			{new Date().getFullYear()}
 			{'.'}
@@ -169,14 +169,14 @@ const styles = {
 };
 
 function Paperbase(props) {
-	const { classes } = props;
+	const { classes, content } = props;
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
 	};
 
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(true);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -201,7 +201,7 @@ function Paperbase(props) {
 						<Grid container alignContent="center" justifyContent="center">
 							<Grid item xs={12}>
 								{isLoggedIn ? (
-									<Content />
+									content
 								) : (
 									<div
 										style={{
@@ -210,7 +210,6 @@ function Paperbase(props) {
 											justifyContent: 'center',
 										}}
 									>
-										{/* <h1>test</h1> */}
 										<SignIn align="center"></SignIn>
 									</div>
 								)}
