@@ -164,3 +164,85 @@ export const ADD_USER = gql`
     }
   }
 `;
+
+export const EDIT_AREA = gql`
+mutation EditArea($areaId: ID!, $name: String, $icon: String) {
+  editArea(areaId: $areaId, name: $name, icon: $icon) {
+    _id
+    address {
+      street1
+      street2
+      city
+      state
+      zip
+    }
+    areas {
+      name
+      icon
+      attributes {
+        type
+        detail {
+          key
+          value
+        }
+      }
+    }
+  }
+}
+`;
+
+export const EDIT_ATTRIBUTE = gql`
+mutation EditAttribute($attributeId: ID!, $type: String!) {
+  editAttribute(attributeId: $attributeId, type: $type) {
+    _id
+    address {
+      street1
+      street2
+      city
+      state
+      zip
+    }
+    areas {
+      _id
+      name
+      icon
+      attributes {
+        _id
+        type
+        detail {
+          key
+          value
+        }
+      }
+    }
+  }
+}
+`;
+
+export const EDIT_DETAIL = gql`
+mutation EditDetail($detailId: ID!, $key: String, $value: String) {
+  editDetail(detailId: $detailId, key: $key, value: $value) {
+    _id
+    address {
+      street1
+      street2
+      city
+      state
+      zip
+    }
+    areas {
+      _id
+      name
+      icon
+      attributes {
+        _id
+        type
+        detail {
+          key
+          value
+        }
+      }
+    }
+  }
+}
+`;
