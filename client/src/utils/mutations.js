@@ -43,6 +43,26 @@ mutation Addhome($address: HomeAddress!) {
   }
 }
 `
+export const TRANSFER_HOME = gql`
+mutation TransferHome($transferer: ID, $receiver: ID, $home: ID!) {
+  transferHome(transferer: $transferer, receiver: $receiver, home: $home) {
+    _id
+    firstName
+    lastName
+    homes {
+      _id
+      address {
+        street1
+        street2
+        city
+        state
+        zip
+      }
+    }
+  }
+}
+`
+
 export const ADD_AREA = gql`
 mutation AddArea($homeId: ID!, $name: String!, $icon: String) {
   addArea(homeId: $homeId, name: $name, icon: $icon) {

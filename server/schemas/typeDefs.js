@@ -94,11 +94,13 @@ const typeDefs = gql`
     addArea(homeId: ID!, name: String!, icon: String): Home
     addAttribute(areaId: ID!, type: String!): Home
     addDetail(attributeId: ID!, key: String!, value: String!): Home
+    transferHome(transferer: ID, receiver: ID, home: ID!): User
+
+
     addOrder(products: [ID]!): Order
     updateUser(firstName: String, lastName: String, email: String, password: String): User
     updateProduct(_id: ID!, quantity: Int!): Product
     login(email: String!, password: String!): Auth
-    transferHome(transferer: [ID], receiver: [ID], home: ID!): [User]
   }
 `;
 
