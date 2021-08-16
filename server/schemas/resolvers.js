@@ -145,12 +145,36 @@ const resolvers = {
 
       return updatedHome;
     },
-    transferHome: async (parent, args, context) => {
-      if (context.user) {
-        return await User.findByIdAndUpdate(context.user._id, args, { new: true });
-      }
-      
-      throw new AuthenticationError('Not logged in');
+    transferHome: async (parent, { transferer, receiver, home }, context) => {
+      // We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
+      if (transferer) {
+        await User.findByIdAndUpdate(transferer, {
+          $pull: { 'homes': home }
+        });
+      };
+      if (receiver) {
+        await User.findByIdAndUpdate(receiver, {
+          $addToSet: { 'homes': home }
+        });
+      };
+      const user = await User.findById(context.user._id).populate('homes');
+      return user;
+
+      // CODE USED FOR TESTING IN INSOMNIA - PLEASE DON'T DELETE.
+      // let transferUser;
+      // if (transferer) {
+      //   transferUser = await User.findByIdAndUpdate(transferer, {
+      //     $pull: { 'homes': home }
+      //   }, { new: true }).populate('homes');
+      //   return transferUser;
+      // }
+      // let receiptUser;
+      // if (receiver) {
+      //   receiptUser = await User.findByIdAndUpdate(receiver, {
+      //     $addToSet: { 'homes': home }
+      //   }, { new: true }).populate('homes');
+      //   return receiptUser;
+      // }
     },
     updateUser: async (parent, args, context) => {
       if (context.user) {
