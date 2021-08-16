@@ -131,6 +131,7 @@ db.once('open', async () => {
 	await Home.deleteMany();
 
 	const homes = await Home.insertMany([
+		//PAMELA WASHINGTON HOME -- SIMPLE EXAMPLE
 		{
 			address: {
 				street1: '6137 sw 38th ter',
@@ -175,6 +176,143 @@ db.once('open', async () => {
 				},
 			],
 		},
+		//FRANK FLIPPERS HOUSE THAT HE IS RENOVATING (LOTS OF ITEMS)
+		{
+			address: {
+				street1: '1947 N 4th St',
+				street2: 'nothing here',
+				city: 'Kansas City',
+				state: 'KS',
+				zip: '66101',
+			},
+			areas: [
+				{
+					name: 'porch',
+					icon: '',
+					attributes: [
+						{
+							type: 'Stairs',
+							detail: [
+								{
+									key: '2x4x8 boards',
+									value: '24',
+								},
+								{
+									key: 'screws',
+									value: '2 1/2 outdoor',
+								},
+								{
+									key: 'stain',
+									value:
+										'533-Cedar-Naturaltone-Semi-Transparent-Waterproofing-Exterior-Wood-Stain-and-Sealer-553301',
+								},
+							],
+						},
+						{
+							type: 'Front Door',
+							detail: [
+								{
+									key: 'Home Depot',
+									value:
+										'https://www.homedepot.com/p/Pacific-Entries-36-in-x-80-in-Craftsman-Espresso-Left-Hand-Inswing-3-lite-w-Arched-Reed-Glass-Stained-Alder-Wood-Pre-Hung-Front-Door-EA75CRDL/312022782',
+								},
+							],
+						},
+						{
+							type: 'Entry',
+							detail: [
+								{
+									key: 'Paint',
+									value: 'PPG1056-2',
+								},
+								{
+									key: 'Paint',
+									value: 'Home Depot',
+								},
+								{
+									key: 'Paint',
+									value: 'Behr',
+								},
+							],
+						},
+						{
+							type: 'Kitchen',
+							detail: [
+								{
+									key: 'Refridgerator',
+									value:
+										'https://www.homedepot.com/p/Frigidaire-18-3-cu-ft-Top-Freezer-Refrigerator-in-White-FFTR1835VW/311743494',
+								},
+								{
+									key: 'Dish Washer',
+									value:
+										'https://www.homedepot.com/p/GE-Profile-18-in-White-Top-Control-Smart-Dishwasher-120-Volt-with-Stainless-Steel-Tub-and-47-dBA-PDT145SGLWW/304789504',
+								},
+								{
+									key: 'Disposal',
+									value:
+										'https://www.homedepot.com/p/InSinkErator-Badger-100-1-3-HP-Continuous-Feed-Garbage-Disposal-Badger-100/203144490',
+								},
+								{
+									key: 'Cabinets',
+									value:
+										'https://www.homedepot.com/collection/kitchen-cabinets/hampton-wall-kitchen-cabinets-in-medium-oak',
+								},
+							],
+						},
+					],
+				},
+			],
+		},
+		//LAND LORD AND JOE RENTER SPLIT HOME
+		{
+			address: {
+				street1: '1474 Carla Rdg',
+				city: 'Beverly Hills',
+				state: 'CA',
+				zip: '90210',
+			},
+			areas: [
+				{
+					name: 'pool',
+					icon: '',
+					attributes: [
+						{
+							type: 'Maintenance',
+							detail: [
+								{
+									key: 'chemicals',
+									value: 'chlorine',
+								},
+								{
+									key: 'filter',
+									value: '05/01/2021',
+								},
+							],
+						},
+					],
+				},
+				{
+					name: 'elevator',
+					icon: '',
+					attributes: [
+						{
+							type: 'hardware',
+							detail: [
+								{
+									key: 'plating',
+									value: 'gold',
+								},
+								{
+									key: 'adhesive',
+									value: 'velcro',
+								},
+							],
+						},
+					],
+				},
+			],
+		},
 	]);
 
 	console.log('homes seeded');
@@ -182,6 +320,7 @@ db.once('open', async () => {
 	await User.deleteMany();
 
 	await User.create(
+		//OWNS HOME[0] IN TOPEKA KS -- SIMPLE EXAMPLE
 		{
 			firstName: 'Pamela',
 			lastName: 'Washington',
@@ -193,30 +332,36 @@ db.once('open', async () => {
 			// 		products: [products[0]._id, products[0]._id, products[1]._id],
 			// 	},
 			// ],
-			// homes: [homes[0]._id],
+			homes: [homes[0]._id],
 		},
+		//OWNS HOME IN BEVERLY HILLS RENTS TO JOE RENTER
 		{
 			firstName: 'Land',
 			lastName: 'Lord',
 			dob: '1969-01-01',
 			email: 'landlord@email.com',
 			password: 'password12345',
+			homes: [homes[1]._id],
 		},
+		//RENTS HOME IN BEVERLY HILLS FROM LAND LORD
 		{
 			firstName: 'Joe',
 			lastName: 'Renter',
 			dob: '1969-02-02',
 			email: 'joerenter@email.com',
 			password: 'password12345',
+			homes: [homes[1]._id],
+		},
+		//HOME FLIPPER WITH A LOT OF ACTIVITIES
+		{
+			firstName: 'Frank',
+			lastName: 'Flipper',
+			dob: '1990-03-03',
+			email: 'frankflipper@email.com',
+			password: 'password12345',
+			homes: [homes[2]._id],
 		}
 	);
-
-	// await User.create({
-	//   firstName: 'Elijah',
-	//   lastName: 'Holt',
-	//   email: 'eholt@testmail.com',
-	//   password: 'password12345'
-	// });
 
 	console.log('users seeded');
 
