@@ -83,7 +83,10 @@ export default function SignIn() {
 		event.preventDefault();
 		try {
 			const mutationResponse = await login({
-				variables: { identifier: formState.identifier, password: formState.password },
+				variables: {
+					identifier: formState.identifier.toLowerCase(),
+					password: formState.password,
+				},
 			});
 			const token = mutationResponse.data.login.token;
 			Auth.login(token);
