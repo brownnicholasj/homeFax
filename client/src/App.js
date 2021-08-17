@@ -1,63 +1,79 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink,
+	ApolloClient,
+	InMemoryCache,
+	ApolloProvider,
+	createHttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-
+import PaperBase from './pages/PaperBase.js';
+import Content from './components/Content';
 import Home from './pages/Home';
-import Detail from './pages/Detail';
-import NoMatch from './pages/NoMatch';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Nav from './components/Nav';
-import { StoreProvider } from './utils/GlobalState';
-import Success from './pages/Success';
-import OrderHistory from './pages/OrderHistory';
+import Settings from './pages/Settings.js';
+import Homes from './pages/Homes.js';
+import Misc from './pages/Misc.js';
+import Profile from './pages/Profile.js';
+import Friends from './pages/Friends.js';
+import Zillow from './pages/Zillow.js';
+import Twitter from './pages/Twitter.js';
+import SignIn from './components/SignIn';
 
 const httpLink = createHttpLink({
-  uri: '/graphql',
+	uri: '/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('id_token');
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  };
+	const token = localStorage.getItem('id_token');
+	return {
+		headers: {
+			...headers,
+			authorization: token ? `Bearer ${token}` : '',
+		},
+	};
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+	link: authLink.concat(httpLink),
+	cache: new InMemoryCache(),
 });
 
-function App() {
-  return (
-    <ApolloProvider client={client}>
-      <Router>
-        <div>
-          <StoreProvider>
-            <Nav />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/signup" component={Signup} />
-              <Route exact path="/success" component={Success} />
-              <Route exact path="/orderHistory" component={OrderHistory} />
-              <Route exact path="/products/:id" component={Detail} />
-              <Route component={NoMatch} />
-            </Switch>
-          </StoreProvider>
-        </div>
-      </Router>
-    </ApolloProvider>
-  );
+function App(props) {
+	return (
+		<ApolloProvider client={client}>
+			<Router>
+				<Switch>
+					<Route exact path="/">
+						<PaperBase content={<Content></Content>}></PaperBase>
+					</Route>
+					<Route exact path="/home">
+						<PaperBase content={<Home></Home>}></PaperBase>
+					</Route>
+					<Route exact path="/settings">
+						<PaperBase content={<Settings></Settings>}></PaperBase>
+					</Route>
+					<Route exact path="/myhomes">
+						<PaperBase content={<Homes></Homes>}></PaperBase>
+					</Route>
+					<Route exact path="/misc">
+						<PaperBase content={<Misc></Misc>}></PaperBase>
+					</Route>
+					<Route exact path="/profile">
+						<PaperBase content={<Profile></Profile>}></PaperBase>
+					</Route>
+					<Route exact path="/friends">
+						<PaperBase content={<Friends></Friends>}></PaperBase>
+					</Route>
+					<Route exact path="/zillow">
+						<PaperBase content={<Zillow></Zillow>}></PaperBase>
+					</Route>
+					<Route exact path="/twitter">
+						<PaperBase content={<Twitter></Twitter>}></PaperBase>
+					</Route>
+				</Switch>
+			</Router>
+		</ApolloProvider>
+	);
 }
 
 export default App;
