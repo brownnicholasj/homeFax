@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
@@ -14,6 +12,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Modal } from '@material-ui/core';
 import { useState } from 'react';
 import SignUp from '../components/SignUp';
+import { useMutation } from '@apollo/client';
+import Auth from '../utils/auth';
+import { LOGIN } from '../utils/mutations';
 
 function Copyright() {
 	return (
@@ -75,6 +76,30 @@ export default function SignIn() {
 		</div>
 	);
 
+	const [formState, setFormState] = useState({ email: '', password: '' });
+	const [login, { error }] = useMutation(LOGIN);
+
+	const handleFormSubmit = async (event) => {
+		event.preventDefault();
+		try {
+			const mutationResponse = await login({
+				variables: { email: formState.email, password: formState.password },
+			});
+			const token = mutationResponse.data.login.token;
+			Auth.login(token);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const handleChange = (event) => {
+		const { name, value } = event.target;
+		setFormState({
+			...formState,
+			[name]: value,
+		});
+	};
+
 	return (
 		<div>
 			<CssBaseline />
@@ -97,6 +122,7 @@ export default function SignIn() {
 						name="email"
 						autoComplete="email"
 						autoFocus
+						onChange={handleChange}
 					/>
 					<TextField
 						variant="outlined"
@@ -108,6 +134,7 @@ export default function SignIn() {
 						type="password"
 						id="password"
 						autoComplete="current-password"
+						onChange={handleChange}
 					/>
 					<br></br>
 					<Button
@@ -116,6 +143,7 @@ export default function SignIn() {
 						variant="contained"
 						color="primary"
 						className={classes.submit}
+						onClick={handleFormSubmit}
 					>
 						Sign In
 					</Button>

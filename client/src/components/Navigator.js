@@ -18,6 +18,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import Auth from '../utils/auth';
+
 const token = null;
 
 const styles = (theme) => ({
@@ -85,7 +87,7 @@ const categories = [
 			{
 				id: 'Profile',
 				icon: <PeopleIcon />,
-				path: `/${token?.me}`,
+				path: '/profile',
 				active: false,
 			},
 		],
@@ -133,7 +135,7 @@ function Navigator(props) {
 				</ListItem>
 
 				{categories.map(({ id, children }) =>
-					isLoggedIn ? (
+					Auth.loggedIn() ? (
 						<React.Fragment key={id}>
 							<ListItem className={classes.categoryHeader}>
 								<ListItemText

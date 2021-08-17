@@ -16,6 +16,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import Auth from '../utils/auth';
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
@@ -64,9 +65,18 @@ function Header(props) {
 						</Hidden>
 						<Grid item xs />
 						<Grid item>
-							<Link className={classes.link} href="#" variant="body2">
-								Go to docs
-							</Link>
+							{Auth.loggedIn() ? (
+								<Link
+									onClick={Auth.logout}
+									className={classes.link}
+									href="#"
+									variant="body2"
+								>
+									Logout
+								</Link>
+							) : (
+								<Link></Link>
+							)}
 						</Grid>
 						<Grid item>
 							<Tooltip title="Alerts • No alerts">

@@ -14,6 +14,7 @@ import Header from '../components/Header';
 import { useState } from 'react';
 import SignIn from '../components/SignIn';
 import { Grid } from '@material-ui/core';
+import Auth from '../utils/auth';
 
 function Copyright() {
 	return (
@@ -199,7 +200,7 @@ function Paperbase(props) {
 					<main className={classes.main}>
 						<Grid container alignContent="center" justifyContent="center">
 							<Grid item xs={12}>
-								{isLoggedIn ? (
+								{Auth.loggedIn() ? (
 									content
 								) : (
 									<div
