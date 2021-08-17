@@ -23,11 +23,55 @@ const typeDefs = gql`
   }
 
   type User {
-    _id: ID
-    firstName: String
-    lastName: String
-    email: String
+    _id: ID!
+    firstName: String!
+    lastName: String!
+    dob: String!
+    email: String!
     orders: [Order]
+    homes: [Home]
+  }
+
+  type Home {
+    _id: ID!
+    address: Address!
+    areas: [Area]
+  }
+
+  type Address {
+    _id: ID!
+    street1: String!
+    street2: String
+    city: String!
+    state: String!
+    zip: String!
+  }
+
+  input HomeAddress {
+    street1: String!
+    street2: String
+    city: String!
+    state: String!
+    zip: String!
+  }
+
+  type Area {
+    _id: ID!
+    name: String!
+    icon: String
+    attributes: [Attribute]
+  }
+
+  type Attribute {
+    _id: ID!
+    type: String!
+    detail: [Detail]
+  }
+  
+  type Detail {
+    _id: ID!
+    key: String!
+    value: String!
   }
 
   type Checkout {
@@ -40,16 +84,22 @@ const typeDefs = gql`
   }
 
   type Query {
-    categories: [Category]
-    products(category: ID, name: String): [Product]
-    product(_id: ID!): Product
     user: User
-    order(_id: ID!): Order
-    checkout(products: [ID]!): Checkout
+    home(homeId: ID!): Home
   }
 
   type Mutation {
     addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
+    addHome(address: HomeAddress!): Home
+    addArea(homeId: ID!, name: String!, icon: String): Home
+    editArea(areaId: ID!, name: String, icon: String): Home
+    addAttribute(areaId: ID!, type: String!): Home
+    editAttribute(attributeId: ID!, type: String!): Home
+    addDetail(attributeId: ID!, key: String!, value: String!): Home
+    editDetail(detailId: ID!, key: String, value: String): Home
+    transferHome(transferer: ID, receiver: ID, home: ID!): User
+
+
     addOrder(products: [ID]!): Order
     updateUser(firstName: String, lastName: String, email: String, password: String): User
     updateProduct(_id: ID!, quantity: Int!): Product
