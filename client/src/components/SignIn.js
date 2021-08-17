@@ -76,14 +76,14 @@ export default function SignIn() {
 		</div>
 	);
 
-	const [formState, setFormState] = useState({ email: '', password: '' });
+	const [formState, setFormState] = useState({ identifier: '', password: '' });
 	const [login, { error }] = useMutation(LOGIN);
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
 		try {
 			const mutationResponse = await login({
-				variables: { email: formState.email, password: formState.password },
+				variables: { identifier: formState.identifier, password: formState.password },
 			});
 			const token = mutationResponse.data.login.token;
 			Auth.login(token);
@@ -117,10 +117,10 @@ export default function SignIn() {
 						margin="normal"
 						required
 						fullWidth
-						id="email"
-						label="Email Address"
-						name="email"
-						autoComplete="email"
+						id="identifier"
+						label="Email/Username"
+						name="identifier"
+						autoComplete="identifier"
 						autoFocus
 						onChange={handleChange}
 					/>

@@ -28,6 +28,7 @@ const typeDefs = gql`
 		lastName: String!
 		password: String!
 		dob: String!
+		username: String!
 		email: String!
 		orders: [Order]
 		homes: [Home]
@@ -93,6 +94,7 @@ const typeDefs = gql`
 		addUser(
 			firstName: String!
 			lastName: String!
+			username: String!
 			email: String!
 			password: String!
 			dob: String!
@@ -110,11 +112,12 @@ const typeDefs = gql`
 		updateUser(
 			firstName: String
 			lastName: String
+			username: String
 			email: String
 			password: String
 		): User
 		updateProduct(_id: ID!, quantity: Int!): Product
-		login(email: String!, password: String!): Auth
+		login(identifier: String!, password: String!): Auth
 	}
 `;
 
