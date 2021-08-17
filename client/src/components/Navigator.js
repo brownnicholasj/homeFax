@@ -85,6 +85,12 @@ const categories = [
 				active: false,
 			},
 			{
+				id: 'Signin',
+				icon: <PeopleIcon />,
+				path: '/signin',
+				active: false,
+			},
+			{
 				id: 'Profile',
 				icon: <PeopleIcon />,
 				path: '/profile',
