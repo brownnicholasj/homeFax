@@ -15,6 +15,10 @@ import { Modal } from '@material-ui/core';
 import { useState } from 'react';
 import SignUp from '../components/SignUp';
 
+import { useMutation } from '@apollo/client';
+import Auth from '../utils/auth';
+import { LOGIN } from '../utils/mutations'
+
 function Copyright() {
 	return (
 		<Typography variant="body2" color="textSecondary" align="center">
@@ -75,6 +79,31 @@ export default function SignIn() {
 		</div>
 	);
 
+	const [formState, setFormState] = useState({ email: '', password: '' });
+	const [login, { error }] = useMutation(LOGIN);
+  
+	const handleFormSubmit = async (event) => {
+	  event.preventDefault();
+	  try {
+		const mutationResponse = await login({
+		  variables: { email: formState.email, password: formState.password },
+		});
+		const token = mutationResponse.data.login.token;
+		Auth.login(token);
+	  } catch (e) {
+		console.log(e);
+	  }
+	};
+  
+	const handleChange = (event) => {
+	  const { name, value } = event.target;
+	  setFormState({
+		...formState,
+		[name]: value,
+	  });
+	};
+  
+
 	return (
 		<div>
 			<CssBaseline />
@@ -97,6 +126,7 @@ export default function SignIn() {
 						name="email"
 						autoComplete="email"
 						autoFocus
+						onChange={handleChange}
 					/>
 					<TextField
 						variant="outlined"
@@ -108,9 +138,11 @@ export default function SignIn() {
 						type="password"
 						id="password"
 						autoComplete="current-password"
+						onChange={handleChange}
 					/>
 					<br></br>
 					<Button
+						onClick={handleFormSubmit}
 						type="submit"
 						fullWidth
 						variant="contained"
