@@ -17,7 +17,7 @@ import Profile from './pages/Profile.js';
 import Friends from './pages/Friends.js';
 import Zillow from './pages/Zillow.js';
 import Twitter from './pages/Twitter.js';
-import SignIn from './components/SignIn'
+import SignIn from './components/SignIn';
 
 const httpLink = createHttpLink({
 	uri: '/graphql',
@@ -45,9 +45,6 @@ function App(props) {
 				<Switch>
 					<Route exact path="/">
 						<PaperBase content={<Content></Content>}></PaperBase>
-					</Route>
-					<Route exact path="/signin">
-						<PaperBase content={<SignIn />}></PaperBase>
 					</Route>
 					<Route exact path="/home">
 						<PaperBase content={<Home></Home>}></PaperBase>

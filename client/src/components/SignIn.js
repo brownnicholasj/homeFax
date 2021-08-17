@@ -16,10 +16,6 @@ import { useMutation } from '@apollo/client';
 import Auth from '../utils/auth';
 import { LOGIN } from '../utils/mutations';
 
-import { useMutation } from '@apollo/client';
-import Auth from '../utils/auth';
-import { LOGIN } from '../utils/mutations'
-
 function Copyright() {
 	return (
 		<Typography variant="body2" color="textSecondary" align="center">
@@ -82,7 +78,6 @@ export default function SignIn() {
 
 	const [formState, setFormState] = useState({ email: '', password: '' });
 	const [login, { error }] = useMutation(LOGIN);
-
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
