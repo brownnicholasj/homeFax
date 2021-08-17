@@ -10,6 +10,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/mutations';
+import Auth from '../utils/auth';
 
 function Copyright() {
 	return (
@@ -46,6 +50,38 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
 	const classes = useStyles();
+	const [formState, setFormState] = useState({
+		dob: '',
+		firstName: '',
+		lastName: '',
+		email: '',
+		password: '',
+	});
+	const [addUser, { error, data }] = useMutation(ADD_USER);
+
+	const handleChange = (event) => {
+		const { name, value } = event.target;
+
+		setFormState({
+			...formState,
+			[name]: value,
+		});
+	};
+
+	const handleFormSubmit = async (event) => {
+		event.preventDefault();
+		console.log(formState);
+
+		try {
+			const { data } = await addUser({
+				variables: { ...formState },
+			});
+
+			Auth.login(data.addUser.token);
+		} catch (e) {
+			console.error(e);
+		}
+	};
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -57,7 +93,7 @@ export default function SignUp() {
 				<Typography component="h1" variant="h5">
 					Sign up
 				</Typography>
-				<form className={classes.form} noValidate>
+				<form onSubmit={handleFormSubmit} className={classes.form} noValidate>
 					<Grid container spacing={2}>
 						<Grid item xs={12} sm={6}>
 							<TextField
@@ -69,6 +105,7 @@ export default function SignUp() {
 								id="firstName"
 								label="First Name"
 								autoFocus
+								onChange={handleChange}
 							/>
 						</Grid>
 						<Grid item xs={12} sm={6}>
@@ -80,6 +117,21 @@ export default function SignUp() {
 								label="Last Name"
 								name="lastName"
 								autoComplete="lname"
+								onChange={handleChange}
+							/>
+						</Grid>
+						<label for="dob">Date of Birth</label>
+						<Grid item xs={12}>
+							<TextField
+								variant="outlined"
+								required
+								fullWidth
+								id="dob"
+								// label="Date of Birth"
+								placeholder="asdfasdf"
+								name="dob"
+								type="date"
+								onChange={handleChange}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -91,6 +143,7 @@ export default function SignUp() {
 								label="Email Address"
 								name="email"
 								autoComplete="email"
+								onChange={handleChange}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -102,6 +155,7 @@ export default function SignUp() {
 								label="Password"
 								type="password"
 								id="password"
+								onChange={handleChange}
 							/>
 						</Grid>
 						<Grid item xs={12}>

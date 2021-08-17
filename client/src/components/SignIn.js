@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
@@ -14,10 +12,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Modal } from '@material-ui/core';
 import { useState } from 'react';
 import SignUp from '../components/SignUp';
-
 import { useMutation } from '@apollo/client';
 import Auth from '../utils/auth';
-import { LOGIN } from '../utils/mutations'
+import { LOGIN } from '../utils/mutations';
 
 function Copyright() {
 	return (
@@ -81,28 +78,27 @@ export default function SignIn() {
 
 	const [formState, setFormState] = useState({ email: '', password: '' });
 	const [login, { error }] = useMutation(LOGIN);
-  
+
 	const handleFormSubmit = async (event) => {
-	  event.preventDefault();
-	  try {
-		const mutationResponse = await login({
-		  variables: { email: formState.email, password: formState.password },
-		});
-		const token = mutationResponse.data.login.token;
-		Auth.login(token);
-	  } catch (e) {
-		console.log(e);
-	  }
+		event.preventDefault();
+		try {
+			const mutationResponse = await login({
+				variables: { email: formState.email, password: formState.password },
+			});
+			const token = mutationResponse.data.login.token;
+			Auth.login(token);
+		} catch (e) {
+			console.log(e);
+		}
 	};
-  
+
 	const handleChange = (event) => {
-	  const { name, value } = event.target;
-	  setFormState({
-		...formState,
-		[name]: value,
-	  });
+		const { name, value } = event.target;
+		setFormState({
+			...formState,
+			[name]: value,
+		});
 	};
-  
 
 	return (
 		<div>
@@ -158,9 +154,12 @@ export default function SignIn() {
 							</Link>
 						</Grid>
 						<Grid item>
-							<button type="button" onClick={handleOpen}>
+							<Link href="#" variant="body2" onClick={handleOpen}>
 								Or Sign Up
-							</button>
+							</Link>
+							{/* <button type="button" onClick={handleOpen}>
+								Or Sign Up
+							</button> */}
 							<Modal
 								open={open}
 								onClose={handleClose}
