@@ -256,10 +256,11 @@ const resolvers = {
 
 			throw new AuthenticationError('Not logged in');
 		},
-		login: async (parent, { email, password }) => {
+		login: async (parent, { identifier, password }) => {
+      const email = identifier;
+      const username = identifier;
 			console.log('logging in');
-			const user = await User.findOne({ email });
-
+      const user = await User.findOne({ email }) || await User.findOne({ username });
 			if (!user) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
