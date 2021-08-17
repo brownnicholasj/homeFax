@@ -5,6 +5,8 @@ export const QUERY_USER = gql`
     user {
       firstName
       lastName
+      dob
+      username
       homes {
         _id
         address {
