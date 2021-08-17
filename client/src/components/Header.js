@@ -17,6 +17,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Auth from '../utils/auth';
+import { MenuItem } from '@material-ui/core';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import { useState } from 'react';
+import { Menu } from '@material-ui/core';
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
@@ -43,55 +47,112 @@ const styles = (theme) => ({
 });
 
 function Header(props) {
-	console.log('props :>> ', props);
 	const { classes, onDrawerToggle } = props;
+	const [anchorEl, setAnchorEl] = useState(null);
+	const handleMenu = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const open = Boolean(anchorEl);
+
+	const handleClose = (event) => {
+		if (event.target.id === 'profile') {
+			window.location.replace('/profile');
+		}
+		if (event.target.id === 'logout') {
+			Auth.logout();
+		}
+		console.log('event.target :>> ', event.target.id);
+		setAnchorEl(null);
+	};
 
 	return (
 		<React.Fragment>
 			<AppBar color="primary" position="sticky" elevation={0}>
-				<Toolbar>
-					<Grid container spacing={1} alignItems="center">
-						<Hidden smUp>
+				{Auth.loggedIn() && (
+					<Toolbar>
+						<Grid container spacing={1} alignItems="center">
+							<Hidden smUp>
+								<Grid item>
+									<IconButton
+										color="inherit"
+										aria-label="open drawer"
+										onClick={onDrawerToggle}
+										className={classes.menuButton}
+									>
+										<MenuIcon />
+									</IconButton>
+								</Grid>
+							</Hidden>
+							<Grid item xs />
 							<Grid item>
-								<IconButton
-									color="inherit"
-									aria-label="open drawer"
-									onClick={onDrawerToggle}
-									className={classes.menuButton}
-								>
-									<MenuIcon />
-								</IconButton>
+								{Auth.loggedIn() ? (
+									<Link
+										onClick={Auth.logout}
+										className={classes.link}
+										href="#"
+										variant="body2"
+									>
+										Logout
+									</Link>
+								) : (
+									<Link></Link>
+								)}
 							</Grid>
-						</Hidden>
-						<Grid item xs />
-						<Grid item>
-							{Auth.loggedIn() ? (
-								<Link
-									onClick={Auth.logout}
-									className={classes.link}
-									href="#"
-									variant="body2"
-								>
-									Logout
-								</Link>
-							) : (
-								<Link></Link>
+							{Auth.loggedIn() && (
+								<Grid item>
+									<Tooltip title="Alerts • No alerts">
+										<IconButton color="inherit">
+											<NotificationsIcon />
+										</IconButton>
+									</Tooltip>
+								</Grid>
+							)}
+							{Auth.loggedIn() && (
+								<Grid item>
+									<div>
+										<IconButton
+											aria-label="account of current user"
+											aria-controls="menu-appbar"
+											aria-haspopup="true"
+											onClick={handleMenu}
+											color="inherit"
+											className={classes.iconButtonAvatar}
+										>
+											<Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
+
+											{/* <AccountCircle /> */}
+										</IconButton>
+										<Menu
+											id="menu-appbar"
+											anchorEl={anchorEl}
+											anchorOrigin={{
+												vertical: 'top',
+												horizontal: 'right',
+											}}
+											keepMounted
+											transformOrigin={{
+												vertical: 'top',
+												horizontal: 'right',
+											}}
+											open={open}
+											onClose={handleClose}
+										>
+											<MenuItem id="profile" onClick={handleClose}>
+												Profile
+											</MenuItem>
+											<MenuItem id="logout" onClick={handleClose}>
+												Logout
+											</MenuItem>
+										</Menu>
+									</div>
+									{/* <IconButton color="inherit" className={classes.iconButtonAvatar}>
+								<Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
+							</IconButton> */}
+								</Grid>
 							)}
 						</Grid>
-						<Grid item>
-							<Tooltip title="Alerts • No alerts">
-								<IconButton color="inherit">
-									<NotificationsIcon />
-								</IconButton>
-							</Tooltip>
-						</Grid>
-						<Grid item>
-							<IconButton color="inherit" className={classes.iconButtonAvatar}>
-								<Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
-							</IconButton>
-						</Grid>
-					</Grid>
-				</Toolbar>
+					</Toolbar>
+				)}
 			</AppBar>
 			<AppBar
 				component="div"

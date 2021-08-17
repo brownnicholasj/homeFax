@@ -120,13 +120,15 @@ export default function SignUp() {
 								onChange={handleChange}
 							/>
 						</Grid>
+						<label for="dob">Date of Birth</label>
 						<Grid item xs={12}>
 							<TextField
 								variant="outlined"
 								required
 								fullWidth
 								id="dob"
-								label="Date of Birth"
+								// label="Date of Birth"
+								placeholder="asdfasdf"
 								name="dob"
 								type="date"
 								onChange={handleChange}

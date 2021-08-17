@@ -154,9 +154,12 @@ export default function SignIn() {
 							</Link>
 						</Grid>
 						<Grid item>
-							<button type="button" onClick={handleOpen}>
+							<Link href="#" variant="body2" onClick={handleOpen}>
 								Or Sign Up
-							</button>
+							</Link>
+							{/* <button type="button" onClick={handleOpen}>
+								Or Sign Up
+							</button> */}
 							<Modal
 								open={open}
 								onClose={handleClose}
