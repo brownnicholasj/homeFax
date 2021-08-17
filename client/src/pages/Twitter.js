@@ -1,13 +1,13 @@
 import React from 'react';
 import Content from '../components/Content';
 
-function Home(props) {
+function Twitter(props) {
 	return (
 		<React.Fragment>
-			<h1>Home</h1>
+			<h1>Twitter</h1>
 			<Content></Content>
 		</React.Fragment>
 	);
 }
 
-export default Home;
+export default Twitter;
