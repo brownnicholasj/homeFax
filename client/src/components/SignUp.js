@@ -54,6 +54,7 @@ export default function SignUp() {
 		dob: '',
 		firstName: '',
 		lastName: '',
+		username: '',
 		email: '',
 		password: '',
 	});
@@ -143,6 +144,18 @@ export default function SignUp() {
 								label="Email Address"
 								name="email"
 								autoComplete="email"
+								onChange={handleChange}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								variant="outlined"
+								required
+								fullWidth
+								id="username"
+								label="Username"
+								name="username"
+								autoComplete="username"
 								onChange={handleChange}
 							/>
 						</Grid>
