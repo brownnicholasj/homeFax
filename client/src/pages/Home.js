@@ -14,7 +14,7 @@ import {
 import { useQuery } from '@apollo/client';
 import { QUERY_USER } from '../utils/queries';
 
-function Home(props) {
+function Home() {
 	const [state, dispatch] = useStoreContext();
 	const { user, homes, transfers } = state;
 	const { loading, data } = useQuery(QUERY_USER);
@@ -62,46 +62,6 @@ function Home(props) {
 		setAnchorEl(null);
 	};
 
-	// TEST CODE FOR PWA
-	const [testState, setTestState] = useState({});
-
-	const { loading, data } = useQuery(QUERY_USER);
-	// let user;
-	// if (!loading) {
-	// 	user = data.user;
-	// }
-
-	const { user, homes } = testState;
-
-	useEffect(() => {
-		// // already in global store
-		// if (data) {
-		// 	setCurrentProduct(products.find((product) => product._id === id));
-		// }
-		// retrieved from server
-		if (data) {
-			setTestState({
-			user: data.user,
-			homes: data.user.homes,
-			});
-	
-			idbPromise('user', 'put', data.user);
-			data.user.homes.forEach((home) => {
-				idbPromise('homes', 'put', home);
-			});
-		}
-		// get cache from idb
-		else if (!loading) {
-			idbPromise('user', 'get').then((indexedInfo) => {
-				setTestState({
-					user: indexedInfo.user,
-					homes: indexedInfo.user.homes,
-				});
-			});
-		}
-	}, [user, homes, data, loading]);
-  
-	// END OF PWA TEST CODE
 
 	return (
 		<React.Fragment>
