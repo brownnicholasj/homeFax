@@ -18,6 +18,7 @@ import Friends from './pages/Friends.js';
 import Zillow from './pages/Zillow.js';
 import Twitter from './pages/Twitter.js';
 import SignIn from './components/SignIn';
+import MyHome from './pages/MyHome.js';
 
 const httpLink = createHttpLink({
 	uri: '/graphql',
@@ -48,6 +49,9 @@ function App(props) {
 					</Route>
 					<Route exact path="/home">
 						<PaperBase content={<Home></Home>}></PaperBase>
+					</Route>
+					<Route exact path="/myhomes/:homeid">
+						<PaperBase content={<MyHome></MyHome>}></PaperBase>
 					</Route>
 					<Route exact path="/settings">
 						<PaperBase content={<Settings></Settings>}></PaperBase>
