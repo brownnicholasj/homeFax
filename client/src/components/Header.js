@@ -27,6 +27,7 @@ const lightColor = 'rgba(255, 255, 255, 0.7)';
 const styles = (theme) => ({
 	secondaryBar: {
 		zIndex: 0,
+		minHeight: '6.7vh',
 	},
 	menuButton: {
 		marginLeft: -theme.spacing(1),
@@ -61,7 +62,6 @@ function Header(props) {
 		if (event.target.id === 'logout') {
 			Auth.logout();
 		}
-		console.log('event.target :>> ', event.target.id);
 		setAnchorEl(null);
 	};
 
@@ -69,7 +69,7 @@ function Header(props) {
 		<React.Fragment>
 			<AppBar color="primary" position="sticky" elevation={0}>
 				{Auth.loggedIn() && (
-					<Toolbar>
+					<Toolbar className={classes.secondaryBar}>
 						<Grid container spacing={1} alignItems="center">
 							<Hidden smUp>
 								<Grid item>
@@ -153,54 +153,6 @@ function Header(props) {
 						</Grid>
 					</Toolbar>
 				)}
-			</AppBar>
-			<AppBar
-				component="div"
-				className={classes.secondaryBar}
-				color="primary"
-				position="static"
-				elevation={0}
-			>
-				<Toolbar>
-					<Grid container alignItems="center" spacing={1}>
-						<Grid item xs>
-							<Typography color="inherit" variant="h5" component="h1">
-								Authentication
-							</Typography>
-						</Grid>
-						<Grid item>
-							<Button
-								className={classes.button}
-								variant="outlined"
-								color="inherit"
-								size="small"
-							>
-								Web setup
-							</Button>
-						</Grid>
-						<Grid item>
-							<Tooltip title="Help">
-								<IconButton color="inherit">
-									<HelpIcon />
-								</IconButton>
-							</Tooltip>
-						</Grid>
-					</Grid>
-				</Toolbar>
-			</AppBar>
-			<AppBar
-				component="div"
-				className={classes.secondaryBar}
-				color="primary"
-				position="static"
-				elevation={0}
-			>
-				{/* <Tabs value={0} textColor="inherit">
-					<Tab textColor="inherit" label="Users" />
-					<Tab textColor="inherit" label="Sign-in method" />
-					<Tab textColor="inherit" label="Templates" />
-					<Tab textColor="inherit" label="Usage" />
-				</Tabs> */}
 			</AppBar>
 		</React.Fragment>
 	);

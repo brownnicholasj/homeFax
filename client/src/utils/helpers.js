@@ -13,6 +13,7 @@ export function idbPromise(storeName, method, object) {
       const db = request.result;
       db.createObjectStore('user', { keyPath: '_id' });
       db.createObjectStore('homes', { keyPath: '_id' });
+      // db.createObjectStore('transfers', { keyPath: '_id' });
     };
 
     request.onerror = function(e) {

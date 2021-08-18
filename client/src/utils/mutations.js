@@ -149,12 +149,14 @@ export const ADD_USER = gql`
 		$firstName: String!
 		$lastName: String!
 		$email: String!
+		$username: String!
 		$password: String!
 		$dob: String!
 	) {
 		addUser(
 			firstName: $firstName
 			lastName: $lastName
+			username: $username
 			email: $email
 			password: $password
 			dob: $dob
@@ -162,6 +164,7 @@ export const ADD_USER = gql`
 			token
 			user {
 				_id
+				username
 				email
 			}
 		}
@@ -249,3 +252,63 @@ export const EDIT_DETAIL = gql`
 		}
 	}
 `;
+
+export const DELETE_USER = gql`
+	mutation DeleteUser($password: String!) {
+		editUser(password: $password) {
+			_id
+		}
+	}
+`;
+
+export const DELETE_HOME = gql`
+	mutation DeleteHome($homeId: ID!) {
+		deleteHome(homeId: $homeId) {
+			_id
+		}
+	}
+`;
+
+export const DELETE_AREA = gql`
+	mutation DeleteArea($areaId: ID!) {
+		deleteArea(areaId: $areaId) {
+			_id
+		}
+	}
+`;
+
+export const DELETE_ATTRIBUTE = gql`
+	mutation DeleteAttribute($attributeId: ID!) {
+		deleteAttribute(attributeId: $attributeId) {
+			_id
+		}
+	}
+`;
+
+export const DELETE_DETAIL = gql`
+	mutation DeleteDetail($detailId: ID!) {
+		deleteDetail(detailId: $detailId) {
+			_id
+		}
+	}
+
+	
+`;
+
+export const EDIT_HOME = gql`
+	mutation EditHome($homeId: ID!, $address: HomeAddress) {
+		editHome(homeId: $homeId, address: $address) {
+			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+		}
+	}
+`;
+
+
+

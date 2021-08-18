@@ -132,6 +132,7 @@ db.once('open', async () => {
 
 	const homes = await Home.insertMany([
 		//PAMELA WASHINGTON HOME -- SIMPLE EXAMPLE
+		//INDEX 0
 		{
 			address: {
 				street1: '6137 sw 38th ter',
@@ -177,6 +178,7 @@ db.once('open', async () => {
 			],
 		},
 		//FRANK FLIPPERS HOUSE THAT HE IS RENOVATING (LOTS OF ITEMS)
+		//INDEX 1
 		{
 			address: {
 				street1: '1947 N 4th St',
@@ -265,6 +267,7 @@ db.once('open', async () => {
 			],
 		},
 		//LAND LORD AND JOE RENTER SPLIT HOME
+		//INDEX 2
 		{
 			address: {
 				street1: '1474 Carla Rdg',
@@ -313,6 +316,143 @@ db.once('open', async () => {
 				},
 			],
 		},
+		// index 03
+		{
+			address: {
+				street1: '2146 Louisiana Street',
+				city: 'Lawrence',
+				state: 'KS',
+				zip: '66046',
+			},
+			areas: [
+				{
+					name: 'Studio',
+					icon: '',
+					attributes: [
+						{
+							type: 'Drums',
+							detail: [
+								{
+									key: 'Sticks',
+									value: 'Wooden',
+								},
+								{
+									key: 'Snare',
+									value: 'White',
+								},
+								{
+									key: 'Stool',
+									value: 'Metal',
+								},
+							],
+						},
+					],
+				},
+			],
+		},
+		// index 04
+		{
+			address: {
+				street1: '6637 State Line Rd',
+				city: 'Kansas City',
+				state: 'MO',
+				zip: '64113',
+			},
+			areas: [
+				{
+					name: 'Movie Theater',
+					icon: '',
+					attributes: [
+						{
+							type: 'Sofa',
+							detail: [
+								{
+									key: 'Color',
+									value: 'Black',
+								},
+								{
+									key: 'Reclining',
+									value: 'Yes',
+								},
+							],
+						},
+						{
+							type: 'Screen',
+							detail: [
+								{
+									key: 'Size',
+									value: 'Large',
+								},
+								{
+									key: 'Definition',
+									value: 'Hi',
+								},
+							],
+						},
+					],
+				},
+			],
+		},
+		// index 05
+		{
+			address: {
+				street1: '1137 SW Camden Ln',
+				city: 'Topeka',
+				state: 'KS',
+				zip: '66604',
+			},
+			areas: [
+				{
+					name: 'Shop',
+					icon: '',
+					attributes: [
+						{
+							type: 'Workbench',
+							detail: [
+								{
+									key: 'Material',
+									value: 'Wood',
+								},
+								{
+									key: 'Functional',
+									value: 'Yes',
+								},
+							],
+						},
+					],
+				},
+			],
+		},
+		// index 06
+		{
+			address: {
+				street1: '9860 La Jolla Farms Rd',
+				city: 'La Jolla',
+				state: 'CA',
+				zip: '92037',
+			},
+			areas: [
+				{
+					name: 'Garden',
+					icon: '',
+					attributes: [
+						{
+							type: 'Plant Seeds',
+							detail: [
+								{
+									key: 'Flower',
+									value: 'Creative',
+								},
+								{
+									key: 'Shrubs',
+									value: 'Lazy',
+								},
+							],
+						},
+					],
+				},
+			],
+		},
 	]);
 
 	console.log('homes seeded');
@@ -335,27 +475,8 @@ db.once('open', async () => {
 			// ],
 			homes: [homes[0]._id],
 		},
-		//OWNS HOME IN BEVERLY HILLS RENTS TO JOE RENTER
-		{
-			firstName: 'Land',
-			lastName: 'Lord',
-			dob: '1969-01-01',
-			username: 'landlord',
-			email: 'landlord@email.com',
-			password: 'password12345',
-			homes: [homes[1]._id],
-		},
-		//RENTS HOME IN BEVERLY HILLS FROM LAND LORD
-		{
-			firstName: 'Joe',
-			lastName: 'Renter',
-			dob: '1969-02-02',
-			username: 'renter',
-			email: 'joerenter@email.com',
-			password: 'password12345',
-			homes: [homes[1]._id],
-		},
 		//HOME FLIPPER WITH A LOT OF ACTIVITIES
+		//INDEX 01
 		{
 			firstName: 'Frank',
 			lastName: 'Flipper',
@@ -363,7 +484,73 @@ db.once('open', async () => {
 			username: 'flipper',
 			email: 'frankflipper@email.com',
 			password: 'password12345',
+			homes: [homes[1]._id],
+		},
+		//OWNS HOME IN BEVERLY HILLS RENTS TO JOE RENTER
+		//INDEX 02
+		{
+			firstName: 'Land',
+			lastName: 'Lord',
+			dob: '1969-01-01',
+			username: 'landlord',
+			email: 'landlord@email.com',
+			password: 'password12345',
 			homes: [homes[2]._id],
+		},
+		//RENTS HOME IN BEVERLY HILLS FROM LAND LORD
+		//INDEX 02
+		{
+			firstName: 'Joe',
+			lastName: 'Renter',
+			dob: '1969-02-02',
+			username: 'renter',
+			email: 'joerenter@email.com',
+			password: 'password12345',
+			homes: [homes[2]._id],
+		},
+		//Eddie
+		//INDEX 03
+		{
+			firstName: 'Edward',
+			lastName: 'Reed',
+			dob: '2000-01-01',
+			username: 'Edward',
+			email: 'edward@email.com',
+			password: 'password12345',
+			homes: [homes[3]._id],
+		},
+		//Blake
+		//INDEX 04
+		{
+			firstName: 'Blake',
+			lastName: 'Wright',
+			dob: '2000-01-01',
+			username: 'Blake',
+			email: 'blake@email.com',
+			password: 'password12345',
+			homes: [homes[4]._id],
+		},
+		//Bryan
+		//INDEX 05
+		{
+			firstName: 'Bryan',
+			lastName: 'Barnes',
+			dob: '2000-01-01',
+			username: 'Bryan',
+			email: 'bryan@email.com',
+			password: 'password12345',
+			homes: [homes[5]._id],
+		},
+		//Nic
+		//INDEX 06
+		{
+			firstName: 'Nicholas',
+			lastName: 'Brown',
+			dob: '2000-01-01',
+			username: 'Nic',
+			email: 'nicholas@email.com',
+			password: 'password12345',
+			homes: [homes[6]._id],
 		}
 	);
 
