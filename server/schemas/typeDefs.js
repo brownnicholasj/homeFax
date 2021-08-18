@@ -99,13 +99,19 @@ const typeDefs = gql`
 			password: String!
 			dob: String!
 		): Auth
+		deleteUser(password: String): User
 		addHome(address: HomeAddress!): Home
+		editHome(homeId: String!, address: HomeAddress): Home
+		deleteHome(homeId: ID!): Home
 		addArea(homeId: ID!, name: String!, icon: String): Home
 		editArea(areaId: ID!, name: String, icon: String): Home
+		deleteArea(areaId: ID!): Home
 		addAttribute(areaId: ID!, type: String!): Home
 		editAttribute(attributeId: ID!, type: String!): Home
+		deleteAttribute(attributeId: ID!): Home
 		addDetail(attributeId: ID!, key: String!, value: String!): Home
 		editDetail(detailId: ID!, key: String, value: String): Home
+		deleteDetail(detailId: ID!): Home
 		transferHome(transferer: ID, receiver: ID, home: ID!): User
 
 		addOrder(products: [ID]!): Order
