@@ -2,8 +2,28 @@ const { AuthenticationError } = require('apollo-server-express');
 const { User, Product, Category, Order, Home } = require('../models');
 const { signToken } = require('../utils/auth');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const { GraphQLScalarType } = require('graphql');
+const { Kind } = require('graphql/language');
+const dayjs = require('dayjs');
 
 const resolvers = {
+	Date: new GraphQLScalarType({
+		name: 'Date',
+		description: 'Custom Date Scalar type',
+		parseValue(value) {
+			return dayjs(value);
+		},
+		serialize(value) {
+			return dayjs(value).format('MM-DD-YYYY');
+		},
+		parseLiteral(ast) {
+			if (ast.kind === Kind.STRING) {
+				return dayjs(ast.value);
+			}
+			return null;
+		},
+	}),
+
 	Query: {
 		user: async (parent, args, context) => {
 			if (context.user) {
@@ -113,7 +133,7 @@ const resolvers = {
 			const home = await Home.findByIdAndUpdate(
 				args.homeId,
 				{
-					address: args.address
+					address: args.address,
 				},
 				{ new: true }
 			);
@@ -123,7 +143,7 @@ const resolvers = {
 			if (context.user._id == args.userId) {
 				const home = await Home.findOneAndDelete({ _id: args.homeId });
 				return home;
-			};
+			}
 			return;
 		},
 		addArea: async (parent, { homeId, name, icon }) => {
@@ -158,7 +178,7 @@ const resolvers = {
 			if (context.user._id == args.userId) {
 				const area = await Home.findOneAndDelete({ 'areas._id': args.areaId });
 				return area;
-			};
+			}
 			return;
 		},
 		addAttribute: async (parent, { areaId, type }) => {
@@ -201,9 +221,11 @@ const resolvers = {
 		},
 		deleteAttribute: async (parent, args, context) => {
 			if (context.user._id == args.userId) {
-				const attribute = await Home.findOneAndDelete({ 'areas.attributes._id': args.attributeId });
+				const attribute = await Home.findOneAndDelete({
+					'areas.attributes._id': args.attributeId,
+				});
 				return attribute;
-			};
+			}
 			return;
 		},
 		addDetail: async (parent, { attributeId, key, value }) => {
@@ -228,7 +250,9 @@ const resolvers = {
 			return updatedHome;
 		},
 		editDetail: async (parent, { detailId, key, value }) => {
-			const home = await Home.findOne({ 'areas.attributes.detail._id': detailId });
+			const home = await Home.findOne({
+				'areas.attributes.detail._id': detailId,
+			});
 			const areas = home.areas.map((area) => {
 				const attributes = area.attributes.map((attribute) => {
 					const details = attribute.detail.map((detail) => {
@@ -254,9 +278,11 @@ const resolvers = {
 		},
 		deleteDetail: async (parent, args, context) => {
 			if (context.user._id == args.userId) {
-				const detail = await Home.findOneAndDelete({ 'areas.attributes.detail._id': args.detailId });
+				const detail = await Home.findOneAndDelete({
+					'areas.attributes.detail._id': args.detailId,
+				});
 				return detail;
-			};
+			}
 			return;
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
@@ -292,7 +318,9 @@ const resolvers = {
 		},
 		updateUser: async (parent, args, context) => {
 			if (context.user) {
-				return await User.findByIdAndUpdate(context.user._id, args, { new: true });
+				return await User.findByIdAndUpdate(context.user._id, args, {
+					new: true,
+				});
 			}
 
 			throw new AuthenticationError('Not logged in');
@@ -301,7 +329,8 @@ const resolvers = {
 			const email = identifier;
 			const username = identifier;
 			console.log('logging in');
-			const user = await User.findOne({ email }) || await User.findOne({ username });
+			const user =
+				(await User.findOne({ email })) || (await User.findOne({ username }));
 			if (!user) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
