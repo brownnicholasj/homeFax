@@ -101,10 +101,30 @@ const resolvers = {
 
 			return { token, user };
 		},
+		deleteUser: async (parent, args, context) => {
+			const user = await User.findOneAndDelete({ _id: context.user._id });
+			return;
+		},
 		addHome: async (parent, args) => {
-			console.log(args);
 			const home = await Home.create(args);
 			return home;
+		},
+		editHome: async (parent, args) => {
+			const home = await Home.findByIdAndUpdate(
+				args.homeId,
+				{
+					address: args.address
+				},
+				{ new: true }
+			);
+			return home;
+		},
+		deleteHome: async (parent, args, context) => {
+			if (context.user._id == args.userId) {
+				const home = await Home.findOneAndDelete({ _id: args.homeId });
+				return home;
+			};
+			return;
 		},
 		addArea: async (parent, { homeId, name, icon }) => {
 			const home = await Home.findByIdAndUpdate(
@@ -133,6 +153,13 @@ const resolvers = {
 				{ new: true }
 			);
 			return updatedHome;
+		},
+		deleteArea: async (parent, args, context) => {
+			if (context.user._id == args.userId) {
+				const area = await Home.findOneAndDelete({ 'areas._id': args.areaId });
+				return area;
+			};
+			return;
 		},
 		addAttribute: async (parent, { areaId, type }) => {
 			const home = await Home.findOne({ 'areas._id': areaId });
@@ -171,6 +198,13 @@ const resolvers = {
 			);
 
 			return updatedHome;
+		},
+		deleteAttribute: async (parent, args, context) => {
+			if (context.user._id == args.userId) {
+				const attribute = await Home.findOneAndDelete({ 'areas.attributes._id': args.attributeId });
+				return attribute;
+			};
+			return;
 		},
 		addDetail: async (parent, { attributeId, key, value }) => {
 			const home = await Home.findOne({ 'areas.attributes._id': attributeId });
@@ -218,6 +252,13 @@ const resolvers = {
 
 			return updatedHome;
 		},
+		deleteDetail: async (parent, args, context) => {
+			if (context.user._id == args.userId) {
+				const detail = await Home.findOneAndDelete({ 'areas.attributes.detail._id': args.detailId });
+				return detail;
+			};
+			return;
+		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
 			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
 			if (transferer) {
@@ -257,10 +298,10 @@ const resolvers = {
 			throw new AuthenticationError('Not logged in');
 		},
 		login: async (parent, { identifier, password }) => {
-      const email = identifier;
-      const username = identifier;
+			const email = identifier;
+			const username = identifier;
 			console.log('logging in');
-      const user = await User.findOne({ email }) || await User.findOne({ username });
+			const user = await User.findOne({ email }) || await User.findOne({ username });
 			if (!user) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
