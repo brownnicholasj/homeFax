@@ -58,8 +58,8 @@ function Home(props) {
 		else if (!loading) {
 			idbPromise('user', 'get').then((indexedInfo) => {
 				setTestState({
-					user: data.user,
-					homes: data.user.homes,
+					user: indexedInfo.user,
+					homes: indexedInfo.user.homes,
 				});
 			});
 		}
