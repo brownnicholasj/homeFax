@@ -198,11 +198,11 @@ function Paperbase(props) {
 				<div className={classes.app}>
 					<Header onDrawerToggle={handleDrawerToggle} />
 					<main className={classes.main}>
-						<Grid container alignContent="center" justifyContent="center">
-							<Grid item xs={12}>
-								{Auth.loggedIn() ? (
-									content
-								) : (
+						{Auth.loggedIn() ? (
+							content
+						) : (
+							<Grid container alignContent="center" justifyContent="center">
+								<Grid item xs={12}>
 									<div
 										style={{
 											display: 'flex',
@@ -212,9 +212,9 @@ function Paperbase(props) {
 									>
 										<SignIn align="center"></SignIn>
 									</div>
-								)}
+								</Grid>
 							</Grid>
-						</Grid>
+						)}
 					</main>
 					<footer className={classes.footer}>
 						<Copyright />
