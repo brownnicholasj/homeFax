@@ -121,6 +121,15 @@ const resolvers = {
 
 			return { token, user };
 		},
+		updateUser: async (parent, args, context) => {
+			if (context.user) {
+				return await User.findByIdAndUpdate(context.user._id, args, {
+					new: true,
+				});
+			}
+
+			throw new AuthenticationError('Not logged in');
+		},
 		deleteUser: async (parent, args, context) => {
 			const user = await User.findOneAndDelete({ _id: context.user._id });
 			return;
@@ -228,12 +237,12 @@ const resolvers = {
 			}
 			return;
 		},
-		addDetail: async (parent, { attributeId, key, value }) => {
+		addDetail: async (parent, { attributeId, key, value, date }) => {
 			const home = await Home.findOne({ 'areas.attributes._id': attributeId });
 			const areas = home.areas.map((area) => {
 				const attributes = area.attributes.map((attribute) => {
 					if (attribute._id == attributeId) {
-						attribute.detail.push({ key, value });
+						attribute.detail.push({ key, value, date });
 					}
 					return attribute;
 				});
@@ -249,7 +258,7 @@ const resolvers = {
 
 			return updatedHome;
 		},
-		editDetail: async (parent, { detailId, key, value }) => {
+		editDetail: async (parent, { detailId, key, value, date }) => {
 			const home = await Home.findOne({
 				'areas.attributes.detail._id': detailId,
 			});
@@ -259,6 +268,7 @@ const resolvers = {
 						if (detail._id == detailId) {
 							detail.key = key;
 							detail.value = value;
+							detail.date = date;
 						}
 						return detail;
 					});
@@ -315,15 +325,6 @@ const resolvers = {
 			//   }, { new: true }).populate('homes');
 			//   return receiptUser;
 			// }
-		},
-		updateUser: async (parent, args, context) => {
-			if (context.user) {
-				return await User.findByIdAndUpdate(context.user._id, args, {
-					new: true,
-				});
-			}
-
-			throw new AuthenticationError('Not logged in');
 		},
 		login: async (parent, { identifier, password }) => {
 			const email = identifier;

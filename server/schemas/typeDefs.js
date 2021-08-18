@@ -76,6 +76,7 @@ const typeDefs = gql`
 		_id: ID!
 		key: String!
 		value: String!
+		date: Date
 	}
 
 	type Checkout {
@@ -111,8 +112,8 @@ const typeDefs = gql`
 		addAttribute(areaId: ID!, type: String!): Home
 		editAttribute(attributeId: ID!, type: String!): Home
 		deleteAttribute(attributeId: ID!): Home
-		addDetail(attributeId: ID!, key: String!, value: String!): Home
-		editDetail(detailId: ID!, key: String, value: String): Home
+		addDetail(attributeId: ID!, key: String!, value: String!, date: Date): Home
+		editDetail(detailId: ID!, key: String, value: String, date: Date): Home
 		deleteDetail(detailId: ID!): Home
 		transferHome(transferer: ID, receiver: ID, home: ID!): User
 
@@ -123,6 +124,7 @@ const typeDefs = gql`
 			username: String
 			email: String
 			password: String
+			dob: Date
 		): User
 		updateProduct(_id: ID!, quantity: Int!): Product
 		login(identifier: String!, password: String!): Auth

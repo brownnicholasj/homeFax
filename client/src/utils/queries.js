@@ -29,6 +29,7 @@ export const QUERY_USER = gql`
               _id
               key
               value
+			  date
             }
           }
         }
@@ -49,8 +50,20 @@ query getHome($homeId: ID!) {
       zip
     }
     areas {
-      name
-    }
+		_id
+		name
+		icon
+		attributes {
+		  _id
+		  type
+		  detail {
+			_id
+			key
+			value
+			date
+		  }
+		}
+	}
   }
 }
 `

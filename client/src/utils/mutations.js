@@ -82,6 +82,7 @@ export const ADD_AREA = gql`
 					detail {
 						key
 						value
+						date
 					}
 				}
 			}
@@ -110,6 +111,7 @@ export const ADD_ATTRIBUTE = gql`
 					detail {
 						key
 						value
+						date
 					}
 				}
 			}
@@ -138,6 +140,7 @@ export const ADD_DETAIL = gql`
 					detail {
 						key
 						value
+						date
 					}
 				}
 			}
@@ -190,6 +193,7 @@ export const EDIT_AREA = gql`
 					detail {
 						key
 						value
+						date
 					}
 				}
 			}
@@ -218,6 +222,7 @@ export const EDIT_ATTRIBUTE = gql`
 					detail {
 						key
 						value
+						date
 					}
 				}
 			}
@@ -246,6 +251,7 @@ export const EDIT_DETAIL = gql`
 					detail {
 						key
 						value
+						date
 					}
 				}
 			}
