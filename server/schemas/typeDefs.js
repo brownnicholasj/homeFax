@@ -1,6 +1,8 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
+	scalar Date
+
 	type Category {
 		_id: ID
 		name: String
@@ -27,7 +29,7 @@ const typeDefs = gql`
 		firstName: String!
 		lastName: String!
 		password: String!
-		dob: String!
+		dob: Date!
 		username: String!
 		email: String!
 		orders: [Order]
@@ -97,7 +99,7 @@ const typeDefs = gql`
 			username: String!
 			email: String!
 			password: String!
-			dob: String!
+			dob: Date!
 		): Auth
 		deleteUser(password: String): User
 		addHome(address: HomeAddress!): Home
