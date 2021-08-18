@@ -13,6 +13,9 @@ const detailSchema = new Schema({
     required: true,
     trim: true
   },
+  date: {
+    type: Date,
+  },
 });
 
 
