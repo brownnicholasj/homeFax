@@ -1,11 +1,11 @@
 import React from 'react';
-import Content from '../components/Content';
+import DetailForm from '../components/DetailForm';
 
 function Misc(props) {
 	return (
 		<React.Fragment>
 			<h1>Misc</h1>
-			<Content></Content>
+			<DetailForm test={'Test Title'} />
 		</React.Fragment>
 	);
 }
