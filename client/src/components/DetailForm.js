@@ -5,23 +5,14 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-// IMPORTS FOR DETAIL FORM TESTING
 
 import TextField from '@material-ui/core/TextField';
-// import { useStoreContext } from '../utils/GlobalState';
-// import { idbPromise } from '../utils/helpers';
-// import Actions from '../utils/actions';
 import { useQuery, useMutation } from '@apollo/client';
-// import { QUERY_USER } from '../utils/queries';
 import {
 	ADD_DETAIL,
     EDIT_DETAIL,
     DELETE_DETAIL
 } from '../utils/mutations';
-
-
-// END OF IMPORTS
-
 
 
 const useStyles = makeStyles((theme) => ({
@@ -52,42 +43,6 @@ export default function OutlinedCard({ test }) {
     const [formState, setFormState] = useState({ attributeId: '611d3a49f38c9d6718e4f856', key: '', value: '', date: '' });
 	const [addDetail, { error }] = useMutation(ADD_DETAIL);
 	// const [editDetail, { error }] = useMutation(EDIT_DETAIL);
-
-    // const [state, dispatch] = useStoreContext();
-	// const { loading, data } = useQuery(QUERY_USER);
-
-
-    // useEffect(() => {
-	// 	if (data) {
-	// 		dispatch({
-	// 			type: UPDATE_USER,
-	// 			user: data.user,
-	// 		});
-	// 		idbPromise('user', 'put', data.user);
-	// 		dispatch({
-	// 			type: UPDATE_HOMES,
-	// 			homes: data.user.homes,
-	// 		});
-	// 		data.user.homes.forEach((home) => {
-	// 			idbPromise('homes', 'put', home);
-	// 	    });
-	// 	} else if (!loading) {
-	// 		idbPromise('user', 'get').then((user) => {
-	// 			dispatch({
-	// 				type: UPDATE_USER,
-	// 				user: user,
-	// 			});
-	// 		});
-	// 		idbPromise('homes', 'get').then((homes) => {
-	// 			dispatch({
-	// 				type: UPDATE_HOMES,
-	// 				homes: homes,
-	// 			});
-	// 		});
-	// 	}
-	//   }, [data, loading, dispatch]);
-
-
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
         try {
