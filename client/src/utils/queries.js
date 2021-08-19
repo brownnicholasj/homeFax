@@ -106,3 +106,14 @@ query Transfer($transferId: ID!) {
 	}
 }
 `;
+// Use graph and apollo to update user email
+export const QUERY_UPDATE_USER = gql`
+  {
+    user {
+      firstName
+      lastName
+      dob
+      username
+            }
+          }
+ `;

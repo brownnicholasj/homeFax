@@ -12,6 +12,7 @@ const typeDefs = gql`
 		username: String!
 		email: String!
 		homes: [Home]
+		currentPassword: String
 	}
 
 	type Home {
@@ -109,8 +110,9 @@ const typeDefs = gql`
 			username: String
 			email: String
 			password: String
-			dob: Date
-		): User
+		): Auth
+		updatePassword(password: String, currentPassword: String): Auth
+		deleteProfile(password: String!): Boolean
 		login(identifier: String!, password: String!): Auth
 	}
 `;

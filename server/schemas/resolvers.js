@@ -2,6 +2,7 @@ const { AuthenticationError } = require('apollo-server-express');
 const { User, Home, Transfer } = require('../models');
 const { signToken } = require('../utils/auth');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const bcrypt = require("bcrypt")
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
 const dayjs = require('dayjs');
@@ -257,6 +258,16 @@ const resolvers = {
 			//   return receiptUser;
 			// }
 		},
+		updateUser: async (parent, args, context) => {
+			if (context.user) {
+				const user = await User.findByIdAndUpdate(context.user._id, args, { new: true });
+				const token = signToken(user)
+
+				return { token, user }
+			}
+
+			throw new AuthenticationError('Not logged in');
+		},
 		createTransfer: async (parent, args) => {
 			return await Transfer.create(args);
 		},
@@ -269,8 +280,7 @@ const resolvers = {
 			const email = identifier;
 			const username = identifier;
 			console.log('logging in');
-			const user =
-				(await User.findOne({ email })) || (await User.findOne({ username }));
+			const user = await User.findOne({ email }) || await User.findOne({ username });
 			if (!user) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
@@ -285,6 +295,48 @@ const resolvers = {
 
 			return { token, user };
 		},
+		// updateEmail: async (parent, args, context) => {
+		// 	if (context.user) {
+		// 		return await User.findByIdAndUpdate(context.user._id, args, { new: true });
+		// 	}
+
+		// 	throw new AuthenticationError('Not logged in');
+		// },
+		updatePassword: async (parent, args, context) => {
+
+			if (context.user) {
+				const foundUser = await User.findById(context.user._id)
+				const passwordMatch = await bcrypt.compareSync(args.password, foundUser.password);
+
+				if (!passwordMatch) throw new AuthenticationError("Password does not match")
+				const hashedPassword = await bcrypt.hash(args.currentPassword, 10);
+				foundUser.password = hashedPassword
+				const updatedUser = {
+					...foundUser,
+					password: hashedPassword
+				}
+				console.log(args.currentPassword)
+				const user = await User.findByIdAndUpdate(context.user._id, foundUser, { new: true });
+				const token = signToken(user)
+
+				return { token, user }
+			}
+
+			throw new AuthenticationError('Not logged in');
+		},
+		deleteProfile: async (parent, args, context) => {
+			if (context.user) {
+				const user = await User.findById(context.user._id)
+				const passwordMatch = await bcrypt.compareSync(args.password, user.password);
+
+				if (!passwordMatch) throw new AuthenticationError("Password does not match!")
+
+				await User.findByIdAndDelete(context.user._id);
+				return true
+			}
+
+			throw new AuthenticationError('Not logged in');
+		}
 	},
 };
 

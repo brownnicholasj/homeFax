@@ -338,4 +338,51 @@ query EditTransfer($transferer: String, $receiver: String, $home: ID!) {
 }
 `;
 
+export const UPDATE_USER = gql`
+	mutation updateUser(
+		$firstName: String
+ 		$lastName: String
+ 		$email: String
+ 		$username: String
+	) {
+		updateUser(
+			firstName: $firstName
+ 			lastName: $lastName
+ 			username: $username
+ 			email: $email
+			) {
+				token
+				user {
+					_id
+					firstName
+					lastName
+				}
+			}
+	}
+`
+
+export const UPDATE_PASSWORD = gql`
+	mutation updatePassword(
+ 		$password: String
+		$currentPassword: String
+	) {
+		updatePassword(
+ 			password: $password
+			currentPassword: $currentPassword
+			) {
+				token
+				user {
+					_id
+					firstName
+					lastName
+				}
+			}
+	}
+`;
+
+export const DELETE_PROFILE = gql`
+	mutation deleteProfile($password: String!) {
+		deleteProfile(password: $password) 
+	}
+`;
 
