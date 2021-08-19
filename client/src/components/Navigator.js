@@ -111,7 +111,7 @@ function Navigator(props) {
 	const { classes, ...other } = props;
 
 	const isActive = (value) => {
-		console.log('value :>> ', value);
+		// console.log('value :>> ', value);
 		return window.location.pathname === value;
 	};
 	const [isLoggedIn, setIsLoggedIn] = useState(true);

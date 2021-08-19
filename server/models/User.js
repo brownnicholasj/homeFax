@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
-const Order = require('./Order');
 const Home = require('./Home');
 
 const userSchema = new Schema({
@@ -35,7 +34,6 @@ const userSchema = new Schema({
     required: true,
     minlength: 5
   },
-  orders: [Order.schema],
   homes: [
     {
       type: Schema.Types.ObjectId,

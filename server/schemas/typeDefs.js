@@ -1,36 +1,16 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
-	type Category {
-		_id: ID
-		name: String
-	}
-
-	type Product {
-		_id: ID
-		name: String
-		description: String
-		image: String
-		quantity: Int
-		price: Float
-		category: Category
-	}
-
-	type Order {
-		_id: ID
-		purchaseDate: String
-		products: [Product]
-	}
+	scalar Date
 
 	type User {
 		_id: ID!
 		firstName: String!
 		lastName: String!
 		password: String!
-		dob: String!
+		dob: Date!
 		username: String!
 		email: String!
-		orders: [Order]
 		homes: [Home]
 		currentPassword: String
 	}
@@ -75,10 +55,7 @@ const typeDefs = gql`
 		_id: ID!
 		key: String!
 		value: String!
-	}
-
-	type Checkout {
-		session: ID
+		date: Date
 	}
 
 	type Auth {
@@ -86,9 +63,18 @@ const typeDefs = gql`
 		user: User
 	}
 
+	type Transfer {
+		_id: ID!
+		transferer: [User]
+		receiver: [User]
+		home: ID!
+	}
+
 	type Query {
 		user: User
 		home(homeId: ID!): Home
+		transfers: [Transfer]
+		transfer(transferId: ID!): Transfer
 	}
 
 	type Mutation {
@@ -98,18 +84,26 @@ const typeDefs = gql`
 			username: String!
 			email: String!
 			password: String!
-			dob: String!
+			dob: Date!
 		): Auth
+		deleteUser(password: String): User
 		addHome(address: HomeAddress!): Home
+		editHome(homeId: String!, address: HomeAddress): Home
+		deleteHome(homeId: ID!): Home
 		addArea(homeId: ID!, name: String!, icon: String): Home
 		editArea(areaId: ID!, name: String, icon: String): Home
+		deleteArea(areaId: ID!): Home
 		addAttribute(areaId: ID!, type: String!): Home
 		editAttribute(attributeId: ID!, type: String!): Home
-		addDetail(attributeId: ID!, key: String!, value: String!): Home
-		editDetail(detailId: ID!, key: String, value: String): Home
+		deleteAttribute(attributeId: ID!): Home
+		addDetail(attributeId: ID!, key: String!, value: String!, date: Date): Home
+		editDetail(detailId: ID!, key: String, value: String, date: Date): Home
+		deleteDetail(detailId: ID!): Home
 		transferHome(transferer: ID, receiver: ID, home: ID!): User
+		
+		createTransfer(transferer: String, receiver: String, home: ID!): Transfer
+		editTransfer(transferer: String, receiver: String, home: ID!): Transfer
 
-		addOrder(products: [ID]!): Order
 		updateUser(
 			firstName: String
 			lastName: String
@@ -119,7 +113,6 @@ const typeDefs = gql`
 		): Auth
 		updatePassword(password: String, currentPassword: String): Auth
 		deleteProfile(password: String!): Boolean
-		updateProduct(_id: ID!, quantity: Int!): Product
 		login(identifier: String!, password: String!): Auth
 	}
 `;
