@@ -13,9 +13,9 @@ import {
 	ADD_DETAIL,
     EDIT_DETAIL,
     DELETE_DETAIL
-} from '../utils/mutations';
+} from '../../utils/mutations';
 
-import Snack from './Snack';
+import Snack from '../Snack';
 
 
 const useStyles = makeStyles((theme) => ({

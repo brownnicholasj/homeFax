@@ -1,6 +1,7 @@
 import React from 'react';
-import AddDetail from '../components/AddDetail';
-import AddAttribute from '../components/AddAttribute';
+import AddDetail from '../components/forms/AddDetail';
+import AddArea from '../components/forms/AddArea';
+import AddAttribute from '../components/forms/AddAttribute';
 import GenericList from '../components/GenericList';
 import HomeCard from '../components/HomeCard';
 
@@ -25,7 +26,7 @@ function Misc(props) {
 		effectHelper(data, dispatch, loading);
 	}, [data, loading, dispatch]);
 
-	function selectRandomArea() {
+	function selectArea() {
 		const areas = homes.map(home => home.areas[0])
 		return {
 			areaName: areas[0].name,
@@ -34,15 +35,18 @@ function Misc(props) {
 		}
 	}
 
-	const testArea = selectRandomArea();
+	const testHome = homes[0];
+	const testArea = selectArea();
 	return (
 		<React.Fragment>
 			<h1>Misc</h1>
 			{/* <AddDetail attributeName={'Attribute Name'} attributeId={'611d3a49f38c9d6718e4f856'}/> */}
 			{/* <AddAttribute areaName={testArea.areaName} areaId={testArea.areaId} areaAttributes={testArea.areaAttributes} /> */}
+			<AddArea homeId={testHome._id} homeAreas={testHome.areas} />
 			{/* <GenericList items={homes[0].areas[0].attributes} itemsKey={'type'} subItems={'detail'} subItemsKey={'key'} /> */}
+			<GenericList items={testHome.areas} itemsKey={'name'} />
 			{/* <Card /> */}
-			<HomeCard home={homes[0]} />
+			{/* <HomeCard home={homes[0]} /> */}
 		</React.Fragment>
 	);
 }
