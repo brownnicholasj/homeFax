@@ -111,33 +111,50 @@ db.once('open', async () => {
 								},
 							],
 						},
-						{
-							type: 'Kitchen',
-							detail: [
-								{
-									key: 'Refridgerator',
-									value:
-										'https://www.homedepot.com/p/Frigidaire-18-3-cu-ft-Top-Freezer-Refrigerator-in-White-FFTR1835VW/311743494',
-								},
-								{
-									key: 'Dish Washer',
-									value:
-										'https://www.homedepot.com/p/GE-Profile-18-in-White-Top-Control-Smart-Dishwasher-120-Volt-with-Stainless-Steel-Tub-and-47-dBA-PDT145SGLWW/304789504',
-								},
-								{
-									key: 'Disposal',
-									value:
-										'https://www.homedepot.com/p/InSinkErator-Badger-100-1-3-HP-Continuous-Feed-Garbage-Disposal-Badger-100/203144490',
-								},
-								{
-									key: 'Cabinets',
-									value:
-										'https://www.homedepot.com/collection/kitchen-cabinets/hampton-wall-kitchen-cabinets-in-medium-oak',
-								},
-							],
-						},
 					],
 				},
+				{
+					name: 'Kitchen',
+					icon: '',
+					attributes: [
+						{
+							type: 'Refridgerator',
+							detail: [
+								{
+									key: 'Link',
+									value: 'https://www.homedepot.com/p/Frigidaire-18-3-cu-ft-Top-Freezer-Refrigerator-in-White-FFTR1835VW/311743494',
+								},
+							]
+						},
+						{
+							type: 'Dish Washer',
+							detail: [
+								{
+									key: 'link',
+									value: 'https://www.homedepot.com/p/GE-Profile-18-in-White-Top-Control-Smart-Dishwasher-120-Volt-with-Stainless-Steel-Tub-and-47-dBA-PDT145SGLWW/304789504'
+								}
+							]
+						},
+						{
+							type: 'Disposal',
+							detail: [
+								{
+									key: 'link',
+									value: 'https://www.homedepot.com/p/InSinkErator-Badger-100-1-3-HP-Continuous-Feed-Garbage-Disposal-Badger-100/203144490'
+								}
+							]
+						},
+						{
+							type: 'Cabinets',
+							detail: [
+								{
+									key: 'link',
+									value: 'https://www.homedepot.com/collection/kitchen-cabinets/hampton-wall-kitchen-cabinets-in-medium-oak'
+								}
+							]
+						},
+					]
+				}
 			],
 		},
 		//LAND LORD AND JOE RENTER SPLIT HOME
