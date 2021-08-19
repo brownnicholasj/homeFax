@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Content from './Content';
 import Auth from '../utils/auth';
 import { Card } from '@material-ui/core';
@@ -14,6 +14,18 @@ import { useState } from 'react';
 import { Box } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
+import HomeIcon from '@material-ui/icons/Home';
+
+// These imports are for bringing in data from the globalState
+// They're only here for testing, as components will receive them as props.
+// import { useStoreContext } from '../utils/GlobalState';
+// import { effectHelper } from '../utils/helpers';
+// import { useQuery, useMutation } from '@apollo/client';
+// import { QUERY_USER } from '../utils/queries';
+
+
+
+
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -38,13 +50,23 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Transfer(props) {
+function Transfer({ user, homes, transfers }) {
 	const { email, username, firstName, lastName } = Auth.getProfile().data;
 	const classes = useStyles();
 	// const [expanded, setExpanded] = useState(false);
 	// const [contactExpanded, setContactExpanded] = useState(false);
 	// const [passwordExpanded, setPasswordExpanded] = useState(false);
 	// const [deleteExpanded, setDeleteExpanded] = useState(false);
+
+	// const [state, dispatch] = useStoreContext();
+	// const { user, homes, transfers } = state;
+	// const { loading, data } = useQuery(QUERY_USER);
+
+
+	// useEffect(() => {
+	// 	effectHelper(data, dispatch, loading);
+	// }, [data, loading, dispatch]);
+	// console.log(user);
 
 	// NEED TO RECEIVE THE INPUT FROM THE TRANSFER BUTTON ACTION
 	const [formState, setFormState] = useState({
@@ -76,26 +98,28 @@ function Transfer(props) {
 			<Grid item xs={12}>
 				<Typography variant='h2'>Transfer Home</Typography>
 			</Grid>
-			<Grid item xs={0} md={2} lg={2}>
+			<Grid item xs={2} md={2} lg={2}>
 				<Box></Box>
 			</Grid>
 			<Grid item xs={12} md={4} lg={3}>
-				<Card>
-					<CardHeader title='Home information' />
-					<CardContent>
-						<Typography color='textPrimary' variant='standard'>
-							{formState.street1}
-							<br />
-							{formState.street2}
-							<br />
-							{formState.city}
-							<br />
-							{formState.state}
-							<br />
-							{formState.zip}
-						</Typography>
-					</CardContent>
-				</Card>
+				{homes.map(home => (
+					<Card key={home._id}>
+						<CardContent>
+							<Typography className={classes.title} color="textSecondary" gutterBottom>
+								<HomeIcon />
+							</Typography>
+							<Typography variant="h5" component="h2">
+								{home.address.street1}
+							</Typography>
+							<Typography className={classes.pos} color="textSecondary">
+								{home.address.street2}
+							</Typography>
+							<Typography variant="body2" component="p">
+								{home.address.city}, {home.address.state} {home.address.zip}
+							</Typography>
+						</CardContent>
+					</Card>
+				))}
 			</Grid>
 			<Box
 				display='flex'
@@ -111,7 +135,6 @@ function Transfer(props) {
 				display='flex'
 				justifyContent='center'
 				alignItems='center'
-				fullWidth
 				ml={2}
 			>
 				<Card>
@@ -127,7 +150,7 @@ function Transfer(props) {
 					</CardContent>
 				</Card>
 			</Box>
-			<Grid item xs={0} md={2} lg={4}>
+			<Grid item xs={2} md={2} lg={4}>
 				<Box></Box>
 			</Grid>
 			<Grid container justifyContent='center'>
