@@ -44,6 +44,16 @@ const resolvers = {
 		transfer: async (parent, { transferId }) => {
 			return await Home.findById(transferId);
 		},
+		area: async (parent, { areaId }) => {
+			return await Home.findOne({ 'areas._id': areaId });
+		},
+		attribute: async (parent, { attributeId }) => {
+			return await Home.findOne({ 'areas.attributes._id': attributeId });
+		},
+		detail: async (parent, { detailId }) => {
+			return await Home.findOne({ 'areas.attributes.detail._id': detailId });
+		},
+
 	},
 	Mutation: {
 		addUser: async (parent, args) => {

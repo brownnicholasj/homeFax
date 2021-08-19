@@ -7,8 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import { Divider } from '@material-ui/core';
 
 import TextField from '@material-ui/core/TextField';
-import { useQuery, useMutation } from '@apollo/client';
-import { ADD_DETAIL } from '../../utils/mutations';
+import { useMutation } from '@apollo/client';
+import { EDIT_DETAIL } from '../../utils/mutations';
 
 import Snack from '../Snack';
 
@@ -35,19 +35,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function AddDetail({ attributeName, attributeId }) {
+export default function EditDetail({ detailId, detailKey, detailValue, detailDate }) {
     const classes = useStyles();
-    const [snack, setSnack] = useState({ status: false, attributeName: attributeName, detailKey: '' });
-    const [formState, setFormState] = useState({ attributeId: attributeId, key: '', value: '', date: '' });
-	const [addDetail, { error }] = useMutation(ADD_DETAIL);
-	// const [editDetail, { error }] = useMutation(EDIT_DETAIL);
+    const [snack, setSnack] = useState({ status: false, message: '' });
+    const [formState, setFormState] = useState({ detailId: detailId, key: detailKey, value: detailValue, date: detailDate });
+	const [editDetail, { error }] = useMutation(EDIT_DETAIL);
 	const handleFormSubmit = async (event) => {
         event.preventDefault();
         if (formState.key && formState.value) {
             try {
-                const mutationResponse = await addDetail({
+                const mutationResponse = await editDetail({
                     variables: {
-                        attributeId: formState.attributeId,
+                        detailId: formState.detailId,
                         key: formState.key,
                         value: formState.value,
                         date: formState.date
@@ -55,7 +54,7 @@ export default function AddDetail({ attributeName, attributeId }) {
                 });
                 if (mutationResponse) {
                     console.log(mutationResponse);
-                    setSnack({ status: true });
+                    setSnack({ status: true, message: 'Detail updated' });
                 }
             } catch (e) {
                 console.log(e);
@@ -79,35 +78,46 @@ export default function AddDetail({ attributeName, attributeId }) {
                 <div className={classes.gridRoot}>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
-                            <h1>{attributeName}</h1>
+                            <h3>Edit Detail</h3>
                             <Divider />
                         </Grid>
                         <Grid item xs={12} s={6}>
                             <form className={classes.inputRoot} noValidate autoComplete="off">
                                 <div>
                                 <TextField
-                                    required
                                     id="key"
                                     label="Detail"
+                                    defaultValue={detailKey}
                                     helperText="Attribute detail"
                                     variant="standard"
                                     onChange={handleChange}
                                     />
                                     <TextField
-                                    required
                                     id="value"
                                     label="Value"
+                                    defaultValue={detailValue}
                                     helperText="Attribute detail value"
                                     onChange={handleChange}
                                     variant="standard"
                                     />
-                                    <TextField
-                                    id="date"
-                                    type="date"
-                                    helperText="Associated date"
-                                    variant="standard"
-                                    onChange={handleChange}
-                                    />
+                                    {detailDate ? (
+                                        <TextField
+                                        id="date"
+                                        type="date"
+                                        defaultValue={detailDate}
+                                        helperText="Associated date"
+                                        variant="standard"
+                                        onChange={handleChange}
+                                        />
+                                        ):(
+                                        <TextField
+                                        id="date"
+                                        type="date"
+                                        helperText="Associated date"
+                                        variant="standard"
+                                        onChange={handleChange}
+                                        />
+                                    )}
                                 </div>
                                 <Button
                                     color="primary"
@@ -115,24 +125,19 @@ export default function AddDetail({ attributeName, attributeId }) {
                                     size="large"
                                     type="submit"
                                     onClick={handleFormSubmit}>
-                                        Save Detail
+                                        Edit Detail
                                 </Button>
-                            </form>
-                        </Grid>
-                        <Grid item xs={12} s={6}>
-                            <p>Some text here to explain what a detail should and shouldn't be.</p>
-                            {snack.status ? (
+                                {snack.status ? (
                                     <Snack
                                     setOpen={setSnack}
                                     status={snack.status}
-                                    attributeName={attributeName}
-                                    detailKey={formState.key}
+                                    message={snack.message}
                                     />
                                 ) : (
                                     null
                                 )}
+                            </form>
                         </Grid>
-
                     </Grid>
                 </div>
 
