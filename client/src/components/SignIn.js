@@ -208,9 +208,6 @@ export default function SignIn() {
 							</Modal>
 						</Grid>
 					</Grid>
-					<Box mt={5}>
-						<Copyright />
-					</Box>
 				</form>
 			</div>
 		</div>
