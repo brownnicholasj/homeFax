@@ -68,7 +68,7 @@ export const QUERY_PRODUCTS = gql`
       }  
     }  
   }  
-`;  
+`;
 
 export const QUERY_CHECKOUT = gql`
   query getCheckout($products: [ID]!) {
@@ -101,4 +101,14 @@ export const QUERY_CATEGORIES = gql`
     }
   }
 `;
-
+// Use graph and apollo to update user email
+export const QUERY_UPDATE_USER = gql`
+  {
+    user {
+      firstName
+      lastName
+      dob
+      username
+            }
+          }
+ `;

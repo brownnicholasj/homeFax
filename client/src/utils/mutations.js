@@ -252,3 +252,106 @@ export const EDIT_DETAIL = gql`
 		}
 	}
 `;
+
+export const DELETE_USER = gql`
+	mutation EditDetail($detailId: ID!, $key: String, $value: String) {
+		editDetail(detailId: $detailId, key: $key, value: $value) {
+			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+			areas {
+				_id
+				name
+				icon
+				attributes {
+					_id
+					type
+					detail {
+						key
+						value
+					}
+				}
+			}
+		}
+	}
+`;
+
+export const UPDATE_USER = gql`
+	mutation updateUser(
+		$firstName: String
+ 		$lastName: String
+ 		$email: String
+ 		$username: String
+	) {
+		updateUser(
+			firstName: $firstName
+ 			lastName: $lastName
+ 			username: $username
+ 			email: $email
+			) {
+				token
+				user {
+					_id
+					firstName
+					lastName
+				}
+			}
+	}
+`
+
+export const UPDATE_PASSWORD = gql`
+	mutation updatePassword(
+ 		$password: String
+		$currentPassword: String
+	) {
+		updatePassword(
+ 			password: $password
+			currentPassword: $currentPassword
+			) {
+				token
+				user {
+					_id
+					firstName
+					lastName
+				}
+			}
+	}
+`
+
+export const DELETE_PROFILE = gql`
+	mutation deleteProfile($password: String!) {
+		deleteProfile(password: $password) 
+	}
+`
+
+// export const ADD_USER = gql`
+// 	mutation addUser(
+// 		$firstName: String!
+// 		$lastName: String!
+// 		$email: String!
+// 		$username: String!
+// 		$password: String!
+// 		$dob: String!
+// 	) {
+// 		addUser(
+// 			firstName: $firstName
+// 			lastName: $lastName
+// 			username: $username
+// 			email: $email
+// 			password: $password
+// 			dob: $dob
+// 		) {
+// 			token
+// 			user {
+// 				_id
+// 				username
+// 				email
+// 			}
+// 		}
+// 	}
+// `;

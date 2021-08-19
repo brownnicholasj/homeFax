@@ -32,6 +32,7 @@ const typeDefs = gql`
 		email: String!
 		orders: [Order]
 		homes: [Home]
+		currentPassword: String
 	}
 
 	type Home {
@@ -115,7 +116,9 @@ const typeDefs = gql`
 			username: String
 			email: String
 			password: String
-		): User
+		): Auth
+		updatePassword(password: String, currentPassword: String): Auth
+		deleteProfile(password: String!): Boolean
 		updateProduct(_id: ID!, quantity: Int!): Product
 		login(identifier: String!, password: String!): Auth
 	}
