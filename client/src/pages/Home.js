@@ -6,7 +6,7 @@ import { MenuItem } from '@material-ui/core';
 
 // CODE ADDED FOR USE STATE TESTING
 import { useStoreContext } from '../utils/GlobalState';
-import { idbPromise } from '../utils/helpers';
+import { idbPromise, effectHelper } from '../utils/helpers';
 import {
 	UPDATE_USER,
 	UPDATE_HOMES
@@ -20,38 +20,10 @@ function Home(props) {
 	const { loading, data } = useQuery(QUERY_USER);
 	
 	useEffect(() => {
-		if (data) {
-			dispatch({
-				type: UPDATE_USER,
-				user: data.user,
-			});
-			idbPromise('user', 'put', data.user);
-			dispatch({
-				type: UPDATE_HOMES,
-				homes: data.user.homes,
-			});
-			data.user.homes.forEach((home) => {
-				idbPromise('homes', 'put', home);
-		    });
-		} else if (!loading) {
-			idbPromise('user', 'get').then((user) => {
-				dispatch({
-					type: UPDATE_USER,
-					user: user,
-				});
-			});
-			idbPromise('homes', 'get').then((homes) => {
-				dispatch({
-					type: UPDATE_HOMES,
-					homes: homes,
-				});
-			});
-		}
+		effectHelper(data, dispatch, loading);
 	  }, [data, loading, dispatch]);
-	
-	console.log(user);
-	console.log(homes);
-	
+	  
+
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
 	const handleClick = (event) => {
