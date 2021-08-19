@@ -1,7 +1,8 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Product, Category, Order, Home } = require('../models');
+const { User, Home, Transfer } = require('../models');
 const { signToken } = require('../utils/auth');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const bcrypt = require("bcrypt")
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
 const dayjs = require('dayjs');
@@ -35,83 +36,14 @@ const resolvers = {
 			throw new AuthenticationError('Not logged in');
 		},
 		home: async (parent, { homeId }) => {
-			console.log(homeId);
-			const home = await Home.findById(homeId);
-
-			return home;
+			return await Home.findById(homeId);
 		},
-		// categories: async () => {
-		//   return await Category.find();
-		// },
-		// home: async (parent, { _id }) => {
-		//   return await Category.findById(_id);
-		// },
-		// products: async (parent, { category, name }) => {
-		//   const params = {};
-
-		//   if (category) {
-		//     params.category = category;
-		//   }
-
-		//   if (name) {
-		//     params.name = {
-		//       $regex: name
-		//     };
-		//   }
-
-		//   return await Product.find(params).populate('category');
-		// },
-		// product: async (parent, { _id }) => {
-		//   return await Product.findById(_id).populate('category');
-		// },
-		// order: async (parent, { _id }, context) => {
-		//   if (context.user) {
-		//     const user = await User.findById(context.user._id).populate({
-		//       path: 'orders.products',
-		//       populate: 'category'
-		//     });
-
-		//     return user.orders.id(_id);
-		//   }
-
-		//   throw new AuthenticationError('Not logged in');
-		// },
-		// checkout: async (parent, args, context) => {
-		//   const url = new URL(context.headers.referer).origin;
-		//   const order = new Order({ products: args.products });
-		//   const line_items = [];
-
-		//   const { products } = await order.populate('products').execPopulate();
-
-		//   for (let i = 0; i < products.length; i++) {
-		//     const product = await stripe.products.create({
-		//       name: products[i].name,
-		//       description: products[i].description,
-		//       images: [`${url}/images/${products[i].image}`]
-		//     });
-
-		//     const price = await stripe.prices.create({
-		//       product: product.id,
-		//       unit_amount: products[i].price * 100,
-		//       currency: 'usd',
-		//     });
-
-		//     line_items.push({
-		//       price: price.id,
-		//       quantity: 1
-		//     });
-		//   }
-
-		//   const session = await stripe.checkout.sessions.create({
-		//     payment_method_types: ['card'],
-		//     line_items,
-		//     mode: 'payment',
-		//     success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
-		//     cancel_url: `${url}/`
-		//   });
-
-		//   return { session: session.id };
-		// }
+		transfers: async () => {
+			return await Transfer.find({}).populate('home');
+		},
+		transfer: async (parent, { transferId }) => {
+			return await Home.findById(transferId);
+		},
 	},
 	Mutation: {
 		addUser: async (parent, args) => {
@@ -120,6 +52,15 @@ const resolvers = {
 			const token = signToken(user);
 
 			return { token, user };
+		},
+		updateUser: async (parent, args, context) => {
+			if (context.user) {
+				return await User.findByIdAndUpdate(context.user._id, args, {
+					new: true,
+				});
+			}
+
+			throw new AuthenticationError('Not logged in');
 		},
 		deleteUser: async (parent, args, context) => {
 			const user = await User.findOneAndDelete({ _id: context.user._id });
@@ -228,12 +169,12 @@ const resolvers = {
 			}
 			return;
 		},
-		addDetail: async (parent, { attributeId, key, value }) => {
+		addDetail: async (parent, { attributeId, key, value, date }) => {
 			const home = await Home.findOne({ 'areas.attributes._id': attributeId });
 			const areas = home.areas.map((area) => {
 				const attributes = area.attributes.map((attribute) => {
 					if (attribute._id == attributeId) {
-						attribute.detail.push({ key, value });
+						attribute.detail.push({ key, value, date });
 					}
 					return attribute;
 				});
@@ -249,7 +190,7 @@ const resolvers = {
 
 			return updatedHome;
 		},
-		editDetail: async (parent, { detailId, key, value }) => {
+		editDetail: async (parent, { detailId, key, value, date }) => {
 			const home = await Home.findOne({
 				'areas.attributes.detail._id': detailId,
 			});
@@ -259,6 +200,7 @@ const resolvers = {
 						if (detail._id == detailId) {
 							detail.key = key;
 							detail.value = value;
+							detail.date = date;
 						}
 						return detail;
 					});
@@ -318,19 +260,27 @@ const resolvers = {
 		},
 		updateUser: async (parent, args, context) => {
 			if (context.user) {
-				return await User.findByIdAndUpdate(context.user._id, args, {
-					new: true,
-				});
+				const user = await User.findByIdAndUpdate(context.user._id, args, { new: true });
+				const token = signToken(user)
+
+				return { token, user }
 			}
 
 			throw new AuthenticationError('Not logged in');
+		},
+		createTransfer: async (parent, args) => {
+			return await Transfer.create(args);
+		},
+		editTransfer: async (parent, args) => {
+			return await Transfer.findOneAndUpdate({ home: args.home }, args, {
+				new: true,
+			});
 		},
 		login: async (parent, { identifier, password }) => {
 			const email = identifier;
 			const username = identifier;
 			console.log('logging in');
-			const user =
-				(await User.findOne({ email })) || (await User.findOne({ username }));
+			const user = await User.findOne({ email }) || await User.findOne({ username });
 			if (!user) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
@@ -345,6 +295,48 @@ const resolvers = {
 
 			return { token, user };
 		},
+		// updateEmail: async (parent, args, context) => {
+		// 	if (context.user) {
+		// 		return await User.findByIdAndUpdate(context.user._id, args, { new: true });
+		// 	}
+
+		// 	throw new AuthenticationError('Not logged in');
+		// },
+		updatePassword: async (parent, args, context) => {
+
+			if (context.user) {
+				const foundUser = await User.findById(context.user._id)
+				const passwordMatch = await bcrypt.compareSync(args.password, foundUser.password);
+
+				if (!passwordMatch) throw new AuthenticationError("Password does not match")
+				const hashedPassword = await bcrypt.hash(args.currentPassword, 10);
+				foundUser.password = hashedPassword
+				const updatedUser = {
+					...foundUser,
+					password: hashedPassword
+				}
+				console.log(args.currentPassword)
+				const user = await User.findByIdAndUpdate(context.user._id, foundUser, { new: true });
+				const token = signToken(user)
+
+				return { token, user }
+			}
+
+			throw new AuthenticationError('Not logged in');
+		},
+		deleteProfile: async (parent, args, context) => {
+			if (context.user) {
+				const user = await User.findById(context.user._id)
+				const passwordMatch = await bcrypt.compareSync(args.password, user.password);
+
+				if (!passwordMatch) throw new AuthenticationError("Password does not match!")
+
+				await User.findByIdAndDelete(context.user._id);
+				return true
+			}
+
+			throw new AuthenticationError('Not logged in');
+		}
 	},
 };
 

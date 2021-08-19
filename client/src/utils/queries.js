@@ -29,6 +29,7 @@ export const QUERY_USER = gql`
               _id
               key
               value
+			  date
             }
           }
         }
@@ -49,57 +50,70 @@ query getHome($homeId: ID!) {
       zip
     }
     areas {
-      name
-    }
+		_id
+		name
+		icon
+		attributes {
+		  _id
+		  type
+		  detail {
+			_id
+			key
+			value
+			date
+		  }
+		}
+	}
   }
 }
 `
 
-export const QUERY_PRODUCTS = gql`
-  query getProducts($category: ID) {
-    products(category: $category) {
-      _id
-      name
-      description
-      price
-      quantity
-      image
-      category {
-        _id
-      }  
-    }  
-  }  
-`;  
-
-export const QUERY_CHECKOUT = gql`
-  query getCheckout($products: [ID]!) {
-    checkout(products: $products) {
-      session
-    }
-  }
+export const QUERY_TRANSFERS = gql`
+query Transfers {
+	transfers {
+		_id
+		transferer
+		receiver
+		home {
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+		}
+	}
+}
 `;
 
-export const QUERY_ALL_PRODUCTS = gql`
+  
+export const QUERY_SINGLE_TRANSFER = gql`
+query Transfer($transferId: ID!) {
+	transfer(transferId: $transferId) {
+		_id
+		transferer
+		receiver
+		home {
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+		}
+	}
+}
+`;
+// Use graph and apollo to update user email
+export const QUERY_UPDATE_USER = gql`
   {
-    products {
-      _id
-      name
-      description
-      price
-      quantity
-      category {
-        name
-      }
-    }
-  }
-`;
-
-export const QUERY_CATEGORIES = gql`
-  {
-    categories {
-      _id
-      name
-    }
-  }
-`;
-
+    user {
+      firstName
+      lastName
+      dob
+      username
+            }
+          }
+ `;
