@@ -31,9 +31,9 @@ const styles = (theme) => ({
 		color: theme.palette.common.white,
 	},
 	item: {
-		paddingTop: 1,
-		paddingBottom: 1,
-		color: 'rgba(255, 255, 255, 0.7)',
+		'paddingTop': 1,
+		'paddingBottom': 1,
+		'color': 'rgba(255, 255, 255, 0.7)',
 		'&:hover,&:focus': {
 			backgroundColor: 'rgba(255, 255, 255, 0.08)',
 		},
@@ -46,6 +46,7 @@ const styles = (theme) => ({
 	},
 	firebase: {
 		fontSize: 24,
+		padding: theme.spacing(2),
 		color: theme.palette.common.white,
 	},
 	itemActiveItem: {
@@ -95,7 +96,12 @@ const categories = [
 	{
 		id: 'Social',
 		children: [
-			{ id: 'Friends', icon: <SettingsIcon />, path: '/friends', active: false },
+			{
+				id: 'Friends',
+				icon: <SettingsIcon />,
+				path: '/friends',
+				active: false,
+			},
 			{ id: 'Zillow', icon: <TimerIcon />, path: '/zillow', active: false },
 			{
 				id: 'Twitter',
@@ -118,7 +124,7 @@ function Navigator(props) {
 	console.log('isLoggedIn :>> ', isLoggedIn);
 
 	return (
-		<Drawer variant="permanent" {...other}>
+		<Drawer variant='permanent' {...other}>
 			<List disablePadding>
 				<ListItem
 					className={clsx(classes.firebase, classes.item, classes.itemCategory)}
@@ -157,7 +163,9 @@ function Navigator(props) {
 										isActive(path) && classes.itemActiveItem
 									)}
 								>
-									<ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+									<ListItemIcon className={classes.itemIcon}>
+										{icon}
+									</ListItemIcon>
 									<ListItemText
 										classes={{
 											primary: classes.itemPrimary,
