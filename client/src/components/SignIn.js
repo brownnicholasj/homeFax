@@ -9,7 +9,9 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { Modal } from '@material-ui/core';
+import { Modal, InputAdornment, IconButton } from '@material-ui/core';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { useState } from 'react';
 import SignUp from '../components/SignUp';
 import { useMutation } from '@apollo/client';
@@ -18,9 +20,9 @@ import { LOGIN } from '../utils/mutations';
 
 function Copyright() {
 	return (
-		<Typography variant="body2" color="textSecondary" align="center">
+		<Typography variant='body2' color='textSecondary' align='center'>
 			{'Copyright © '}
-			<Link color="inherit" href="/">
+			<Link color='inherit' href='/'>
 				HomeFax
 			</Link>{' '}
 			{new Date().getFullYear()}
@@ -76,8 +78,17 @@ export default function SignIn() {
 		</div>
 	);
 
-	const [formState, setFormState] = useState({ identifier: '', password: '' });
-	const [login, { error }] = useMutation(LOGIN);
+	const [formState, setFormState] = useState({
+		identifier: '',
+		password: '',
+		errorMsg: '',
+	});
+
+	const [showPassword, setShowPassword] = useState(false);
+	const handleClickShowPassword = () => setShowPassword(!showPassword);
+	const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
+	const [login] = useMutation(LOGIN);
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
@@ -91,6 +102,7 @@ export default function SignIn() {
 			const token = mutationResponse.data.login.token;
 			Auth.login(token);
 		} catch (e) {
+			setFormState({ errorMsg: 'Incorrect Credentials' });
 			console.log(e);
 		}
 	};
@@ -111,53 +123,71 @@ export default function SignIn() {
 				<Avatar className={classes.avatar}>
 					<LockOutlinedIcon />
 				</Avatar>
-				<Typography component="h1" variant="h5">
+				<Typography component='h1' variant='h5'>
 					Sign in
 				</Typography>
 				<form className={classes.form} noValidate>
 					<TextField
-						variant="outlined"
-						margin="normal"
+						variant='outlined'
+						margin='normal'
 						required
 						fullWidth
-						id="identifier"
-						label="Email/Username"
-						name="identifier"
-						autoComplete="identifier"
+						id='identifier'
+						label='Email/Username'
+						name='identifier'
+						autoComplete='identifier'
 						autoFocus
 						onChange={handleChange}
 					/>
 					<TextField
-						variant="outlined"
-						margin="normal"
+						variant='outlined'
+						margin='normal'
 						required
 						fullWidth
-						name="password"
-						label="Password"
-						type="password"
-						id="password"
-						autoComplete="current-password"
+						name='password'
+						label='Password'
+						// showPassword state defaulted to false, will show text (showing) or password (hidden)
+						type={showPassword ? 'text' : 'password'}
+						id='password'
+						autoComplete='current-password'
 						onChange={handleChange}
+						InputProps={{
+							// This is where the toggle button is added.
+							endAdornment: (
+								<InputAdornment position='end'>
+									<IconButton
+										aria-label='toggle password visibility'
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+									>
+										{showPassword ? <Visibility /> : <VisibilityOff />}
+									</IconButton>
+								</InputAdornment>
+							),
+						}}
 					/>
+					<Typography variant='body1' color='error'>
+						{formState.errorMsg}
+					</Typography>
 					<br></br>
 					<Button
 						onClick={handleFormSubmit}
-						type="submit"
+						type='submit'
 						fullWidth
-						variant="contained"
-						color="primary"
+						variant='contained'
+						color='primary'
 						className={classes.submit}
 					>
 						Sign In
 					</Button>
 					<Grid container>
 						<Grid item xs>
-							<Link href="#" variant="body2">
+							<Link href='#' variant='body2'>
 								Forgot password?
 							</Link>
 						</Grid>
 						<Grid item>
-							<Link href="#" variant="body2" onClick={handleOpen}>
+							<Link href='#' variant='body2' onClick={handleOpen}>
 								Or Sign Up
 							</Link>
 							{/* <button type="button" onClick={handleOpen}>
@@ -166,8 +196,8 @@ export default function SignIn() {
 							<Modal
 								open={open}
 								onClose={handleClose}
-								aria-labelledby="simple-modal-title"
-								aria-describedby="simple-modal-description"
+								aria-labelledby='simple-modal-title'
+								aria-describedby='simple-modal-description'
 								style={{
 									display: 'flex',
 									alignItems: 'center',
@@ -178,9 +208,6 @@ export default function SignIn() {
 							</Modal>
 						</Grid>
 					</Grid>
-					<Box mt={5}>
-						<Copyright />
-					</Box>
 				</form>
 			</div>
 		</div>
