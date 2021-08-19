@@ -1,3 +1,9 @@
+import {
+	UPDATE_USER,
+	UPDATE_HOMES
+} from '../utils/actions';
+
+
 export function pluralize(name, count) {
   if (count === 1) {
     return name;
@@ -54,3 +60,33 @@ export function idbPromise(storeName, method, object) {
     };
   });
 }
+
+export function effectHelper(data, dispatch, loading) {
+  if (data) {
+    dispatch({
+      type: UPDATE_USER,
+      user: data.user,
+    });
+    idbPromise('user', 'put', data.user);
+    dispatch({
+      type: UPDATE_HOMES,
+      homes: data.user.homes,
+    });
+    data.user.homes.forEach((home) => {
+      idbPromise('homes', 'put', home);
+      });
+  } else if (!loading) {
+    idbPromise('user', 'get').then((user) => {
+      dispatch({
+        type: UPDATE_USER,
+        user: user,
+      });
+    });
+    idbPromise('homes', 'get').then((homes) => {
+      dispatch({
+        type: UPDATE_HOMES,
+        homes: homes,
+      });
+    });
+  };
+};
