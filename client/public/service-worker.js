@@ -19,66 +19,39 @@ const FILES_TO_CACHE = [
   "/robots.txt"
 ];
 
-// install
-self.addEventListener("install", function (evt) {
-  // pre cache transaction data
-  // pre cache all static assets
-  evt.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE))
-  );
-
-  // tell the browser to activate this service worker immediately once it
-  // has finished installing
-  self.skipWaiting();
+const urlsToCache = FILES_TO_CACHE;
+const self = this;
+// Install SW
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then((cache) => {
+                console.log('Opened cache');
+return cache.addAll(urlsToCache);
+            })
+    )
 });
-
-// activate
-self.addEventListener("activate", function(evt) {
-  evt.waitUntil(
-    caches.keys().then(keyList => {
-      return Promise.all(
-        keyList.map(key => {
-          if (key !== CACHE_NAME) {
-            console.log("Removing old cache data", key);
-            return caches.delete(key);
-          }
-        })
-      );
-    })
-  );
-
-  self.clients.claim();
+// Listen for requests
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request)
+            .then(() => {
+                return fetch(event.request) 
+                    .catch(() => caches.match('offline.html'))
+            })
+    )
 });
-
-// fetch
-// self.addEventListener("fetch", function(evt) {
-//   if (evt.request.url.includes("/api/")) {
-//     evt.respondWith(
-//       caches.open(DATA_CACHE_NAME).then(cache => {
-//         return fetch(evt.request)
-//           .then(response => {
-//             // If the response was good, clone it and store it in the cache.
-//             if (response.status === 200) {
-//               cache.put(evt.request.url, response.clone());
-//             }
-
-//             return response;
-//           })
-//           .catch(err => {
-//             // Network request failed, try to get it from the cache.
-//             return cache.match(evt.request);
-//           });
-//       }).catch(err => console.log(err))
-//     );
-
-//     return;
-//   }
-
-//   evt.respondWith(
-//     caches.open(CACHE_NAME).then(cache => {
-//       return cache.match(evt.request).then(response => {
-//         return response || fetch(evt.request);
-//       });
-//     })
-//   );
-// });
+// Activate the SW
+self.addEventListener('activate', (event) => {
+    const cacheWhitelist = [];
+    cacheWhitelist.push(CACHE_NAME);
+event.waitUntil(
+        caches.keys().then((cacheNames) => Promise.all(
+            cacheNames.map((cacheName) => {
+                if(!cacheWhitelist.includes(cacheName)) {
+                    return caches.delete(cacheName);
+                }
+            })
+        ))
+)
+});
