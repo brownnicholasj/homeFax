@@ -146,12 +146,13 @@ export default function SignIn() {
 						fullWidth
 						name='password'
 						label='Password'
+						// showPassword state defaulted to false, will show text (showing) or password (hidden)
 						type={showPassword ? 'text' : 'password'}
 						id='password'
 						autoComplete='current-password'
 						onChange={handleChange}
 						InputProps={{
-							// <-- This is where the toggle button is added.
+							// This is where the toggle button is added.
 							endAdornment: (
 								<InputAdornment position='end'>
 									<IconButton
