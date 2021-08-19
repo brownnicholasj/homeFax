@@ -171,7 +171,7 @@ function Profile(props) {
 			<Grid item xs={12}>
 				<Typography variant="h2">Profile Settings</Typography>
 			</Grid>
-			<Grid item xs={0} md={2} lg={2}>
+			<Grid item xs={2} md={2} lg={2}>
 				<Box></Box>
 			</Grid>
 			<Grid item xs={12} md={8} lg={6}>
@@ -248,10 +248,10 @@ function Profile(props) {
 					</Collapse>
 				</Card>
 			</Grid>
-			<Grid item xs={0} md={2} lg={4}>
+			<Grid item xs={2} md={2} lg={4}>
 				<Box></Box>
 			</Grid>
-			<Grid item xs={0} md={2} lg={2}>
+			<Grid item xs={2} md={2} lg={2}>
 				<Box></Box>
 			</Grid>
 			<Grid item xs={12} md={8} lg={6}>
@@ -324,10 +324,10 @@ function Profile(props) {
 					</Collapse>
 				</Card>
 			</Grid>
-			<Grid item xs={0} md={2} lg={4}>
+			<Grid item xs={2} md={2} lg={4}>
 				<Box></Box>
 			</Grid>
-			<Grid item xs={0} md={2} lg={2}>
+			<Grid item xs={2} md={2} lg={2}>
 				<Box></Box>
 			</Grid>
 			<Grid item xs={12} md={8} lg={6}>
@@ -409,10 +409,10 @@ function Profile(props) {
 					</Collapse>
 				</Card>
 			</Grid>
-			<Grid item xs={0} md={2} lg={4}>
+			<Grid item xs={2} md={2} lg={4}>
 				<Box></Box>
 			</Grid>
-			<Grid item xs={0} md={2} lg={2}>
+			<Grid item xs={2} md={2} lg={2}>
 				<Box></Box>
 			</Grid>
 			<Grid item xs={12} md={8} lg={6}>
@@ -434,7 +434,7 @@ function Profile(props) {
 									style={{ cursor: 'pointer', textDecoration: 'underline' }}
 									onClick={handleExpandClick}
 									variant="body1"
-									color="red"
+									color="error"
 								>
 									Delete
 								</Link>
@@ -474,7 +474,7 @@ function Profile(props) {
 					</Collapse>
 				</Card>
 			</Grid>
-			<Grid item xs={0} md={2} lg={4}>
+			<Grid item xs={2} md={2} lg={4}>
 				<Box></Box>
 			</Grid>
 		</Grid>
