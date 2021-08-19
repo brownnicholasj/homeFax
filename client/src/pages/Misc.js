@@ -4,6 +4,7 @@ import EditDetail from '../components/forms/EditDetail';
 import AddAttribute from '../components/forms/AddAttribute';
 import EditAttribute from '../components/forms/EditAttribute';
 import AddArea from '../components/forms/AddArea';
+import EditArea from '../components/forms/EditArea';
 import GenericList from '../components/GenericList';
 import HomeCard from '../components/HomeCard';
 
@@ -59,17 +60,17 @@ function Misc(props) {
 
 	return (
 		<React.Fragment>
-			<h1>Misc</h1>
-			<AddDetail attributeName={testAttribute.type} attributeId={testAttribute._id}/>
+			{/* <AddDetail attributeName={testAttribute.type} attributeId={testAttribute._id}/>
 			<EditDetail detailId={testDetail._id} detailKey={testDetail.key} detailValue={testDetail.value} detailDate={testDetail.date} />
-			<GenericList items={testAttribute.detail} itemsKey={'key'} />
+			<GenericList items={testAttribute.detail} itemsKey={'key'} /> */}
 
 			{/* <AddAttribute areaName={testArea.name} areaId={testArea._id} areaAttributes={testArea.attributes} />
 			<EditAttribute attId={testAttribute._id} attType={testAttribute.type} />
 			<GenericList items={testArea.attributes} itemsKey={'type'} subItems={'detail'} subItemsKey={'key'} /> */}
 			
-			{/* <AddArea homeId={testHome._id} homeAreas={testHome.areas} /> */}
-			{/* <GenericList items={testHome.areas} itemsKey={'name'} /> */}
+			<AddArea homeId={testHome._id} />
+			<EditArea areaId={testArea._id} areaName={testArea.name} areaIcon={testArea.icon} />
+			<GenericList items={testHome.areas} itemsKey={'name'} />
 			{/* <Card /> */}
 			{/* <HomeCard home={homes[0]} /> */}
 		</React.Fragment>
