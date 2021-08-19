@@ -18,9 +18,11 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
+  "orientation": "portrait",
+  "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff",
-  "scope": "/"
+  "description": "An application that puts all of your home's information at your fingertips.",
+  "background_color": "#01579b",
+  "theme_color": "#ffffff",
+  "theme-color": "#ffffff"
 }
