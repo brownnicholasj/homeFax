@@ -9,13 +9,9 @@ import { Divider } from '@material-ui/core';
 
 import TextField from '@material-ui/core/TextField';
 import { useQuery, useMutation } from '@apollo/client';
-import {
-	ADD_ATTRIBUTE,
-    EDIT_DETAIL,
-    DELETE_DETAIL
-} from '../utils/mutations';
+import { ADD_AREA } from '../../utils/mutations';
 
-import Snack from './Snack';
+import Snack from '../Snack';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -40,25 +36,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function AddAttribute({ areaName, areaId }) {
+export default function AddArea({ homeId }) {
     const classes = useStyles();
-    const [snack, setSnack] = useState({ status: false, areaName: areaName, detailKey: '' });
-    const [formState, setFormState] = useState({ areaId: areaId, type: '' });
-	const [addAttribute, { error }] = useMutation(ADD_ATTRIBUTE);
-	// const [editDetail, { error }] = useMutation(EDIT_DETAIL);
-	const handleFormSubmit = async (event) => {
+    const [snack, setSnack] = useState({ status: false, message: '' });
+    const [formState, setFormState] = useState({ homeId: homeId, name: '', icon: '' });
+	const [addArea, { error }] = useMutation(ADD_AREA);
+
+    const handleFormSubmit = async (event) => {
         event.preventDefault();
-        if (formState.type) {
+        if (formState.name) {
             try {
-                const mutationResponse = await addAttribute({
+                const mutationResponse = await addArea({
                     variables: {
-                        areaId: formState.areaId,
-                        type: formState.type
+                        homeId: formState.homeId,
+                        name: formState.name,
+                        icon: formState.icon
                     },
                 });
                 if (mutationResponse) {
                     console.log(mutationResponse);
-                    // setSnack({ status: true });
+                    setSnack({ status: true, message: `${formState.name} has been added to your home` });
                 }
             } catch (e) {
                 console.log(e);
@@ -82,7 +79,7 @@ export default function AddAttribute({ areaName, areaId }) {
                 <div className={classes.gridRoot}>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
-                            <h1>{areaName}</h1>
+                            <h1>Add area</h1>
                             <Divider />
                         </Grid>
                         <Grid item xs={12} s={6}>
@@ -90,9 +87,17 @@ export default function AddAttribute({ areaName, areaId }) {
                                 <div>
                                 <TextField
                                     required
-                                    id="type"
-                                    label="Type"
-                                    helperText="Attribute detail"
+                                    id="name"
+                                    label="Name"
+                                    helperText="Area name"
+                                    variant="standard"
+                                    onChange={handleChange}
+                                    />
+                                <TextField
+                                    disabled
+                                    id="icon"
+                                    label="Icon"
+                                    helperText="Area icon"
                                     variant="standard"
                                     onChange={handleChange}
                                     />
@@ -103,47 +108,22 @@ export default function AddAttribute({ areaName, areaId }) {
                                     size="large"
                                     type="submit"
                                     onClick={handleFormSubmit}>
-                                        Save Attribute
+                                        Save Area
                                 </Button>
                             </form>
-                        </Grid>
-                        <Grid item xs={12} s={6}>
-                            <p>An attribute is part of an area. For instance in your kitchen there are many different things - appliances, dishes, paint color, etc. - and these are what we call "attributes".</p><p>An attribute has a type. Your toaster is an attribute with "type" "toaster".</p>
                             {snack.status ? (
                                     <Snack
                                     setOpen={setSnack}
                                     status={snack.status}
-                                    areaName={areaName}
-                                    detailKey={formState.key}
+                                    message={snack.message}
                                     />
                                 ) : (
                                     null
                                 )}
                         </Grid>
-
                     </Grid>
                 </div>
-
             </CardContent>
-            {/* <CardActions>
-                <Button
-                color="primary"
-                variant="standard"
-                size="large"
-                onSubmit={handleFormSubmit}>
-                    Save Detail
-                </Button>
-                {snack.status ? (
-                    <Snack
-                    setOpen={setSnack}
-                    status={snack.status}
-                    attributeName={attributeName}
-                    detailKey={formState.key}
-                    />
-                ) : (
-                    null
-                )}
-            </CardActions> */}
         </Card>
     </>
   );

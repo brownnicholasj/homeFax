@@ -1,11 +1,50 @@
 import { gql } from '@apollo/client';
 
+// export const LOGIN = gql`
+// 	mutation login($identifier: String!, $password: String!) {
+// 		login(identifier: $identifier, password: $password) {
+// 			token
+// 			user {
+// 				_id
+// 				homes {
+// 					_id
+// 					address {
+// 						street1
+// 						street2
+// 						city
+// 						state
+// 						zip
+// 					}
+// 					areas {
+// 						_id
+// 						name
+// 						icon
+// 						attributes {
+// 							_id
+// 							type
+// 							detail {
+// 								_id
+// 								key
+// 								value
+// 								date
+// 							}
+// 						}
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// `;
+
 export const LOGIN = gql`
 	mutation login($identifier: String!, $password: String!) {
 		login(identifier: $identifier, password: $password) {
 			token
 			user {
 				_id
+				homes {
+					_id
+				}
 			}
 		}
 	}
@@ -90,16 +129,6 @@ export const TRANSFER_HOME = gql`
 			_id
 			firstName
 			lastName
-			homes {
-				_id
-				address {
-					street1
-					street2
-					city
-					state
-					zip
-				}
-			}
 		}
 	}
 `;

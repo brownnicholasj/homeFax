@@ -20,6 +20,9 @@ import { Link } from '@material-ui/core';
 import { Modal } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import SignUp from '../components/SignUp';
+import AddArea from '../components/forms/AddArea';
+import AddAttribute from '../components/forms/AddAttribute';
+import AddDetail from '../components/forms/AddDetail';
 
 const useStyles = makeStyles((theme) => ({
 	modal: {
@@ -36,6 +39,9 @@ function MyHome(props) {
 	const [expandedId, setExpandedId] = useState(-1);
 	const [open, setOpen] = useState(false);
 	const [modalIndex, setModalIndex] = useState(-1);
+	const [areaModalOpen, setAreaModalOpen] = useState(false);
+	const [attributeModalOpen, setAttributeModalOpen] = useState(false);
+	const [detailModalOpen, setDetailModalOpen] = useState(false);
 
 	const { loading, error, data } = useQuery(QUERY_GET_HOME, {
 		variables: { homeId: homeid },
@@ -56,6 +62,16 @@ function MyHome(props) {
 
 	const handleExpandClick = (i) => {
 		setExpandedId(expandedId === i ? -1 : i);
+	};
+
+	const handleAddAreaModal = () => {
+		setAreaModalOpen(true);
+	};
+	const handleAttributeModal = () => {
+		setAttributeModalOpen(true);
+	};
+	const handleDetailModal = () => {
+		setDetailModalOpen(true);
 	};
 
 	return (
@@ -94,7 +110,7 @@ function MyHome(props) {
 										{expandedId !== i && (
 											<CardContent>
 												{area.attributes.length +
-													(area.attributes.length === 1 ? ' attribute' : 'attributes')}
+													(area.attributes.length === 1 ? ' attribute' : ' attributes')}
 											</CardContent>
 										)}
 										<Collapse in={expandedId === i}>
@@ -122,18 +138,44 @@ function MyHome(props) {
 																open={modalIndex === j && expandedId === i}
 															>
 																<div className={classes.modal}>
+																	<h1>Details</h1>
 																	{attribute.detail.map((detail) => (
-																		<h1>{detail.key + ': ' + detail.value}</h1>
+																		<React.Fragment>
+																			<h3>{detail.key + ': ' + detail.value}</h3>
+																		</React.Fragment>
 																	))}
+																	<Link onClick={handleDetailModal}>Add Detail</Link>
+																	<Modal
+																		onClose={() => setDetailModalOpen(false)}
+																		open={detailModalOpen && expandedId === i && modalIndex === j}
+																	>
+																		<AddDetail
+																			attributeName={attribute.type}
+																			attributeId={attribute._id}
+																		></AddDetail>
+																	</Modal>
 																</div>
 															</Modal>
 														</Grid>
 													</React.Fragment>
 												))}
 												<Typography variant="p">
-													<Button variant="contained" color="primary">
+													<Button
+														onClick={handleAttributeModal}
+														variant="contained"
+														color="primary"
+													>
 														Add Attribute
 													</Button>
+													<Modal
+														onClose={() => setAttributeModalOpen(false)}
+														open={attributeModalOpen && expandedId === i}
+													>
+														<AddAttribute
+															areaName={area.name}
+															areaId={area._id}
+														></AddAttribute>
+													</Modal>
 												</Typography>
 											</CardContent>
 										</Collapse>
@@ -143,7 +185,12 @@ function MyHome(props) {
 						))}
 						<Grid item xs={3}>
 							<Card>
-								<CardActionArea variant="contained">Add Area</CardActionArea>
+								<CardActionArea onClick={handleAddAreaModal} variant="contained">
+									Add Area
+								</CardActionArea>
+								<Modal onClose={() => setAreaModalOpen(false)} open={areaModalOpen}>
+									<AddArea homeId={data.home._id}></AddArea>
+								</Modal>
 							</Card>
 						</Grid>
 					</React.Fragment>

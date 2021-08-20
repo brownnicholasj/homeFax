@@ -20,9 +20,9 @@ import Twitter from './pages/Twitter.js';
 import SignIn from './components/SignIn';
 
 import MyHome from './pages/MyHome.js';
+import Transfer from './components/Transfer.js';
 
 import { StoreProvider } from './utils/GlobalState';
-
 
 const httpLink = createHttpLink({
 	uri: '/graphql',
@@ -49,32 +49,38 @@ function App(props) {
 			<Router>
 				<StoreProvider>
 					<Switch>
-						<Route exact path="/">
+						<Route exact path='/'>
 							<PaperBase content={<Content></Content>}></PaperBase>
 						</Route>
-						<Route exact path="/home">
+						<Route exact path='/home'>
 							<PaperBase content={<Home></Home>}></PaperBase>
 						</Route>
-						<Route exact path="/settings">
-							<PaperBase content={<Settings></Settings>}></PaperBase>
-						</Route>
-						<Route exact path="/myhomes">
+						<Route exact path='/myhomes'>
 							<PaperBase content={<Homes></Homes>}></PaperBase>
 						</Route>
-						<Route exact path="/misc">
-							<PaperBase content={<Misc></Misc>}></PaperBase>
+						<Route exact path='/myhomes/:homeid'>
+							<PaperBase content={<MyHome></MyHome>}></PaperBase>
 						</Route>
-						<Route exact path="/profile">
+						<Route exact path='/profile'>
 							<PaperBase content={<Profile></Profile>}></PaperBase>
 						</Route>
-						<Route exact path="/friends">
+						<Route exact path='/transfer'>
+							<PaperBase content={<Transfer></Transfer>}></PaperBase>
+						</Route>
+						<Route exact path='/friends'>
 							<PaperBase content={<Friends></Friends>}></PaperBase>
 						</Route>
-						<Route exact path="/zillow">
+						<Route exact path='/zillow'>
 							<PaperBase content={<Zillow></Zillow>}></PaperBase>
 						</Route>
-						<Route exact path="/twitter">
+						<Route exact path='/twitter'>
 							<PaperBase content={<Twitter></Twitter>}></PaperBase>
+						</Route>
+						<Route exact path='/misc'>
+							<PaperBase content={<Misc></Misc>}></PaperBase>
+						</Route>
+						<Route exact path='/settings'>
+							<PaperBase content={<Settings></Settings>}></PaperBase>
 						</Route>
 					</Switch>
 				</StoreProvider>

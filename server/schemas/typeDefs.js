@@ -76,6 +76,9 @@ const typeDefs = gql`
 		transfers: [Transfer]
 		transfer(transferId: ID!): Transfer
 		userTransfer(useremail: String): Transfer
+		area(areaId: ID!): Area
+		attribute(attributeId: ID!): Attribute
+		detail(detailId: ID!): Detail
 	}
 
 	type Mutation {

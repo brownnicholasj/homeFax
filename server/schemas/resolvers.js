@@ -47,6 +47,15 @@ const resolvers = {
 		userTransfer: async (parent, { useremail }) => {
 			return await Transfer.find({ receiver: useremail });
 		},
+		area: async (parent, { areaId }) => {
+			return await Home.findOne({ 'areas._id': areaId });
+		},
+		attribute: async (parent, { attributeId }) => {
+			return await Home.findOne({ 'areas.attributes._id': attributeId });
+		},
+		detail: async (parent, { detailId }) => {
+			return await Home.findOne({ 'areas.attributes.detail._id': detailId });
+		},
 	},
 	Mutation: {
 		addUser: async (parent, args) => {
@@ -232,6 +241,7 @@ const resolvers = {
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
 			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
+			console.log('hit')
 			if (transferer) {
 				await User.findByIdAndUpdate(transferer, {
 					$pull: { homes: home },
