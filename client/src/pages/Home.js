@@ -16,9 +16,16 @@ import { QUERY_USER } from '../utils/queries';
 
 function Home(props) {
 	const [state, dispatch] = useStoreContext();
-	const { user, homes, transfers } = state;
-	const { loading, data } = useQuery(QUERY_USER);
-	
+	// const { user, homes, transfers } = state;
+	const { data } = useQuery(QUERY_USER);
+	let user;
+	let homes;
+	const handleState = () => {
+		user = data?.user ?? {};
+		homes = user.homes;
+		dispatch({ type: UPDATE_USER, user });
+		dispatch({ type: UPDATE_HOMES, homes });
+	}
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -34,12 +41,19 @@ function Home(props) {
 		<React.Fragment>
 			<h1>Home</h1>
 			<div>
-				<Button
+			<Button
 					aria-controls="simple-menu"
 					aria-haspopup="true"
 					onClick={handleClick}
 				>
 					Open Menu
+				</Button>
+				<Button
+					aria-controls="simple-menu"
+					aria-haspopup="true"
+					onClick={handleState}
+				>
+					Test Reducer
 				</Button>
 				<Menu
 					id="simple-menu"
