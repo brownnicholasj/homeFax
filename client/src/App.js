@@ -1,11 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import {
-	ApolloClient,
-	InMemoryCache,
-	ApolloProvider,
-	createHttpLink,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import PaperBase from './pages/PaperBase.js';
 import Content from './components/Content';
@@ -18,10 +13,8 @@ import Friends from './pages/Friends.js';
 import Zillow from './pages/Zillow.js';
 import Twitter from './pages/Twitter.js';
 import SignIn from './components/SignIn';
-
 import MyHome from './pages/MyHome.js';
 import Transfer from './components/Transfer.js';
-
 import { StoreProvider } from './utils/GlobalState';
 
 const httpLink = createHttpLink({
