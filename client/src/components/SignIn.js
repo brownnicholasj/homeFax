@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,7 +12,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Modal, InputAdornment, IconButton } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { useState } from 'react';
 import SignUp from '../components/SignUp';
 import { useMutation } from '@apollo/client';
 import Auth from '../utils/auth';
