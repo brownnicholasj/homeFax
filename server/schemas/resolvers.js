@@ -127,12 +127,17 @@ const resolvers = {
 			);
 			return updatedHome;
 		},
-		deleteArea: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const area = await Home.findOneAndDelete({ 'areas._id': args.areaId });
-				return area;
-			}
-			return;
+		deleteArea: async (parent, { areaId }) => {
+			const home = await Home.findOne({ 'areas._id': areaId });
+			const areas = home.areas.filter((area) => area._id != areaId);
+			const updatedHome = await Home.findOneAndUpdate(
+				{ 'areas._id': areaId },
+				{
+					areas: areas,
+				},
+				{ new: true }
+			);
+			return updatedHome;
 		},
 		addAttribute: async (parent, { areaId, type }) => {
 			const home = await Home.findOne({ 'areas._id': areaId });
@@ -241,7 +246,7 @@ const resolvers = {
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
 			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
-			console.log('hit')
+			console.log('hit');
 			if (transferer) {
 				await User.findByIdAndUpdate(transferer, {
 					$pull: { homes: home },

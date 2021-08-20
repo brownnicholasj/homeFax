@@ -31,6 +31,7 @@ import { Tooltip } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { DELETE_AREA } from '../utils/mutations';
+import Snack from '../components/Snack';
 
 const useStyles = makeStyles((theme) => ({
 	modal: {
@@ -61,6 +62,8 @@ function MyHome(props) {
 		return str.charAt(0).toUpperCase() + lower.slice(1);
 	}
 
+	const [snack, setSnack] = useState({ status: false, message: '' });
+
 	if (!loading) {
 		console.log('data :>> ', data);
 	}
@@ -81,6 +84,21 @@ function MyHome(props) {
 	};
 	const handleDetailModal = () => {
 		setDetailModalOpen(true);
+	};
+
+	const handleDeleteArea = async (areaId) => {
+		try {
+			const mutationResponse = await deleteArea({
+				variables: {
+					areaId: areaId,
+				},
+			});
+			if (mutationResponse) {
+				setSnack({ status: true, message: `Area has been deleted.` });
+			}
+		} catch (e) {
+			console.log('error :>> ', e);
+		}
 	};
 
 	return (
@@ -215,6 +233,10 @@ function MyHome(props) {
 													<Tooltip title="Delete Area">
 														<IconButton>
 															<HighlightOffIcon
+																onClick={() => {
+																	console.log('area :>> ', area);
+																	handleDeleteArea(area._id);
+																}}
 																fontSize="large"
 																color="secondary"
 															></HighlightOffIcon>
@@ -240,6 +262,13 @@ function MyHome(props) {
 					</React.Fragment>
 				)}
 			</Grid>
+			{snack.status ? (
+				<Snack
+					setOpen={setSnack}
+					status={snack.status}
+					message={snack.message}
+				></Snack>
+			) : null}
 		</React.Fragment>
 	);
 }
