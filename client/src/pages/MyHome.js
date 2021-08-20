@@ -23,6 +23,9 @@ import SignUp from '../components/SignUp';
 import AddArea from '../components/forms/AddArea';
 import AddAttribute from '../components/forms/AddAttribute';
 import AddDetail from '../components/forms/AddDetail';
+import { Box } from '@material-ui/core';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 	modal: {
@@ -119,16 +122,21 @@ function MyHome(props) {
 													<React.Fragment>
 														<Grid item xs={12}>
 															<Typography gutterBottom="true" variant="p" xs={12}>
-																<Link
-																	onClick={() => {
-																		console.log('i :>> ', i);
-																		console.log('j :>> ', j);
-																		handleModalOpen(j);
-																	}}
-																	style={{ textDecoration: 'none', cursor: 'pointer' }}
-																>
-																	{capitalize(attribute.type)}
-																</Link>
+																<Box display="flex" justifyContent="space-between">
+																	<Link
+																		onClick={() => {
+																			console.log('i :>> ', i);
+																			console.log('j :>> ', j);
+																			handleModalOpen(j);
+																		}}
+																		style={{ textDecoration: 'none', cursor: 'pointer' }}
+																	>
+																		{capitalize(attribute.type)}
+																	</Link>
+																	<IconButton>
+																		<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
+																	</IconButton>
+																</Box>
 															</Typography>
 														</Grid>
 														<br></br>
@@ -144,7 +152,12 @@ function MyHome(props) {
 																			<h3>{detail.key + ': ' + detail.value}</h3>
 																		</React.Fragment>
 																	))}
-																	<Link onClick={handleDetailModal}>Add Detail</Link>
+																	<Link
+																		style={{ textDecoration: 'none', cursor: 'pointer' }}
+																		onClick={handleDetailModal}
+																	>
+																		Add Detail
+																	</Link>
 																	<Modal
 																		onClose={() => setDetailModalOpen(false)}
 																		open={detailModalOpen && expandedId === i && modalIndex === j}
