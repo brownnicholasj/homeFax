@@ -19,10 +19,6 @@ function Home(props) {
 	const { user, homes, transfers } = state;
 	const { loading, data } = useQuery(QUERY_USER);
 	
-	useEffect(() => {
-		effectHelper(data, dispatch, loading);
-	  }, [data, loading, dispatch]);
-	  
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
 

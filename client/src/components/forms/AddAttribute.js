@@ -10,12 +10,12 @@ import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useQuery, useMutation } from '@apollo/client';
 import {
-	ADD_DETAIL,
+	ADD_ATTRIBUTE,
     EDIT_DETAIL,
     DELETE_DETAIL
-} from '../utils/mutations';
+} from '../../utils/mutations';
 
-import Snack from './Snack';
+import Snack from '../Snack';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -40,27 +40,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function AddDetail({ attributeName, attributeId }) {
+export default function AddAttribute({ areaName, areaId }) {
     const classes = useStyles();
-    const [snack, setSnack] = useState({ status: false, attributeName: attributeName, detailKey: '' });
-    const [formState, setFormState] = useState({ attributeId: attributeId, key: '', value: '', date: '' });
-	const [addDetail, { error }] = useMutation(ADD_DETAIL);
+    const [snack, setSnack] = useState({ status: false, message: '' });
+    const [formState, setFormState] = useState({ areaId: areaId, type: '' });
+	const [addAttribute, { error }] = useMutation(ADD_ATTRIBUTE);
 	// const [editDetail, { error }] = useMutation(EDIT_DETAIL);
 	const handleFormSubmit = async (event) => {
         event.preventDefault();
-        if (formState.key && formState.value) {
+        if (formState.type) {
             try {
-                const mutationResponse = await addDetail({
+                const mutationResponse = await addAttribute({
                     variables: {
-                        attributeId: formState.attributeId,
-                        key: formState.key,
-                        value: formState.value,
-                        date: formState.date
+                        areaId: formState.areaId,
+                        type: formState.type
                     },
                 });
                 if (mutationResponse) {
                     console.log(mutationResponse);
-                    setSnack({ status: true });
+                    setSnack({ status: true, message: `${formState.type} added to ${areaName}` });
                 }
             } catch (e) {
                 console.log(e);
@@ -84,7 +82,7 @@ export default function AddDetail({ attributeName, attributeId }) {
                 <div className={classes.gridRoot}>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
-                            <h1>{attributeName}</h1>
+                            <h3>{areaName}</h3>
                             <Divider />
                         </Grid>
                         <Grid item xs={12} s={6}>
@@ -92,25 +90,10 @@ export default function AddDetail({ attributeName, attributeId }) {
                                 <div>
                                 <TextField
                                     required
-                                    id="key"
-                                    label="Detail"
+                                    id="type"
+                                    label="Type"
                                     helperText="Attribute detail"
-                                    variant="outlined"
-                                    onChange={handleChange}
-                                    />
-                                    <TextField
-                                    required
-                                    id="value"
-                                    label="Value"
-                                    helperText="Attribute detail value"
-                                    onChange={handleChange}
-                                    variant="outlined"
-                                    />
-                                    <TextField
-                                    id="date"
-                                    type="date"
-                                    helperText="Associated date"
-                                    variant="outlined"
+                                    variant="standard"
                                     onChange={handleChange}
                                     />
                                 </div>
@@ -120,22 +103,21 @@ export default function AddDetail({ attributeName, attributeId }) {
                                     size="large"
                                     type="submit"
                                     onClick={handleFormSubmit}>
-                                        Save Detail
+                                        Save Attribute
                                 </Button>
                             </form>
-                        </Grid>
-                        <Grid item xs={12} s={6}>
-                            <p>Some text here to explain what a detail should and shouldn't be.</p>
                             {snack.status ? (
                                     <Snack
                                     setOpen={setSnack}
                                     status={snack.status}
-                                    attributeName={attributeName}
-                                    detailKey={formState.key}
+                                    message={snack.message}
                                     />
                                 ) : (
                                     null
                                 )}
+                        </Grid>
+                        <Grid item xs={12} s={6}>
+                            <p>An attribute is part of an area. For instance in your kitchen there are many different things - appliances, dishes, paint color, etc. - and these are what we call "attributes".</p><p>An attribute has a type. Your toaster is an attribute with "type" "toaster".</p>
                         </Grid>
 
                     </Grid>
@@ -145,7 +127,7 @@ export default function AddDetail({ attributeName, attributeId }) {
             {/* <CardActions>
                 <Button
                 color="primary"
-                variant="outlined"
+                variant="standard"
                 size="large"
                 onSubmit={handleFormSubmit}>
                     Save Detail

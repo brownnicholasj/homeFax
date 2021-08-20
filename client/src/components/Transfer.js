@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
-import Content from './Content';
+import React from 'react';
 import Auth from '../utils/auth';
 import { Card } from '@material-ui/core';
-import { CardHeader } from '@material-ui/core';
-import { IconButton } from '@material-ui/core';
 import { CardContent } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
@@ -15,6 +12,8 @@ import { Box } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import HomeIcon from '@material-ui/icons/Home';
+import { useStoreContext } from '../utils/GlobalState';
+
 
 // These imports are for bringing in data from the globalState
 // They're only here for testing, as components will receive them as props.
@@ -53,21 +52,8 @@ const useStyles = makeStyles((theme) => ({
 function Transfer({ user, homes, transfers }) {
 	const { email, username, firstName, lastName } = Auth.getProfile().data;
 	const classes = useStyles();
-	// const [expanded, setExpanded] = useState(false);
-	// const [contactExpanded, setContactExpanded] = useState(false);
-	// const [passwordExpanded, setPasswordExpanded] = useState(false);
-	// const [deleteExpanded, setDeleteExpanded] = useState(false);
 
-	// const [state, dispatch] = useStoreContext();
-	// const { user, homes, transfers } = state;
-	// const { loading, data } = useQuery(QUERY_USER);
-
-
-	// useEffect(() => {
-	// 	effectHelper(data, dispatch, loading);
-	// }, [data, loading, dispatch]);
-	// console.log(user);
-
+	const [state, dispatch] = useStoreContext();
 	// NEED TO RECEIVE THE INPUT FROM THE TRANSFER BUTTON ACTION
 	const [formState, setFormState] = useState({
 		street1: '1 Main St',

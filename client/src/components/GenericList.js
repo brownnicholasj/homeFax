@@ -33,7 +33,6 @@ export default function InteractiveList({ items, itemsKey, subItems, subItemsKey
   const classes = useStyles();
   const [dense, setDense] = React.useState(false);
   
-  console.log(items[0][subItems][0][subItemsKey])
 
   return (
     <div className={classes.root}>
