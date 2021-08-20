@@ -1,24 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Content from '../components/Content';
-import {
-	CardActionArea,
-	CardContent,
-	Menu,
-	Typography,
-} from '@material-ui/core';
-import { Button } from '@material-ui/core';
-import { MenuItem } from '@material-ui/core';
+import { CardActionArea, CardContent, Menu, Typography, Button, MenuItem, Card, Grid, CardHeader, Collapse, Link, Modal, makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_GET_HOME } from '../utils/queries';
-import { Card } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
-import { CardHeader } from '@material-ui/core';
-import { Collapse } from '@material-ui/core';
-import { useState } from 'react';
-import { Link } from '@material-ui/core';
-import { Modal } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core';
 import SignUp from '../components/SignUp';
 import AddArea from '../components/forms/AddArea';
 import AddAttribute from '../components/forms/AddAttribute';
