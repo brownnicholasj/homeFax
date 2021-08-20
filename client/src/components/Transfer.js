@@ -1,19 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Auth from '../utils/auth';
-import { Card } from '@material-ui/core';
+import { Card, CardContent, Typography, makeStyles, Grid, TextField, Box, Button } from '@material-ui/core';
 import { CardContent } from '@material-ui/core';
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import { Grid } from '@material-ui/core';
-import { TextField } from '@material-ui/core';
-import { useState } from 'react';
-import { Box } from '@material-ui/core';
-import { Button } from '@material-ui/core';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import HomeIcon from '@material-ui/icons/Home';
 import { useStoreContext } from '../utils/GlobalState';
-
 
 // These imports are for bringing in data from the globalState
 // They're only here for testing, as components will receive them as props.
