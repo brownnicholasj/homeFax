@@ -7,8 +7,11 @@ import Grid from '@material-ui/core/Grid';
 import { Divider } from '@material-ui/core';
 
 import TextField from '@material-ui/core/TextField';
-import { useQuery, useMutation } from '@apollo/client';
-import { ADD_DETAIL } from '../../utils/mutations';
+import { useMutation } from '@apollo/client';
+import {
+    ADD_HOME,
+    TRANSFER_HOME
+ } from '../../utils/mutations';
 
 import Snack from '../Snack';
 
@@ -35,28 +38,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function AddDetail({ attributeName, attributeId }) {
+export default function AddHome({ userId }) {
     const classes = useStyles();
     const [snack, setSnack] = useState({ status: false, message: '' });
-    const [formState, setFormState] = useState({ attributeId: attributeId, key: '', value: '', date: '' });
-	const [addDetail, { error }] = useMutation(ADD_DETAIL);
-	// const [editDetail, { error }] = useMutation(EDIT_DETAIL);
+    const [formState, setFormState] = useState({ street1: '', street2: '', city: '', state: '', zip: '' });
+	const [addHome, { addError }] = useMutation(ADD_HOME);
+	const [assignHome, { assignError }] = useMutation(TRANSFER_HOME);
 	const handleFormSubmit = async (event) => {
         event.preventDefault();
-        if (formState.key && formState.value) {
-            console.log("here")
+        if (userId && formState.street1) {
             try {
-                const mutationResponse = await addDetail({
+                const mutationResponse = await addHome({
                     variables: {
-                        attributeId: formState.attributeId,
-                        key: formState.key,
-                        value: formState.value,
-                        date: formState.date
+                        address: formState,
                     },
                 });
                 if (mutationResponse) {
-                    console.log(mutationResponse);
-                    setSnack({ status: true, message: `${formState.key} has been added to ${attributeName}` });
+                    const user = await assignHome({
+                        variables: {
+                            receiver: userId,
+                            home: mutationResponse.data.addHome._id
+                        }
+                    });
+                    console.log(user);
+                    setSnack({ status: true, message: 'Home added' });
                 }
             } catch (e) {
                 console.log(e);
@@ -80,7 +85,7 @@ export default function AddDetail({ attributeName, attributeId }) {
                 <div className={classes.gridRoot}>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
-                            <h1>{attributeName}</h1>
+                            <h3>Add home</h3>
                             <Divider />
                         </Grid>
                         <Grid item xs={12} s={6}>
@@ -88,27 +93,38 @@ export default function AddDetail({ attributeName, attributeId }) {
                                 <div>
                                 <TextField
                                     required
-                                    id="key"
-                                    label="Detail"
-                                    helperText="Attribute detail"
+                                    id="street1"
+                                    label="Street(1)"
                                     variant="standard"
                                     onChange={handleChange}
-                                    />
-                                    <TextField
+                                />
+                                <TextField
+                                    id="street2"
+                                    label="Street(2)"
+                                    variant="standard"
+                                    onChange={handleChange}
+                                />
+                                <TextField
                                     required
-                                    id="value"
-                                    label="Value"
-                                    helperText="Attribute detail value"
-                                    onChange={handleChange}
-                                    variant="standard"
-                                    />
-                                    <TextField
-                                    id="date"
-                                    type="date"
-                                    helperText="Associated date"
+                                    id="city"
+                                    label="City"
                                     variant="standard"
                                     onChange={handleChange}
-                                    />
+                                />
+                                <TextField
+                                    required
+                                    id="state"
+                                    label="State"
+                                    variant="standard"
+                                    onChange={handleChange}
+                                />
+                                <TextField
+                                    required
+                                    id="zip"
+                                    label="Zip"
+                                    variant="standard"
+                                    onChange={handleChange}
+                                />
                                 </div>
                                 <Button
                                     color="primary"
@@ -116,7 +132,7 @@ export default function AddDetail({ attributeName, attributeId }) {
                                     size="large"
                                     type="submit"
                                     onClick={handleFormSubmit}>
-                                        Save Detail
+                                        Save Home
                                 </Button>
                             </form>
                             {snack.status ? (

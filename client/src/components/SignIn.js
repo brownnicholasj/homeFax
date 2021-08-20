@@ -17,6 +17,8 @@ import SignUp from '../components/SignUp';
 import { useMutation } from '@apollo/client';
 import Auth from '../utils/auth';
 import { LOGIN } from '../utils/mutations';
+import { useStoreContext } from '../utils/GlobalState';
+import { UPDATE_USER, UPDATE_HOMES } from '../utils/actions';
 
 function Copyright() {
 	return (
@@ -62,6 +64,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
 	const classes = useStyles();
+
+	const [state, dispatch] = useStoreContext();
+
 	const handleOpen = () => {
 		setOpen(true);
 	};
@@ -99,7 +104,11 @@ export default function SignIn() {
 					password: formState.password,
 				},
 			});
-			const token = mutationResponse.data.login.token;
+			const { user, token } = mutationResponse.data.login;
+			dispatch({ type: UPDATE_USER, user });
+			const homes = user.homes;
+			dispatch({ type: UPDATE_HOMES, homes })
+
 			Auth.login(token);
 		} catch (e) {
 			setFormState({ errorMsg: 'Incorrect Credentials' });

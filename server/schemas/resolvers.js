@@ -239,6 +239,7 @@ const resolvers = {
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
 			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
+			console.log('hit')
 			if (transferer) {
 				await User.findByIdAndUpdate(transferer, {
 					$pull: { homes: home },
