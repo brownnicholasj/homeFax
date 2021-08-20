@@ -26,6 +26,8 @@ import AddDetail from '../components/forms/AddDetail';
 import { Box } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { IconButton } from '@material-ui/core';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import { Tooltip } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 	modal: {
@@ -121,8 +123,12 @@ function MyHome(props) {
 												{area.attributes.map((attribute, j) => (
 													<React.Fragment>
 														<Grid item xs={12}>
-															<Typography gutterBottom="true" variant="p" xs={12}>
-																<Box display="flex" justifyContent="space-between">
+															<Box
+																display="flex"
+																alignItems="center"
+																justifyContent="space-between"
+															>
+																<Typography gutterBottom="true" variant="p" xs={12}>
 																	<Link
 																		onClick={() => {
 																			console.log('i :>> ', i);
@@ -133,11 +139,11 @@ function MyHome(props) {
 																	>
 																		{capitalize(attribute.type)}
 																	</Link>
-																	<IconButton>
-																		<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
-																	</IconButton>
-																</Box>
-															</Typography>
+																</Typography>
+																<IconButton>
+																	<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
+																</IconButton>
+															</Box>
 														</Grid>
 														<br></br>
 														<Grid item xs={3}>
@@ -172,24 +178,39 @@ function MyHome(props) {
 														</Grid>
 													</React.Fragment>
 												))}
-												<Typography variant="p">
-													<Button
-														onClick={handleAttributeModal}
-														variant="contained"
-														color="primary"
-													>
-														Add Attribute
-													</Button>
-													<Modal
-														onClose={() => setAttributeModalOpen(false)}
-														open={attributeModalOpen && expandedId === i}
-													>
-														<AddAttribute
-															areaName={area.name}
-															areaId={area._id}
-														></AddAttribute>
-													</Modal>
-												</Typography>
+												<Box
+													mt={2}
+													display="flex"
+													alignItems="center"
+													justifyContent="space-between"
+												>
+													<Typography variant="p">
+														<Button
+															onClick={handleAttributeModal}
+															variant="contained"
+															color="primary"
+														>
+															Add Attribute
+														</Button>
+														<Modal
+															onClose={() => setAttributeModalOpen(false)}
+															open={attributeModalOpen && expandedId === i}
+														>
+															<AddAttribute
+																areaName={area.name}
+																areaId={area._id}
+															></AddAttribute>
+														</Modal>
+													</Typography>
+													<Tooltip title="Delete Area">
+														<IconButton>
+															<HighlightOffIcon
+																fontSize="large"
+																color="secondary"
+															></HighlightOffIcon>
+														</IconButton>
+													</Tooltip>
+												</Box>
 											</CardContent>
 										</Collapse>
 									</Card>
