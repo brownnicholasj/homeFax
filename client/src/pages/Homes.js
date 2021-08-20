@@ -4,10 +4,7 @@ import Auth from '../utils/auth';
 import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { QUERY_USER } from '../utils/queries';
-import { Card, CardActionArea, Typography } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
-import { Link } from '@material-ui/core';
-import { CardActions } from '@material-ui/core';
+import { Card, CardActionArea, Typography, Grid, Link, CardActions } from '@material-ui/core';
 
 function Homes(props) {
 	const me = Auth.getProfile().data;
