@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import Badge from '@material-ui/core/Badge';
 // import Tab from '@material-ui/core/Tab';
 // import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -49,7 +50,7 @@ const styles = (theme) => ({
 });
 
 function Header(props) {
-	const { classes, onDrawerToggle } = props;
+	const { classes, onDrawerToggle, transferCount } = props;
 	const [anchorEl, setAnchorEl] = useState(null);
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -101,9 +102,17 @@ function Header(props) {
 							</Grid>
 							{Auth.loggedIn() && (
 								<Grid item>
-									<Tooltip title='Alerts • No alerts'>
+									<Tooltip
+										title={
+											transferCount === '!'
+												? 'Pending Transfer'
+												: 'No Transfers'
+										}
+									>
 										<IconButton color='inherit'>
-											<NotificationsIcon />
+											<Badge badgeContent={transferCount} color='secondary'>
+												<NotificationsIcon />
+											</Badge>
 										</IconButton>
 									</Tooltip>
 								</Grid>
