@@ -104,9 +104,7 @@ function Header(props) {
 								<Grid item>
 									<Tooltip
 										title={
-											transferCount === '!'
-												? 'Pending Transfer'
-												: 'No Transfers'
+											transferCount > 0 ? 'Pending Transfer' : 'No Transfers'
 										}
 									>
 										<IconButton color='inherit'>
