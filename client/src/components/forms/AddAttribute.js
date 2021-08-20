@@ -6,17 +6,10 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { Divider } from '@material-ui/core';
-
 import TextField from '@material-ui/core/TextField';
 import { useQuery, useMutation } from '@apollo/client';
-import {
-	ADD_ATTRIBUTE,
-    EDIT_DETAIL,
-    DELETE_DETAIL
-} from '../../utils/mutations';
-
+import { ADD_ATTRIBUTE, EDIT_DETAIL, DELETE_DETAIL } from '../../utils/mutations';
 import Snack from '../Snack';
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     },
     inputRoot: {
         '& .MuiTextField-root': {
-          margin: theme.spacing(1),
-          width: '25ch',
+            margin: theme.spacing(1),
+            width: '25ch',
         },
     },
     gridRoot: {
@@ -44,9 +37,9 @@ export default function AddAttribute({ areaName, areaId }) {
     const classes = useStyles();
     const [snack, setSnack] = useState({ status: false, message: '' });
     const [formState, setFormState] = useState({ areaId: areaId, type: '' });
-	const [addAttribute, { error }] = useMutation(ADD_ATTRIBUTE);
-	// const [editDetail, { error }] = useMutation(EDIT_DETAIL);
-	const handleFormSubmit = async (event) => {
+    const [addAttribute, { error }] = useMutation(ADD_ATTRIBUTE);
+    // const [editDetail, { error }] = useMutation(EDIT_DETAIL);
+    const handleFormSubmit = async (event) => {
         event.preventDefault();
         if (formState.type) {
             try {
@@ -64,67 +57,67 @@ export default function AddAttribute({ areaName, areaId }) {
                 console.log(e);
             }
         }
-	};
+    };
 
-	const handleChange = (event) => {
-		const { id, value } = event.target;
-		setFormState({
-			...formState,
-			[id]: value,
-		});
-	};
+    const handleChange = (event) => {
+        const { id, value } = event.target;
+        setFormState({
+            ...formState,
+            [id]: value,
+        });
+    };
 
 
-  return (
-    <>
-        <Card className={classes.root} variant="outlined">
-            <CardContent>
-                <div className={classes.gridRoot}>
-                    <Grid container spacing={1}>
-                        <Grid item xs={12}>
-                            <h3>{areaName}</h3>
-                            <Divider />
-                        </Grid>
-                        <Grid item xs={12} s={6}>
-                            <form className={classes.inputRoot} noValidate autoComplete="off">
-                                <div>
-                                <TextField
-                                    required
-                                    id="type"
-                                    label="Type"
-                                    helperText="Attribute detail"
-                                    variant="standard"
-                                    onChange={handleChange}
-                                    />
-                                </div>
-                                <Button
-                                    color="primary"
-                                    variant="outlined"
-                                    size="large"
-                                    type="submit"
-                                    onClick={handleFormSubmit}>
+    return (
+        <>
+            <Card className={classes.root} variant="outlined">
+                <CardContent>
+                    <div className={classes.gridRoot}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <h3>{areaName}</h3>
+                                <Divider />
+                            </Grid>
+                            <Grid item xs={12} s={6}>
+                                <form className={classes.inputRoot} noValidate autoComplete="off">
+                                    <div>
+                                        <TextField
+                                            required
+                                            id="type"
+                                            label="Type"
+                                            helperText="Attribute detail"
+                                            variant="standard"
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <Button
+                                        color="primary"
+                                        variant="outlined"
+                                        size="large"
+                                        type="submit"
+                                        onClick={handleFormSubmit}>
                                         Save Attribute
-                                </Button>
-                            </form>
-                            {snack.status ? (
+                                    </Button>
+                                </form>
+                                {snack.status ? (
                                     <Snack
-                                    setOpen={setSnack}
-                                    status={snack.status}
-                                    message={snack.message}
+                                        setOpen={setSnack}
+                                        status={snack.status}
+                                        message={snack.message}
                                     />
                                 ) : (
                                     null
                                 )}
-                        </Grid>
-                        <Grid item xs={12} s={6}>
-                            <p>An attribute is part of an area. For instance in your kitchen there are many different things - appliances, dishes, paint color, etc. - and these are what we call "attributes".</p><p>An attribute has a type. Your toaster is an attribute with "type" "toaster".</p>
-                        </Grid>
+                            </Grid>
+                            <Grid item xs={12} s={6}>
+                                <p>An attribute is part of an area. For instance in your kitchen there are many different things - appliances, dishes, paint color, etc. - and these are what we call "attributes".</p><p>An attribute has a type. Your toaster is an attribute with "type" "toaster".</p>
+                            </Grid>
 
-                    </Grid>
-                </div>
+                        </Grid>
+                    </div>
 
-            </CardContent>
-            {/* <CardActions>
+                </CardContent>
+                {/* <CardActions>
                 <Button
                 color="primary"
                 variant="standard"
@@ -143,8 +136,8 @@ export default function AddAttribute({ areaName, areaId }) {
                     null
                 )}
             </CardActions> */}
-        </Card>
-    </>
-  );
+            </Card>
+        </>
+    );
 }
 
