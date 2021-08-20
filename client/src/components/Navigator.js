@@ -67,24 +67,24 @@ const categories = [
 	{
 		id: 'Home Section',
 		children: [
-			{
-				id: 'Settings',
-				icon: <DnsRoundedIcon />,
-				path: '/settings',
-				active: false,
-			},
+			// {
+			// 	id: 'Settings',
+			// 	icon: <DnsRoundedIcon />,
+			// 	path: '/settings',
+			// 	active: false,
+			// },
 			{
 				id: 'My Homes',
 				icon: <PermMediaOutlinedIcon />,
 				path: '/myhomes',
 				active: false,
 			},
-			{
-				id: 'Misc',
-				icon: <SettingsInputComponentIcon />,
-				path: '/misc',
-				active: false,
-			},
+			// {
+			// 	id: 'Misc',
+			// 	icon: <SettingsInputComponentIcon />,
+			// 	path: '/misc',
+			// 	active: false,
+			// },
 			{
 				id: 'Profile',
 				icon: <PeopleIcon />,
@@ -93,24 +93,24 @@ const categories = [
 			},
 		],
 	},
-	{
-		id: 'Social',
-		children: [
-			{
-				id: 'Friends',
-				icon: <SettingsIcon />,
-				path: '/friends',
-				active: false,
-			},
-			{ id: 'Zillow', icon: <TimerIcon />, path: '/zillow', active: false },
-			{
-				id: 'Twitter',
-				icon: <PhonelinkSetupIcon />,
-				path: '/twitter',
-				active: false,
-			},
-		],
-	},
+	// {
+	// 	id: 'Social',
+	// 	children: [
+	// 		{
+	// 			id: 'Friends',
+	// 			icon: <SettingsIcon />,
+	// 			path: '/friends',
+	// 			active: false,
+	// 		},
+	// 		{ id: 'Zillow', icon: <TimerIcon />, path: '/zillow', active: false },
+	// 		{
+	// 			id: 'Twitter',
+	// 			icon: <PhonelinkSetupIcon />,
+	// 			path: '/twitter',
+	// 			active: false,
+	// 		},
+	// 	],
+	// },
 ];
 
 function Navigator(props) {
