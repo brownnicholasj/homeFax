@@ -9,7 +9,7 @@ import {
 import { Button } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_GET_HOME } from '../utils/queries';
 import { Card } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
@@ -28,6 +28,9 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { IconButton } from '@material-ui/core';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { Tooltip } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { DELETE_AREA } from '../utils/mutations';
 
 const useStyles = makeStyles((theme) => ({
 	modal: {
@@ -47,6 +50,7 @@ function MyHome(props) {
 	const [areaModalOpen, setAreaModalOpen] = useState(false);
 	const [attributeModalOpen, setAttributeModalOpen] = useState(false);
 	const [detailModalOpen, setDetailModalOpen] = useState(false);
+	const [deleteArea] = useMutation(DELETE_AREA);
 
 	const { loading, error, data } = useQuery(QUERY_GET_HOME, {
 		variables: { homeId: homeid },
@@ -100,15 +104,21 @@ function MyHome(props) {
 									<Card>
 										<CardHeader
 											action={
-												<Link
-													style={{ cursor: 'pointer' }}
-													onClick={() => {
-														// console.log('i :>> ', i);
-														handleExpandClick(i);
-													}}
-												>
-													Inspect
-												</Link>
+												expandedId !== i ? (
+													<IconButton>
+														<ExpandMoreIcon
+															onClick={() => handleExpandClick(i)}
+														></ExpandMoreIcon>
+													</IconButton>
+												) : (
+													<IconButton>
+														<ExpandLessIcon
+															onClick={() => {
+																handleExpandClick(i);
+															}}
+														></ExpandLessIcon>
+													</IconButton>
+												)
 											}
 											title={capitalize(area.name)}
 										></CardHeader>
