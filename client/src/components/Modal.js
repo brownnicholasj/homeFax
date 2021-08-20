@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-
 import HomeList from './HomeList';
 
 function rand() {
@@ -52,7 +51,7 @@ export default function SimpleModal({ home }) {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <HomeList home={home}/>
+        <HomeList home={home} />
       </Modal>
     </div>
   );

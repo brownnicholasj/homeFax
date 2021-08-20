@@ -1,19 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import HomeCard from '../components/HomeCard';
 import AddDetail from '../components/AddDetail';
 import AddAttribute from '../components/AddAttribute';
 import GenericList from '../components/GenericList';
-import HomeCard from '../components/HomeCard';
-
 import Card from '../components/Card';
-
 import Transfer from '../components/Transfer';
-
-import { useEffect } from 'react';
 import { useStoreContext } from '../utils/GlobalState';
 import { effectHelper } from '../utils/helpers';
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_USER } from '../utils/queries';
-
 
 function Misc(props) {
 	const [state, dispatch] = useStoreContext();

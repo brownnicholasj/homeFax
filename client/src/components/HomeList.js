@@ -5,14 +5,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
-
 import KitchenIcon from '@material-ui/icons/Kitchen';
 import WeekendIcon from '@material-ui/icons/Weekend';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import LocalBarIcon from '@material-ui/icons/LocalBar';
 import BuildIcon from '@material-ui/icons/Build';
 import WcIcon from '@material-ui/icons/Wc';
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,7 +37,7 @@ export default function InteractiveList({ home }) {
         <Grid item xs={8} md={6}>
           <div className={classes.demo}>
             <List dense={dense}>
-            {home.areas.map((area, index) => (
+              {home.areas.map((area, index) => (
                 <ListItem key={area._id}>
                   <ListItemIcon>
                     <KitchenIcon />
@@ -49,7 +47,7 @@ export default function InteractiveList({ home }) {
                     secondary={area.attributes.map(attr => `${attr.type}, `)}
                   />
                 </ListItem>
-            ))}
+              ))}
             </List>
           </div>
         </Grid>

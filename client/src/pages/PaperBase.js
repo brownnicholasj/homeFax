@@ -1,17 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-	createTheme,
-	ThemeProvider,
-	withStyles,
-} from '@material-ui/core/styles';
+import { createTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Navigator from '../components/Navigator';
 import Header from '../components/Header';
-import { useState } from 'react';
 import SignIn from '../components/SignIn';
 import { Grid } from '@material-ui/core';
 import Auth from '../utils/auth';

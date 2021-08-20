@@ -1,6 +1,5 @@
 export const UPDATE_USER = "UPDATE_USER";
 export const UPDATE_HOMES = "UPDATE_HOME";
-
 export const ADD_HOME = "ADD_HOME";
 export const EDIT_HOME = "EDIT_HOME";
 export const DELETE_HOME = "DELETE_HOME";

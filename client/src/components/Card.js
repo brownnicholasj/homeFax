@@ -5,7 +5,6 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-
 import { useQuery } from '@apollo/client';
 import { QUERY_USER } from '../utils/queries';
 import HomeIcon from '@material-ui/icons/Home';
@@ -35,7 +34,7 @@ const useStyles = makeStyles({
     //     boxShadow: theme.shadows[5],
     //     padding: theme.spacing(2, 4, 3),
     //   },
-    });
+});
 
 
 export default function OutlinedCard() {
@@ -66,38 +65,38 @@ export default function OutlinedCard() {
 
     const bull = <span className={classes.bullet}>•</span>;
 
-  return (
-    <>
-        {loading ? (
-            <span>loading...</span>
-        ) : (
-            user.homes.map((home, index) => (
-                <>
-                <Card key={home.index} className={classes.root} variant="outlined">
-                    <CardContent>
-                        <Typography className={classes.title} color="textSecondary" gutterBottom>
-                            <HomeIcon />
-                        </Typography>
-                        <Typography variant="h5" component="h2">
-                            {home.address.street1}
-                        </Typography>
-                        <Typography className={classes.pos} color="textSecondary">
-                            {home.address.street2}
-                        </Typography>
-                        <Typography variant="body2" component="p">
-                            {home.address.city}, {home.address.state} {home.address.zip}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small" ><Modal home={home} /></Button>
-                    </CardActions>
-                </Card>
-                {/* <HomeList home={home} /> */}
-                </>
-            ))
-        
-        )}
-        
-    </>
-  );
+    return (
+        <>
+            {loading ? (
+                <span>loading...</span>
+            ) : (
+                user.homes.map((home, index) => (
+                    <>
+                        <Card key={home.index} className={classes.root} variant="outlined">
+                            <CardContent>
+                                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                    <HomeIcon />
+                                </Typography>
+                                <Typography variant="h5" component="h2">
+                                    {home.address.street1}
+                                </Typography>
+                                <Typography className={classes.pos} color="textSecondary">
+                                    {home.address.street2}
+                                </Typography>
+                                <Typography variant="body2" component="p">
+                                    {home.address.city}, {home.address.state} {home.address.zip}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button size="small" ><Modal home={home} /></Button>
+                            </CardActions>
+                        </Card>
+                        {/* <HomeList home={home} /> */}
+                    </>
+                ))
+
+            )}
+
+        </>
+    );
 }

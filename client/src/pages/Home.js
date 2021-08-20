@@ -1,28 +1,24 @@
 import React, { useEffect } from 'react';
 import Content from '../components/Content';
-import { Menu } from '@material-ui/core';
-import { Button } from '@material-ui/core';
-import { MenuItem } from '@material-ui/core';
+import { Menu, Button, MenuItem } from '@material-ui/core';
+
 
 // CODE ADDED FOR USE STATE TESTING
 import { useStoreContext } from '../utils/GlobalState';
-import { idbPromise, effectHelper } from '../utils/helpers';
-import {
-	UPDATE_USER,
-	UPDATE_HOMES
-} from '../utils/actions';
 import { useQuery } from '@apollo/client';
 import { QUERY_USER } from '../utils/queries';
+import { idbPromise, effectHelper } from '../utils/helpers';
+import { UPDATE_USER, UPDATE_HOMES } from '../utils/actions';
 
 function Home(props) {
 	const [state, dispatch] = useStoreContext();
 	const { user, homes, transfers } = state;
 	const { loading, data } = useQuery(QUERY_USER);
-	
+
 	useEffect(() => {
 		effectHelper(data, dispatch, loading);
-	  }, [data, loading, dispatch]);
-	  
+	}, [data, loading, dispatch]);
+
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
