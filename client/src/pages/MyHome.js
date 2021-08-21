@@ -214,6 +214,7 @@ function MyHome(props) {
 																		<AddDetail
 																			attributeName={attribute.type}
 																			attributeId={attribute._id}
+																			setHome={setHome}
 																		></AddDetail>
 																	</Modal>
 																</div>
