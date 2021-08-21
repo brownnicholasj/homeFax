@@ -13,6 +13,7 @@ import Container from '@material-ui/core/Container';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
 	return (
@@ -49,6 +50,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
 	const classes = useStyles();
+	const history = useHistory();
+
 	const [formState, setFormState] = useState({
 		dob: '',
 		firstName: '',
@@ -66,20 +69,51 @@ export default function SignUp() {
 			...formState,
 			[name]: value,
 		});
+		console.log('formState :>> ', formState);
 	};
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
 		console.log(formState);
 
-		try {
-			const { data } = await addUser({
-				variables: { ...formState },
-			});
-
-			Auth.login(data.addUser.token);
-		} catch (e) {
-			console.error(e);
+		if (
+			formState.password &&
+			formState.password2 &&
+			formState.firstName &&
+			formState.lastName &&
+			formState.dob &&
+			formState.email &&
+			formState.username
+		) {
+			if (formState.password !== formState.password2) {
+				setFormState({ ...formState, errorMsg: 'Passwords do not match' });
+			}
+			if (formState.password === formState.password2) {
+				try {
+					const { data } = await addUser({
+						variables: { ...formState },
+					});
+					Auth.login(data.addUser.token);
+					history.push('/home');
+				} catch (e) {
+					setFormState({
+						...formState,
+						errorMsg: 'Something went wrong signing up',
+					});
+					console.error(e);
+				}
+			}
+		}
+		if (
+			!formState.password ||
+			!formState.password2 ||
+			!formState.firstName ||
+			!formState.lastName ||
+			!formState.dob ||
+			!formState.email ||
+			!formState.username
+		) {
+			setFormState({ ...formState, errorMsg: 'Must fill in all required fields' });
 		}
 	};
 
@@ -120,7 +154,7 @@ export default function SignUp() {
 								onChange={handleChange}
 							/>
 						</Grid>
-						<label for="dob">Date of Birth</label>
+						<label htmlFor="dob">Date of Birth</label>
 						<Grid item xs={12}>
 							<TextField
 								variant="outlined"
@@ -179,11 +213,15 @@ export default function SignUp() {
 								label="Confirm Password"
 								type="password"
 								id="password2"
+								onChange={handleChange}
 							/>
 						</Grid>
 					</Grid>
 					<br></br>
 					<br></br>
+					<Typography variant="body1" color="error">
+						{formState.errorMsg}
+					</Typography>
 					<Button
 						type="submit"
 						fullWidth
