@@ -69,32 +69,51 @@ export default function SignUp() {
 			...formState,
 			[name]: value,
 		});
+		console.log('formState :>> ', formState);
 	};
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
 		console.log(formState);
 
-		try {
-			const { data } = await addUser({
-				variables: { ...formState },
-			});
-
-
-			Auth.login(data.addUser.token);
-			history.push('/home');
-
+		if (
+			formState.password &&
+			formState.password2 &&
+			formState.firstName &&
+			formState.lastName &&
+			formState.dob &&
+			formState.email &&
+			formState.username
+		) {
 			if (formState.password !== formState.password2) {
-				setFormState({ errorMsg: "Passwords do not match" })
+				setFormState({ ...formState, errorMsg: 'Passwords do not match' });
 			}
 			if (formState.password === formState.password2) {
-				console.log("Credentials Match")
-					(Auth.login(data.addUser.token))
+				try {
+					const { data } = await addUser({
+						variables: { ...formState },
+					});
+					Auth.login(data.addUser.token);
+					history.push('/home');
+				} catch (e) {
+					setFormState({
+						...formState,
+						errorMsg: 'Something went wrong signing up',
+					});
+					console.error(e);
+				}
 			}
-
-		} catch (e) {
-
-			console.error(e);
+		}
+		if (
+			!formState.password ||
+			!formState.password2 ||
+			!formState.firstName ||
+			!formState.lastName ||
+			!formState.dob ||
+			!formState.email ||
+			!formState.username
+		) {
+			setFormState({ ...formState, errorMsg: 'Must fill in all required fields' });
 		}
 	};
 
@@ -135,7 +154,7 @@ export default function SignUp() {
 								onChange={handleChange}
 							/>
 						</Grid>
-						<label for="dob">Date of Birth</label>
+						<label htmlFor="dob">Date of Birth</label>
 						<Grid item xs={12}>
 							<TextField
 								variant="outlined"
