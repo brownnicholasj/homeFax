@@ -16,6 +16,8 @@ import { useState } from 'react';
 import { Paper } from '@material-ui/core';
 import { Box } from '@material-ui/core';
 import { Button } from '@material-ui/core';
+import { useMutation } from '@apollo/client';
+import { DELETE_PROFILE, UPDATE_PASSWORD, UPDATE_USER } from '../utils/mutations';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -41,13 +43,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Profile(props) {
-	const { email, username, firstName, lastName } = Auth.getProfile().data;
+	const { email, username, firstName, lastName, _id } = Auth.getProfile().data;
+	// console.log(Auth.getProfile().data)
 	const classes = useStyles();
 	const [expanded, setExpanded] = useState(false);
 	const [contactExpanded, setContactExpanded] = useState(false);
 	const [passwordExpanded, setPasswordExpanded] = useState(false);
 	const [deleteExpanded, setDeleteExpanded] = useState(false);
+	const [updateUser] = useMutation(UPDATE_USER)
+	const [changePassword] = useMutation(UPDATE_PASSWORD)
+	const [deleteUser] = useMutation(DELETE_PROFILE)
 
+	// Modify e.currentTarget. <- dataId attr
 	const handleExpandClick = (e) => {
 		console.log('e.currentTarget.id :>> ', e.currentTarget.id);
 		switch (e.currentTarget.id) {
@@ -55,7 +62,9 @@ function Profile(props) {
 				setExpanded(!expanded);
 				break;
 			case 'contact':
+				console.log(contactExpanded)
 				setContactExpanded(!contactExpanded);
+				console.log(contactExpanded)
 				break;
 			case 'passwordandsecurity':
 				setPasswordExpanded(!passwordExpanded);
@@ -69,12 +78,82 @@ function Profile(props) {
 		}
 	};
 
+	async function updateProfile() {
+		const { data } = await updateUser({
+			variables: {
+				email: formState.email,
+				username,
+				firstName: formState.firstName,
+				lastName: formState.lastName,
+			}
+		})
+		const token = data.updateUser.token
+		console.log(token)
+		localStorage.setItem('id_token', token);
+		setContactExpanded(false)
+		setExpanded(false)
+	}
+
+	const updateEmail = async () => {
+		// Using formState.email and _id, find and update the users email via Apollo and Graphql
+		updateProfile()
+		setExpanded(false)
+	}
+
+	const updateContact = async () => {
+		updateProfile()
+		setContactExpanded(false)
+		console.log(contactExpanded)
+	}
+
+	const updatePassword = async () => {
+		try {
+			if (formState.newpassword1 !== formState.newpassword2) {
+				alert("password does not match")
+			} else {
+				const { data } = await changePassword({
+					variables: {
+						password: formState.currentpassword,
+						currentPassword: formState.newpassword2
+					}
+				})
+				const token = data.updatePassword.token
+				console.log(token)
+				localStorage.setItem('id_token', token);
+				setPasswordExpanded(false)
+			}
+		} catch (error) {
+			alert(error)
+			console.log(error)
+		}
+
+	}
+
+	const deleteProfile = async () => {
+		try {
+
+			const { data } = await deleteUser({
+				variables: {
+					password: formState.currentpassword,
+				}
+			})
+			if (data.deleteProfile) {
+				Auth.logout()
+			}
+			setDeleteExpanded(false)
+			console.log(data)
+		} catch (error) {
+			alert(error)
+			console.log(error)
+		}
+	}
+
 	const [formState, setFormState] = useState({
 		dob: '',
-		firstName: '',
-		lastName: '',
+		firstName: firstName,
+		lastName: lastName,
 		username: '',
-		email: '',
+		email: email,
 		password: '',
 	});
 
@@ -92,7 +171,7 @@ function Profile(props) {
 			<Grid item xs={12}>
 				<Typography variant="h2">Profile Settings</Typography>
 			</Grid>
-			<Grid item xs={0} md={2} lg={2}>
+			<Grid item xs={2} md={2} lg={2}>
 				<Box></Box>
 			</Grid>
 			<Grid item xs={12} md={8} lg={6}>
@@ -156,12 +235,12 @@ function Profile(props) {
 								</Grid>
 								<Grid container justifyContent="flex-end">
 									<Box mx={3}>
-										<Button variant="contained" color="secondary">
+										<Button variant="contained" color="secondary" onClick={() => setExpanded(!expanded)}>
 											<Typography variant="button">Cancel</Typography>
 										</Button>
 									</Box>
 									<Button variant="contained" color="primary">
-										<Typography variant="button">Save & Close</Typography>
+										<Typography variant="button" onClick={updateContact}>Save & Close</Typography>
 									</Button>
 								</Grid>
 							</Grid>
@@ -169,10 +248,10 @@ function Profile(props) {
 					</Collapse>
 				</Card>
 			</Grid>
-			<Grid item xs={0} md={2} lg={4}>
+			<Grid item xs={2} md={2} lg={4}>
 				<Box></Box>
 			</Grid>
-			<Grid item xs={0} md={2} lg={2}>
+			<Grid item xs={2} md={2} lg={2}>
 				<Box></Box>
 			</Grid>
 			<Grid item xs={12} md={8} lg={6}>
@@ -181,6 +260,7 @@ function Profile(props) {
 						action={
 							contactExpanded ? (
 								<Link
+									// Add Data Id Attr
 									id="contact"
 									style={{ cursor: 'pointer' }}
 									onClick={handleExpandClick}
@@ -231,11 +311,11 @@ function Profile(props) {
 								</Grid>
 								<Grid container justifyContent="flex-end">
 									<Box mx={3}>
-										<Button variant="contained" color="secondary">
+										<Button variant="contained" color="secondary" onClick={() => setContactExpanded(!contactExpanded)}>
 											<Typography variant="button">Cancel</Typography>
 										</Button>
 									</Box>
-									<Button variant="contained" color="primary">
+									<Button variant="contained" color="primary" id="contact" onClick={updateEmail}>
 										<Typography variant="button">Save & Close</Typography>
 									</Button>
 								</Grid>
@@ -244,10 +324,10 @@ function Profile(props) {
 					</Collapse>
 				</Card>
 			</Grid>
-			<Grid item xs={0} md={2} lg={4}>
+			<Grid item xs={2} md={2} lg={4}>
 				<Box></Box>
 			</Grid>
-			<Grid item xs={0} md={2} lg={2}>
+			<Grid item xs={2} md={2} lg={2}>
 				<Box></Box>
 			</Grid>
 			<Grid item xs={12} md={8} lg={6}>
@@ -316,11 +396,11 @@ function Profile(props) {
 								</Grid>
 								<Grid container justifyContent="flex-end">
 									<Box mx={3}>
-										<Button variant="contained" color="secondary">
+										<Button variant="contained" color="secondary" onClick={() => setPasswordExpanded(!passwordExpanded)}>
 											<Typography variant="button">Cancel</Typography>
 										</Button>
 									</Box>
-									<Button variant="contained" color="primary">
+									<Button variant="contained" color="primary" onClick={updatePassword}>
 										<Typography variant="button">Save & Close</Typography>
 									</Button>
 								</Grid>
@@ -329,10 +409,10 @@ function Profile(props) {
 					</Collapse>
 				</Card>
 			</Grid>
-			<Grid item xs={0} md={2} lg={4}>
+			<Grid item xs={2} md={2} lg={4}>
 				<Box></Box>
 			</Grid>
-			<Grid item xs={0} md={2} lg={2}>
+			<Grid item xs={2} md={2} lg={2}>
 				<Box></Box>
 			</Grid>
 			<Grid item xs={12} md={8} lg={6}>
@@ -354,7 +434,7 @@ function Profile(props) {
 									style={{ cursor: 'pointer', textDecoration: 'underline' }}
 									onClick={handleExpandClick}
 									variant="body1"
-									color="red"
+									color="error"
 								>
 									Delete
 								</Link>
@@ -381,11 +461,11 @@ function Profile(props) {
 								</Grid>
 								<Grid container justifyContent="flex-end">
 									<Box mx={3}>
-										<Button variant="contained" color="primary">
+										<Button variant="contained" color="primary" onClick={() => setDeleteExpanded(!deleteExpanded)}>
 											<Typography variant="button">Cancel</Typography>
 										</Button>
 									</Box>
-									<Button variant="contained" color="secondary">
+									<Button variant="contained" color="secondary" onClick={deleteProfile}>
 										<Typography variant="button">Delete Profile</Typography>
 									</Button>
 								</Grid>
@@ -394,7 +474,7 @@ function Profile(props) {
 					</Collapse>
 				</Card>
 			</Grid>
-			<Grid item xs={0} md={2} lg={4}>
+			<Grid item xs={2} md={2} lg={4}>
 				<Box></Box>
 			</Grid>
 		</Grid>

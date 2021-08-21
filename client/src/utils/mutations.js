@@ -6,25 +6,82 @@ export const LOGIN = gql`
 			token
 			user {
 				_id
+				homes {
+					_id
+					address {
+						_id
+						street1
+						street2
+						city
+						state
+						zip
+					}
+					areas {
+						_id
+						name
+						icon
+						attributes {
+							_id
+							type
+							detail {
+								_id
+								key
+								value
+								date
+							}
+						}
+					}
+				}
 			}
 		}
 	}
 `;
 
-export const ADD_ORDER = gql`
-	mutation addOrder($products: [ID]!) {
-		addOrder(products: $products) {
-			purchaseDate
-			products {
+// export const LOGIN = gql`
+// 	mutation login($identifier: String!, $password: String!) {
+// 		login(identifier: $identifier, password: $password) {
+// 			token
+// 			user {
+// 				_id
+// 				homes {
+// 					_id
+// 				}
+// 			}
+// 		}
+// 	}
+// `;
+
+export const ADD_USER = gql`
+	mutation addUser(
+		$firstName: String!
+		$lastName: String!
+		$email: String!
+		$username: String!
+		$password: String!
+		$dob: String!
+	) {
+		addUser(
+			firstName: $firstName
+			lastName: $lastName
+			username: $username
+			email: $email
+			password: $password
+			dob: $dob
+		) {
+			token
+			user {
 				_id
-				name
-				description
-				price
-				quantity
-				category {
-					name
-				}
+				username
+				email
 			}
+		}
+	}
+`;
+
+export const DELETE_USER = gql`
+	mutation DeleteUser($password: String!) {
+		editUser(password: $password) {
+			_id
 		}
 	}
 `;
@@ -43,22 +100,36 @@ export const ADD_HOME = gql`
 		}
 	}
 `;
+
+export const EDIT_HOME = gql`
+	mutation EditHome($homeId: ID!, $address: HomeAddress) {
+		editHome(homeId: $homeId, address: $address) {
+			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+		}
+	}
+`;
+
+export const DELETE_HOME = gql`
+	mutation DeleteHome($homeId: ID!) {
+		deleteHome(homeId: $homeId) {
+			_id
+		}
+	}
+`;
+
 export const TRANSFER_HOME = gql`
 	mutation TransferHome($transferer: ID, $receiver: ID, $home: ID!) {
 		transferHome(transferer: $transferer, receiver: $receiver, home: $home) {
 			_id
 			firstName
 			lastName
-			homes {
-				_id
-				address {
-					street1
-					street2
-					city
-					state
-					zip
-				}
-			}
 		}
 	}
 `;
@@ -75,6 +146,36 @@ export const ADD_AREA = gql`
 				zip
 			}
 			areas {
+				_id
+				name
+				icon
+				attributes {
+					_id
+					type
+					detail {
+						_id
+						key
+						value
+						date
+					}
+				}
+			}
+		}
+	}
+`;
+
+export const EDIT_AREA = gql`
+	mutation EditArea($areaId: ID!, $name: String, $icon: String) {
+		editArea(areaId: $areaId, name: $name, icon: $icon) {
+			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+			areas {
 				name
 				icon
 				attributes {
@@ -82,6 +183,37 @@ export const ADD_AREA = gql`
 					detail {
 						key
 						value
+						date
+					}
+				}
+			}
+		}
+	}
+`;
+
+export const DELETE_AREA = gql`
+	mutation DeleteArea($areaId: ID!) {
+		deleteArea(areaId: $areaId) {
+			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+			areas {
+				_id
+				name
+				icon
+				attributes {
+					_id
+					type
+					detail {
+						key
+						value
+						date
+						_id
 					}
 				}
 			}
@@ -110,86 +242,8 @@ export const ADD_ATTRIBUTE = gql`
 					detail {
 						key
 						value
-					}
-				}
-			}
-		}
-	}
-`;
-
-export const ADD_DETAIL = gql`
-	mutation AddDetail($attributeId: ID!, $key: String!, $value: String!) {
-		addDetail(attributeId: $attributeId, key: $key, value: $value) {
-			_id
-			address {
-				street1
-				street2
-				city
-				state
-				zip
-			}
-			areas {
-				_id
-				name
-				icon
-				attributes {
-					_id
-					type
-					detail {
-						key
-						value
-					}
-				}
-			}
-		}
-	}
-`;
-export const ADD_USER = gql`
-	mutation addUser(
-		$firstName: String!
-		$lastName: String!
-		$email: String!
-		$username: String!
-		$password: String!
-		$dob: String!
-	) {
-		addUser(
-			firstName: $firstName
-			lastName: $lastName
-			username: $username
-			email: $email
-			password: $password
-			dob: $dob
-		) {
-			token
-			user {
-				_id
-				username
-				email
-			}
-		}
-	}
-`;
-
-export const EDIT_AREA = gql`
-	mutation EditArea($areaId: ID!, $name: String, $icon: String) {
-		editArea(areaId: $areaId, name: $name, icon: $icon) {
-			_id
-			address {
-				street1
-				street2
-				city
-				state
-				zip
-			}
-			areas {
-				name
-				icon
-				attributes {
-					type
-					detail {
-						key
-						value
+						date
+						_id
 					}
 				}
 			}
@@ -218,6 +272,67 @@ export const EDIT_ATTRIBUTE = gql`
 					detail {
 						key
 						value
+						date
+					}
+				}
+			}
+		}
+	}
+`;
+
+export const DELETE_ATTRIBUTE = gql`
+	mutation DeleteAttribute($attributeId: ID!) {
+		deleteAttribute(attributeId: $attributeId) {
+			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+			areas {
+				_id
+				name
+				icon
+				attributes {
+					_id
+					type
+					detail {
+						_id
+						key
+						value
+						date
+					}
+				}
+			}
+		}
+	}
+`;
+
+export const ADD_DETAIL = gql`
+	mutation AddDetail($attributeId: ID!, $key: String!, $value: String!) {
+		addDetail(attributeId: $attributeId, key: $key, value: $value) {
+			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+			areas {
+				_id
+				name
+				icon
+				attributes {
+					_id
+					type
+					detail {
+						key
+						value
+						date
+						_id
 					}
 				}
 			}
@@ -246,9 +361,112 @@ export const EDIT_DETAIL = gql`
 					detail {
 						key
 						value
+						date
 					}
 				}
 			}
 		}
+	}
+`;
+
+export const DELETE_DETAIL = gql`
+	mutation DeleteDetail($detailId: ID!) {
+		deleteDetail(detailId: $detailId) {
+			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+			areas {
+				_id
+				name
+				icon
+				attributes {
+					_id
+					type
+					detail {
+						_id
+						key
+						value
+						date
+					}
+				}
+			}
+		}
+	}
+`;
+
+export const CREATE_TRANSFER = gql`
+	mutation CreateTransfer($transferer: String, $receiver: String, $home: ID!) {
+		createTransfer(transferer: $transferer, receiver: $receiver, home: $home) {
+			_id
+			transferer
+			receiver
+			home
+		}
+	}
+`;
+
+export const EDIT_TRANSFER = gql`
+	mutation EditTransfer($transferer: String, $receiver: String, $home: ID!) {
+		editTransfer(transferer: $transferer, receiver: $receiver, home: $home) {
+			_id
+			transferer
+			receiver
+			home {
+				address {
+					street1
+					street2
+					city
+					state
+					zip
+				}
+			}
+		}
+	}
+`;
+
+export const UPDATE_USER = gql`
+	mutation updateUser(
+		$firstName: String
+		$lastName: String
+		$email: String
+		$username: String
+	) {
+		updateUser(
+			firstName: $firstName
+			lastName: $lastName
+			username: $username
+			email: $email
+		) {
+			token
+			user {
+				_id
+				firstName
+				lastName
+			}
+		}
+	}
+`;
+
+export const UPDATE_PASSWORD = gql`
+	mutation updatePassword($password: String, $currentPassword: String) {
+		updatePassword(password: $password, currentPassword: $currentPassword) {
+			token
+			user {
+				_id
+				firstName
+				lastName
+			}
+		}
+	}
+`;
+
+export const DELETE_PROFILE = gql`
+	mutation deleteProfile($password: String!) {
+		deleteProfile(password: $password)
 	}
 `;
