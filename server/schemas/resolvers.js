@@ -127,12 +127,17 @@ const resolvers = {
 			);
 			return updatedHome;
 		},
-		deleteArea: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const area = await Home.findOneAndDelete({ 'areas._id': args.areaId });
-				return area;
-			}
-			return;
+		deleteArea: async (parent, { areaId }) => {
+			const home = await Home.findOne({ 'areas._id': areaId });
+			const areas = home.areas.filter((area) => area._id != areaId);
+			const updatedHome = await Home.findOneAndUpdate(
+				{ 'areas._id': areaId },
+				{
+					areas: areas,
+				},
+				{ new: true }
+			);
+			return updatedHome;
 		},
 		addAttribute: async (parent, { areaId, type }) => {
 			const home = await Home.findOne({ 'areas._id': areaId });
@@ -172,14 +177,12 @@ const resolvers = {
 
 			return updatedHome;
 		},
-		deleteAttribute: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const attribute = await Home.findOneAndDelete({
-					'areas.attributes._id': args.attributeId,
-				});
-				return attribute;
-			}
-			return;
+		deleteAttribute: async (parent, { attributeId }) => {
+			const home = await Home.findOneAndUpdate(
+				{ 'areas.attributes._id': attributeId },
+				{ $pull: { 'areas.$[].attributes': { _id: attributeId } } }
+			);
+			return home;
 		},
 		addDetail: async (parent, { attributeId, key, value, date }) => {
 			const home = await Home.findOne({ 'areas.attributes._id': attributeId });
@@ -230,18 +233,16 @@ const resolvers = {
 
 			return updatedHome;
 		},
-		deleteDetail: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const detail = await Home.findOneAndDelete({
-					'areas.attributes.detail._id': args.detailId,
-				});
-				return detail;
-			}
-			return;
+		deleteDetail: async (parent, { detailId }) => {
+			const home = await Home.findOneAndUpdate(
+				{ 'areas.attributes.detail._id': detailId },
+				{ $pull: { 'areas.$[].attributes.$[].detail': { _id: detailId } } }
+			);
+			return home;
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
 			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
-			console.log('hit')
+			console.log('hit');
 			if (transferer) {
 				await User.findByIdAndUpdate(transferer, {
 					$pull: { homes: home },
