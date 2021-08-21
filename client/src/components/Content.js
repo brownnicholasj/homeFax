@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import Box from '@material-ui/core/box'
+
 const styles = (theme) => ({
 	paper: {
 		maxWidth: 936,
@@ -76,15 +76,24 @@ function Content(props) {
 				</Toolbar>
 			</AppBar> */}
 			<div className={classes.contentWrapper}>
-				<Typography style={{ textAlign: "center", fontWeight: 600 }}>
+				<Typography style={{ textAlign: 'center', fontWeight: 600 }}>
 					Welcome to HomeFax!
 				</Typography>
 				<Typography color="textSecondary" align="center">
-					What Is HomeFax? - Bacon ipsum dolor amet pork drumstick pork chop andouille. Pork belly sirloin shank, venison drumstick landjaeger ground round pork. Filet mignon ham hock kevin tri-tip buffalo short loin. Flank jowl tenderloin bacon beef ribs short ribs t-bone tri-tip. Shoulder alcatra jerky, cupim picanha turducken hamburger tenderloin meatloaf beef ribs landjaeger tri-tip sausage pig chicken. Salami biltong picanha tri-tip turkey. Sausage corned beef tenderloin, ham hock drumstick meatball beef ribs flank shankle ribeye.
+					What Is HomeFax? - Bacon ipsum dolor amet pork drumstick pork chop
+					andouille. Pork belly sirloin shank, venison drumstick landjaeger ground
+					round pork. Filet mignon ham hock kevin tri-tip buffalo short loin. Flank
+					jowl tenderloin bacon beef ribs short ribs t-bone tri-tip. Shoulder alcatra
+					jerky, cupim picanha turducken hamburger tenderloin meatloaf beef ribs
+					landjaeger tri-tip sausage pig chicken. Salami biltong picanha tri-tip
+					turkey. Sausage corned beef tenderloin, ham hock drumstick meatball beef
+					ribs flank shankle ribeye.
 				</Typography>
-				<Typography color="textSecondary" align="center" lineHeight={2}>
-				</Typography>
-
+				<Typography
+					color="textSecondary"
+					align="center"
+					lineHeight={2}
+				></Typography>
 			</div>
 		</Paper>
 	);
