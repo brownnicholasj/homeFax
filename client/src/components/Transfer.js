@@ -1,28 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 // import Snack from './Snack';
 import Auth from '../utils/auth';
-import { Card } from '@material-ui/core';
-import { CardContent } from '@material-ui/core';
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core';
+import { Card, CardContent, Typography, makeStyles, Grid, TextField, Box, Button } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import { Grid } from '@material-ui/core';
-import { TextField } from '@material-ui/core';
-import { useState } from 'react';
-import { Box } from '@material-ui/core';
-import { Button } from '@material-ui/core';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
-import HomeIcon from '@material-ui/icons/Home';
-import { useStoreContext } from '../utils/GlobalState';
 import { CREATE_TRANSFER } from '../utils/mutations';
-
-// These imports are for bringing in data from the globalState
-// They're only here for testing, as components will receive them as props.
-// import { useStoreContext } from '../utils/GlobalState';
-// import { effectHelper } from '../utils/helpers';
-// import { useQuery, useMutation } from '@apollo/client';
-// import { QUERY_USER } from '../utils/queries';
+import HomeCard from '../components/HomeCard';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -47,41 +31,16 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Transfer(
-	{
-		user,
-		homes,
-		transfers,
-		homeId,
-		Street1,
-		Street2,
-		City,
-		State,
-		Zip,
-		setTransferModalOpen,
-	},
-	...props
-) {
-	const { email, username, firstName, lastName } = Auth.getProfile().data;
+
+function Transfer({ home }) {
+	const { email } = Auth.getProfile().data;
+
 	const classes = useStyles();
 	const [formState, setFormState] = useState({
 		transferEmail: ''
 	});
 	// const [snack, setSnack] = useState({ status: false, message: '' });
 	const [createTransfer, { error }] = useMutation(CREATE_TRANSFER);
-
-	const [state, dispatch] = useStoreContext();
-	// NEED TO RECEIVE THE INPUT FROM THE TRANSFER BUTTON ACTION
-
-	// console.log(state);
-	// const [formState, setFormState] = useState({
-	// 	street1: '1 Main St',
-	// 	street2: 'PO BOX',
-	// 	city: 'Kansas City',
-	// 	state: 'KS',
-	// 	zip: '65432',
-	// 	transferEmail: '',
-	// });
 
 	// NEED TO CATCH THE INPUT FROM SUBMIT
 	const handleChange = (event) => {
@@ -94,8 +53,6 @@ function Transfer(
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		console.log(formState.transferEmail);
-
 		if (formState.transferEmail) {
 			try {
 				console.log('transferer :>> ', 'test');
@@ -105,7 +62,7 @@ function Transfer(
 					variables: {
 						transferer: email,
 						receiver: formState.transferEmail,
-						home: homeId,
+						home: home._id,
 					},
 				});
 				if (mutationResponse) {
@@ -120,12 +77,6 @@ function Transfer(
 				console.log(e);
 			}
 		}
-		// const { name, value } = event.target;
-
-		// setFormState({
-		// 	...formState,
-		// 	[name]: value,
-		// });
 	};
 
 	const handleCancel = (event) => {
@@ -138,21 +89,8 @@ function Transfer(
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
-							<Typography
-								className={classes.title}
-								color="Primary"
-								gutterBottom
-								align="center"
-							>
-								<HomeIcon /> Transfer
-								<Typography color="textPrimary">{formState.Street1}</Typography>
-								<Typography className={classes.pos} color="textPrimary">
-									{formState.Street2}
-								</Typography>
-								<Typography color="textPrimary" component="p">
-									{formState.City}, {formState.State} {formState.Zip}
-								</Typography>
-							</Typography>
+							<h3>Transfer</h3>
+							<HomeCard home={home} />
 							<Grid item xs={12}>
 								<Box
 									display="flex"
