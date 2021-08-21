@@ -24,7 +24,6 @@ function Home(props) {
 		user = data?.user ?? {};
 		homes = user.homes;
 		dispatch({ type: UPDATE_USER, user });
-		dispatch({ type: UPDATE_HOMES, homes });
 	}
 	console.log(user);
 	const [anchorEl, setAnchorEl] = React.useState(null);
