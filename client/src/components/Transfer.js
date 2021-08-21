@@ -1,4 +1,6 @@
 import React from 'react';
+import { useQuery, useMutation } from '@apollo/client';
+import Snack from './Snack';
 import Auth from '../utils/auth';
 import { Card } from '@material-ui/core';
 import { CardContent } from '@material-ui/core';
@@ -13,6 +15,7 @@ import { Button } from '@material-ui/core';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import HomeIcon from '@material-ui/icons/Home';
 import { useStoreContext } from '../utils/GlobalState';
+import { CREATE_TRANSFER } from '../utils/mutations';
 
 // These imports are for bringing in data from the globalState
 // They're only here for testing, as components will receive them as props.
@@ -44,24 +47,68 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Transfer({ user, homes, transfers }) {
+function Transfer(
+	{ user, homes, transfers, Street1, Street2, City, State, Zip },
+	...props
+) {
 	const { email, username, firstName, lastName } = Auth.getProfile().data;
 	const classes = useStyles();
+	const [formState, setFormState] = useState({
+		Street1: Street1,
+		Street2: Street2,
+		City: City,
+		State: State,
+		Zip: Zip,
+	});
+	const [snack, setSnack] = useState({ status: false, message: '' });
+	const [createTransfer, { error }] = useMutation(CREATE_TRANSFER);
 
 	const [state, dispatch] = useStoreContext();
 	// NEED TO RECEIVE THE INPUT FROM THE TRANSFER BUTTON ACTION
-	const [formState, setFormState] = useState({
-		street1: '1 Main St',
-		street2: 'PO BOX',
-		city: 'Kansas City',
-		state: 'KS',
-		zip: '65432',
-		transferEmail: '',
-	});
+
+	console.log(props);
+	// const [formState, setFormState] = useState({
+	// 	street1: '1 Main St',
+	// 	street2: 'PO BOX',
+	// 	city: 'Kansas City',
+	// 	state: 'KS',
+	// 	zip: '65432',
+	// 	transferEmail: '',
+	// });
 
 	// NEED TO CATCH THE INPUT FROM SUBMIT
-	const handleSubmit = (event) => {
+	const handleChange = (event) => {
+		const { id, value } = event.target;
+		setFormState({
+			...formState,
+			[id]: value,
+		});
+	};
+
+	const handleSubmit = async (event) => {
+		event.preventDefault();
 		console.log('handle save and submit action');
+
+		if (formState.transferEmail) {
+			try {
+				const mutationResponse = await createTransfer({
+					variables: {
+						transferer: 'nicholas@email.com',
+						receiver: 'bryan@email.com',
+						home: 'someID',
+					},
+				});
+				if (mutationResponse) {
+					console.log(mutationResponse);
+					setSnack({
+						status: true,
+						message: `${formState.transferEmail} has been added to transfer`,
+					});
+				}
+			} catch (e) {
+				console.log(e);
+			}
+		}
 		// const { name, value } = event.target;
 
 		// setFormState({
@@ -87,15 +134,12 @@ function Transfer({ user, homes, transfers }) {
 								align='center'
 							>
 								<HomeIcon /> Transfer
-								<Typography color='textPrimary'>
-									{'home.address.street1'}
-								</Typography>
+								<Typography color='textPrimary'>{formState.Street1}</Typography>
 								<Typography className={classes.pos} color='textPrimary'>
-									{'home.address.street2'}
+									{formState.Street2}
 								</Typography>
 								<Typography color='textPrimary' component='p'>
-									{'home.address.city'}, {'home.address.state'}{' '}
-									{'home.address.zip'}
+									{formState.City}, {formState.State} {formState.Zip}
 								</Typography>
 							</Typography>
 							<Grid item xs={12}>
@@ -126,6 +170,7 @@ function Transfer({ user, homes, transfers }) {
 												id='transferEmail'
 												label='Email of Receiver'
 												defaultValue=''
+												onChange={handleChange}
 											/>
 										</CardContent>
 									</Card>

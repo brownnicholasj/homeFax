@@ -221,19 +221,28 @@ function MyHome(props) {
 								</Modal>
 							</Card>
 						</Grid>
+						<Button
+							onClick={handleTransferModal}
+							variant='contained'
+							color='primary'
+						>
+							Transfer Home
+						</Button>
+						<Modal
+							onClose={() => setTransferModalOpen(false)}
+							open={transferModalOpen}
+						>
+							<Transfer
+								Street1={data.home.address.street1}
+								Street2={data.home.address.street2}
+								City={data.home.address.city}
+								State={data.home.address.state}
+								Zip={data.home.address.zip}
+							></Transfer>
+						</Modal>
 					</React.Fragment>
 				)}
 			</Grid>
-
-			<Button onClick={handleTransferModal} variant='contained' color='primary'>
-				Transfer Home
-			</Button>
-			<Modal
-				onClose={() => setTransferModalOpen(false)}
-				open={transferModalOpen}
-			>
-				<Transfer homeId={'test'}></Transfer>
-			</Modal>
 		</React.Fragment>
 	);
 }
