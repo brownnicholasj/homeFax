@@ -286,12 +286,12 @@ const resolvers = {
 		},
 		createTransfer: async (parent, args) => {
 			console.log('hit')
-			return await (await Transfer.create(args)).populate('homes');
+			return await (await Transfer.create(args));
 		},
 		editTransfer: async (parent, args) => {
 			return await Transfer.findOneAndUpdate({ home: args.home }, args, {
 				new: true,
-			}).populate('homes');
+			});
 		},
 		login: async (parent, { identifier, password }) => {
 			const email = identifier;
