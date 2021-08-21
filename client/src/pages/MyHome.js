@@ -23,6 +23,7 @@ import SignUp from '../components/SignUp';
 import AddArea from '../components/forms/AddArea';
 import AddAttribute from '../components/forms/AddAttribute';
 import AddDetail from '../components/forms/AddDetail';
+import Transfer from '../components/Transfer';
 import { Box } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { IconButton } from '@material-ui/core';
@@ -56,6 +57,7 @@ function MyHome(props) {
 	const [areaModalOpen, setAreaModalOpen] = useState(false);
 	const [attributeModalOpen, setAttributeModalOpen] = useState(false);
 	const [detailModalOpen, setDetailModalOpen] = useState(false);
+	const [transferModalOpen, setTransferModalOpen] = useState(false);
 	const [deleteArea] = useMutation(DELETE_AREA);
 	const [deleteAttribute] = useMutation(DELETE_ATTRIBUTE);
 	const [deleteDetail] = useMutation(DELETE_DETAIL);
@@ -89,6 +91,9 @@ function MyHome(props) {
 	};
 	const handleDetailModal = () => {
 		setDetailModalOpen(true);
+	};
+	const handleTransferModal = () => {
+		setTransferModalOpen(true);
 	};
 
 	const handleDeleteArea = async (areaId) => {
@@ -232,7 +237,9 @@ function MyHome(props) {
 										{expandedId !== i && (
 											<CardContent>
 												{area.attributes.length +
-													(area.attributes.length === 1 ? ' attribute' : ' attributes')}
+													(area.attributes.length === 1
+														? ' attribute'
+														: ' attributes')}
 											</CardContent>
 										)}
 										<Collapse in={expandedId === i}>
@@ -290,7 +297,11 @@ function MyHome(props) {
 																	</Link>
 																	<Modal
 																		onClose={() => setDetailModalOpen(false)}
-																		open={detailModalOpen && expandedId === i && modalIndex === j}
+																		open={
+																			detailModalOpen &&
+																			expandedId === i &&
+																			modalIndex === j
+																		}
 																	>
 																		<AddDetail
 																			attributeName={attribute.type}
@@ -351,7 +362,10 @@ function MyHome(props) {
 						))}
 						<Grid item xs={3}>
 							<Card>
-								<CardActionArea onClick={handleAddAreaModal} variant="contained">
+								<CardActionArea
+									onClick={handleAddAreaModal}
+									variant='contained'
+								>
 									Add Area
 								</CardActionArea>
 								<Modal onClose={() => setAreaModalOpen(false)} open={areaModalOpen}>
@@ -363,6 +377,26 @@ function MyHome(props) {
 								</Modal>
 							</Card>
 						</Grid>
+						<Button
+							onClick={handleTransferModal}
+							variant='contained'
+							color='primary'
+						>
+							Transfer Home
+						</Button>
+						<Modal
+							onClose={() => setTransferModalOpen(false)}
+							open={transferModalOpen}
+						>
+							<Transfer
+								homeId={data.home._id}
+								Street1={data.home.address.street1}
+								Street2={data.home.address.street2}
+								City={data.home.address.city}
+								State={data.home.address.state}
+								Zip={data.home.address.zip}
+							></Transfer>
+						</Modal>
 					</React.Fragment>
 				)}
 			</Grid>
