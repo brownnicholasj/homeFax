@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Content from '../components/Content';
 import {
 	CardActionArea,
@@ -52,8 +52,10 @@ function MyHome(props) {
 	const [attributeModalOpen, setAttributeModalOpen] = useState(false);
 	const [detailModalOpen, setDetailModalOpen] = useState(false);
 	const [deleteArea] = useMutation(DELETE_AREA);
+	const [home, setHome] = useState([]);
 
 	const { loading, error, data } = useQuery(QUERY_GET_HOME, {
+		onCompleted: setHome,
 		variables: { homeId: homeid },
 	});
 
@@ -63,10 +65,6 @@ function MyHome(props) {
 	}
 
 	const [snack, setSnack] = useState({ status: false, message: '' });
-
-	if (!loading) {
-		console.log('data :>> ', data);
-	}
 
 	const handleModalOpen = (i) => {
 		setModalIndex(i);
@@ -93,6 +91,34 @@ function MyHome(props) {
 					areaId: areaId,
 				},
 			});
+			// console.log('areaId :>> ', areaId);
+
+			// const newArray = home.home?.areas.filter((area) => {
+			// 	return area._id !== areaId;
+			// });
+			console.log('home :>> ', home);
+			const areas = home.home.areas;
+			console.log('areas :>> ', areas);
+
+			const newHome = {
+				home: {
+					address: home.home.address,
+					areas: areas.filter((area) => {
+						return area._id !== areaId;
+					}),
+					_typename: home.home._typename,
+					_id: home.home._id,
+				},
+			};
+
+			console.log('newhome :>> ', newHome);
+
+			// home.home?.areas.filter((area) => {
+			// 	return area._id !== areaId;
+			// });
+			// console.log('newHome :>> ', newHome);
+			setHome(newHome);
+
 			if (mutationResponse) {
 				setSnack({ status: true, message: `Area has been deleted.` });
 			}
@@ -115,8 +141,9 @@ function MyHome(props) {
 							<br></br>
 							<h3>Areas</h3>
 						</Grid>
-
-						{data.home.areas.map((area, i) => (
+						{console.log('home :>> ', home)}
+						{console.log('home.areas :>> ', home.home?.areas)}
+						{home.home?.areas.map((area, i) => (
 							<React.Fragment>
 								<Grid item xs={3}>
 									<Card>
