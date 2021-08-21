@@ -23,6 +23,7 @@ import SignUp from '../components/SignUp';
 import AddArea from '../components/forms/AddArea';
 import AddAttribute from '../components/forms/AddAttribute';
 import AddDetail from '../components/forms/AddDetail';
+import Transfer from '../components/Transfer';
 
 const useStyles = makeStyles((theme) => ({
 	modal: {
@@ -73,6 +74,9 @@ function MyHome(props) {
 	const handleDetailModal = () => {
 		setDetailModalOpen(true);
 	};
+	const handleTransfer = () => {
+		console.log('open transfer');
+	};
 
 	return (
 		<React.Fragment>
@@ -110,7 +114,9 @@ function MyHome(props) {
 										{expandedId !== i && (
 											<CardContent>
 												{area.attributes.length +
-													(area.attributes.length === 1 ? ' attribute' : ' attributes')}
+													(area.attributes.length === 1
+														? ' attribute'
+														: ' attributes')}
 											</CardContent>
 										)}
 										<Collapse in={expandedId === i}>
@@ -118,14 +124,21 @@ function MyHome(props) {
 												{area.attributes.map((attribute, j) => (
 													<React.Fragment>
 														<Grid item xs={12}>
-															<Typography gutterBottom="true" variant="p" xs={12}>
+															<Typography
+																gutterBottom='true'
+																variant='p'
+																xs={12}
+															>
 																<Link
 																	onClick={() => {
 																		console.log('i :>> ', i);
 																		console.log('j :>> ', j);
 																		handleModalOpen(j);
 																	}}
-																	style={{ textDecoration: 'none', cursor: 'pointer' }}
+																	style={{
+																		textDecoration: 'none',
+																		cursor: 'pointer',
+																	}}
 																>
 																	{capitalize(attribute.type)}
 																</Link>
@@ -141,13 +154,21 @@ function MyHome(props) {
 																	<h1>Details</h1>
 																	{attribute.detail.map((detail) => (
 																		<React.Fragment>
-																			<h3>{detail.key + ': ' + detail.value}</h3>
+																			<h3>
+																				{detail.key + ': ' + detail.value}
+																			</h3>
 																		</React.Fragment>
 																	))}
-																	<Link onClick={handleDetailModal}>Add Detail</Link>
+																	<Link onClick={handleDetailModal}>
+																		Add Detail
+																	</Link>
 																	<Modal
 																		onClose={() => setDetailModalOpen(false)}
-																		open={detailModalOpen && expandedId === i && modalIndex === j}
+																		open={
+																			detailModalOpen &&
+																			expandedId === i &&
+																			modalIndex === j
+																		}
 																	>
 																		<AddDetail
 																			attributeName={attribute.type}
@@ -159,11 +180,11 @@ function MyHome(props) {
 														</Grid>
 													</React.Fragment>
 												))}
-												<Typography variant="p">
+												<Typography variant='p'>
 													<Button
 														onClick={handleAttributeModal}
-														variant="contained"
-														color="primary"
+														variant='contained'
+														color='primary'
 													>
 														Add Attribute
 													</Button>
@@ -185,10 +206,16 @@ function MyHome(props) {
 						))}
 						<Grid item xs={3}>
 							<Card>
-								<CardActionArea onClick={handleAddAreaModal} variant="contained">
+								<CardActionArea
+									onClick={handleAddAreaModal}
+									variant='contained'
+								>
 									Add Area
 								</CardActionArea>
-								<Modal onClose={() => setAreaModalOpen(false)} open={areaModalOpen}>
+								<Modal
+									onClose={() => setAreaModalOpen(false)}
+									open={areaModalOpen}
+								>
 									<AddArea homeId={data.home._id}></AddArea>
 								</Modal>
 							</Card>
@@ -196,6 +223,10 @@ function MyHome(props) {
 					</React.Fragment>
 				)}
 			</Grid>
+
+			<Button onClick={handleTransfer} variant='contained' color='primary'>
+				Transfer Home
+			</Button>
 		</React.Fragment>
 	);
 }
