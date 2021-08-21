@@ -233,6 +233,7 @@ function MyHome(props) {
 							open={transferModalOpen}
 						>
 							<Transfer
+								homeId={data.home._id}
 								Street1={data.home.address.street1}
 								Street2={data.home.address.street2}
 								City={data.home.address.city}

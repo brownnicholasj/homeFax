@@ -1,6 +1,6 @@
 import React from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import Snack from './Snack';
+import { useMutation } from '@apollo/client';
+// import Snack from './Snack';
 import Auth from '../utils/auth';
 import { Card } from '@material-ui/core';
 import { CardContent } from '@material-ui/core';
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Transfer(
-	{ user, homes, transfers, Street1, Street2, City, State, Zip },
+	{ user, homes, transfers, homeId, Street1, Street2, City, State, Zip },
 	...props
 ) {
 	const { email, username, firstName, lastName } = Auth.getProfile().data;
@@ -60,13 +60,13 @@ function Transfer(
 		State: State,
 		Zip: Zip,
 	});
-	const [snack, setSnack] = useState({ status: false, message: '' });
+	// const [snack, setSnack] = useState({ status: false, message: '' });
 	const [createTransfer, { error }] = useMutation(CREATE_TRANSFER);
 
 	const [state, dispatch] = useStoreContext();
 	// NEED TO RECEIVE THE INPUT FROM THE TRANSFER BUTTON ACTION
 
-	console.log(props);
+	// console.log(state);
 	// const [formState, setFormState] = useState({
 	// 	street1: '1 Main St',
 	// 	street2: 'PO BOX',
@@ -87,23 +87,23 @@ function Transfer(
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		console.log('handle save and submit action');
+		console.log(formState.transferEmail);
 
 		if (formState.transferEmail) {
 			try {
 				const mutationResponse = await createTransfer({
 					variables: {
 						transferer: 'nicholas@email.com',
-						receiver: 'bryan@email.com',
-						home: 'someID',
+						receiver: formState.transferEmail,
+						home: homeId,
 					},
 				});
 				if (mutationResponse) {
 					console.log(mutationResponse);
-					setSnack({
-						status: true,
-						message: `${formState.transferEmail} has been added to transfer`,
-					});
+					// setSnack({
+					// 	status: true,
+					// 	message: `${formState.transferEmail} has been added to transfer`,
+					// });
 				}
 			} catch (e) {
 				console.log(e);
