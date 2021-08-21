@@ -2,7 +2,6 @@ import React, { createContext, useContext } from "react";
 import { useHFReducer } from './reducers'
 
 const StoreContext = createContext();
-
 const StoreProvider = (props) => {
   const [state, dispatch] = useHFReducer({
     user: {},
