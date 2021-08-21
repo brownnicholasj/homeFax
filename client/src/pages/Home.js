@@ -26,7 +26,7 @@ function Home(props) {
 		dispatch({ type: UPDATE_USER, user });
 		dispatch({ type: UPDATE_HOMES, homes });
 	}
-
+	console.log(user);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
 	const handleClick = (event) => {

@@ -106,8 +106,8 @@ export default function SignIn() {
 			});
 			const { user, token } = mutationResponse.data.login;
 			dispatch({ type: UPDATE_USER, user });
-			const homes = user.homes;
-			dispatch({ type: UPDATE_HOMES, homes })
+			// const homes = user.homes;
+			// dispatch({ type: UPDATE_HOMES, homes })
 
 			Auth.login(token);
 		} catch (e) {
