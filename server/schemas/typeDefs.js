@@ -65,8 +65,8 @@ const typeDefs = gql`
 
 	type Transfer {
 		_id: ID!
-		transferer: [User]
-		receiver: [User]
+		transferer: [String]
+		receiver: [String]
 		home: ID!
 	}
 

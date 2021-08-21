@@ -93,7 +93,6 @@ export default function SignIn() {
 	const [showPassword, setShowPassword] = useState(false);
 	const handleClickShowPassword = () => setShowPassword(!showPassword);
 	const handleMouseDownPassword = () => setShowPassword(!showPassword);
-	const history = useHistory();
 
 	const [login] = useMutation(LOGIN);
 
@@ -108,7 +107,6 @@ export default function SignIn() {
 			});
 			const { user, token } = mutationResponse.data.login;
 			dispatch({ type: UPDATE_USER, user });
-
 
 			Auth.login(token);
 			history.push('/home');
@@ -191,7 +189,7 @@ export default function SignIn() {
 					>
 						Sign In
 					</Button>
-					<Grid container justifyContent='center'>
+					<Grid container justifyContent="center">
 						<Grid item>
 							<Link href="#" variant="body2" onClick={handleOpen}>
 								Or Sign Up
