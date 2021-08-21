@@ -139,6 +139,7 @@ function Profile(props) {
 			})
 			if (data.deleteProfile) {
 				Auth.logout()
+				// window.location.assign('/');
 			}
 			setDeleteExpanded(false)
 			console.log(data)
