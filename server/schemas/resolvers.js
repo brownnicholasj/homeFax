@@ -39,13 +39,13 @@ const resolvers = {
 			return await Home.findById(homeId);
 		},
 		transfers: async () => {
-			return await Transfer.find({}).populate('home');
+			return await Transfer.find({});
 		},
 		transfer: async (parent, { transferId }) => {
 			return await Home.findById(transferId);
 		},
 		userTransfer: async (parent, { useremail }) => {
-			return await Transfer.find({ receiver: useremail });
+			return await Transfer.findOne({ receiver: useremail });
 		},
 		area: async (parent, { areaId }) => {
 			return await Home.findOne({ 'areas._id': areaId });
@@ -241,6 +241,9 @@ const resolvers = {
 			return home;
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
+			console.log('transferer :>> ', transferer);
+			console.log('receiver :>> ', receiver);
+			console.log('home :>> ', home);
 			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
 			console.log('hit');
 			if (transferer) {
@@ -285,8 +288,8 @@ const resolvers = {
 			throw new AuthenticationError('Not logged in');
 		},
 		createTransfer: async (parent, args) => {
-			console.log('hit')
-			return await (await Transfer.create(args));
+			console.log('hit');
+			return await await Transfer.create(args);
 		},
 		editTransfer: async (parent, args) => {
 			return await Transfer.findOneAndUpdate({ home: args.home }, args, {
@@ -298,7 +301,8 @@ const resolvers = {
 			const username = identifier;
 			console.log('logging in');
 			const user =
-				(await User.findOne({ email }).populate('homes')) || (await User.findOne({ username }).populate('homes'));
+				(await User.findOne({ email }).populate('homes')) ||
+				(await User.findOne({ username }).populate('homes'));
 			if (!user) {
 				throw new AuthenticationError('Incorrect credentials');
 			}

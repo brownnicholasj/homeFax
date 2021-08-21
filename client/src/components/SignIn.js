@@ -108,7 +108,6 @@ export default function SignIn() {
 			const { user, token } = mutationResponse.data.login;
 			dispatch({ type: UPDATE_USER, user });
 
-
 			Auth.login(token);
 			history.push('/home');
 		} catch (e) {
@@ -190,7 +189,7 @@ export default function SignIn() {
 					>
 						Sign In
 					</Button>
-					<Grid container justifyContent='center'>
+					<Grid container justifyContent="center">
 						<Grid item>
 							<Link href="#" variant="body2" onClick={handleOpen}>
 								Or Sign Up

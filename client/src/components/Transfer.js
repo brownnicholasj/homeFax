@@ -31,8 +31,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+
 function Transfer({ home }) {
 	const { email } = Auth.getProfile().data;
+
 	const classes = useStyles();
 	const [formState, setFormState] = useState({
 		transferEmail: ''
@@ -53,6 +55,9 @@ function Transfer({ home }) {
 		event.preventDefault();
 		if (formState.transferEmail) {
 			try {
+				console.log('transferer :>> ', 'test');
+				console.log('receiver :>> ', formState.transferEmail);
+				console.log('homeId :>> ', homeId);
 				const mutationResponse = await createTransfer({
 					variables: {
 						transferer: email,
@@ -62,6 +67,7 @@ function Transfer({ home }) {
 				});
 				if (mutationResponse) {
 					console.log(mutationResponse);
+					setTransferModalOpen(false);
 					// setSnack({
 					// 	status: true,
 					// 	message: `${formState.transferEmail} has been added to transfer`,
@@ -74,12 +80,12 @@ function Transfer({ home }) {
 	};
 
 	const handleCancel = (event) => {
-		console.log('send user back to homes?');
+		setTransferModalOpen(false);
 	};
 
 	return (
 		<>
-			<Card key={'homeId'} className={classes.root} variant='outlined'>
+			<Card key={'homeId'} className={classes.root} variant="outlined">
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
@@ -87,32 +93,27 @@ function Transfer({ home }) {
 							<HomeCard home={home} />
 							<Grid item xs={12}>
 								<Box
-									display='flex'
-									justifyContent='center'
-									alignItems='center'
+									display="flex"
+									justifyContent="center"
+									alignItems="center"
 									xs={12}
 									md={2}
 									lg={3}
 								>
-									<TransferWithinAStationIcon fontSize='large' />
+									<TransferWithinAStationIcon fontSize="large" />
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<Box
-									display='flex'
-									justifyContent='center'
-									alignItems='center'
-									ml={2}
-								>
+								<Box display="flex" justifyContent="center" alignItems="center" ml={2}>
 									<Card>
 										<CardContent>
 											<TextField
-												name='transferEmail'
-												variant='standard'
+												name="transferEmail"
+												variant="standard"
 												fullWidth
-												id='transferEmail'
-												label='Email of Receiver'
-												defaultValue=''
+												id="transferEmail"
+												label="Email of Receiver"
+												defaultValue=""
 												onChange={handleChange}
 											/>
 										</CardContent>
@@ -120,15 +121,15 @@ function Transfer({ home }) {
 								</Box>
 							</Grid>
 
-							<Box mx={3} paddingTop={2} alignItems='center'>
-								<Button variant='contained' color='secondary'>
-									<Typography variant='button' onClick={handleCancel}>
+							<Box mx={3} paddingTop={2} alignItems="center">
+								<Button variant="contained" color="secondary">
+									<Typography variant="button" onClick={handleCancel}>
 										Cancel
 									</Typography>
 								</Button>
 
-								<Button variant='contained' color='primary'>
-									<Typography variant='button' onClick={handleSubmit}>
+								<Button variant="contained" color="primary">
+									<Typography variant="button" onClick={handleSubmit}>
 										Save & Close
 									</Typography>
 								</Button>
