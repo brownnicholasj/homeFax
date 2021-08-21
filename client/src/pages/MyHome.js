@@ -43,6 +43,7 @@ function MyHome(props) {
 	const [areaModalOpen, setAreaModalOpen] = useState(false);
 	const [attributeModalOpen, setAttributeModalOpen] = useState(false);
 	const [detailModalOpen, setDetailModalOpen] = useState(false);
+	const [transferModalOpen, setTransferModalOpen] = useState(false);
 
 	const { loading, error, data } = useQuery(QUERY_GET_HOME, {
 		variables: { homeId: homeid },
@@ -74,8 +75,8 @@ function MyHome(props) {
 	const handleDetailModal = () => {
 		setDetailModalOpen(true);
 	};
-	const handleTransfer = () => {
-		console.log('open transfer');
+	const handleTransferModal = () => {
+		setTransferModalOpen(true);
 	};
 
 	return (
@@ -224,9 +225,15 @@ function MyHome(props) {
 				)}
 			</Grid>
 
-			<Button onClick={handleTransfer} variant='contained' color='primary'>
+			<Button onClick={handleTransferModal} variant='contained' color='primary'>
 				Transfer Home
 			</Button>
+			<Modal
+				onClose={() => setTransferModalOpen(false)}
+				open={transferModalOpen}
+			>
+				<Transfer homeId={'test'}></Transfer>
+			</Modal>
 		</React.Fragment>
 	);
 }

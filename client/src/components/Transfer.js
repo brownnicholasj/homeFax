@@ -14,17 +14,12 @@ import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStatio
 import HomeIcon from '@material-ui/icons/Home';
 import { useStoreContext } from '../utils/GlobalState';
 
-
 // These imports are for bringing in data from the globalState
 // They're only here for testing, as components will receive them as props.
 // import { useStoreContext } from '../utils/GlobalState';
 // import { effectHelper } from '../utils/helpers';
 // import { useQuery, useMutation } from '@apollo/client';
 // import { QUERY_USER } from '../utils/queries';
-
-
-
-
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -80,80 +75,81 @@ function Transfer({ user, homes, transfers }) {
 	};
 
 	return (
-		<Grid container spacing={4}>
-			<Grid item xs={12}>
-				<Typography variant='h2'>Transfer Home</Typography>
-			</Grid>
-			<Grid item xs={2} md={2} lg={2}>
-				<Box></Box>
-			</Grid>
-			<Grid item xs={12} md={4} lg={3}>
-				{homes.map(home => (
-					<Card key={home._id}>
-						<CardContent>
-							<Typography className={classes.title} color="textSecondary" gutterBottom>
-								<HomeIcon />
+		<>
+			<Card key={'homeId'} className={classes.root} variant='outlined'>
+				<CardContent>
+					<div className={classes.gridRoot}>
+						<Grid container spacing={1}>
+							<Typography
+								className={classes.title}
+								color='Primary'
+								gutterBottom
+								align='center'
+							>
+								<HomeIcon /> Transfer
+								<Typography color='textPrimary'>
+									{'home.address.street1'}
+								</Typography>
+								<Typography className={classes.pos} color='textPrimary'>
+									{'home.address.street2'}
+								</Typography>
+								<Typography color='textPrimary' component='p'>
+									{'home.address.city'}, {'home.address.state'}{' '}
+									{'home.address.zip'}
+								</Typography>
 							</Typography>
-							<Typography variant="h5" component="h2">
-								{home.address.street1}
-							</Typography>
-							<Typography className={classes.pos} color="textSecondary">
-								{home.address.street2}
-							</Typography>
-							<Typography variant="body2" component="p">
-								{home.address.city}, {home.address.state} {home.address.zip}
-							</Typography>
-						</CardContent>
-					</Card>
-				))}
-			</Grid>
-			<Box
-				display='flex'
-				justifyContent='center'
-				alignItems='center'
-				xs={12}
-				md={2}
-				lg={3}
-			>
-				<TransferWithinAStationIcon fontSize='large' />
-			</Box>
-			<Box
-				display='flex'
-				justifyContent='center'
-				alignItems='center'
-				ml={2}
-			>
-				<Card>
-					<CardContent>
-						<TextField
-							name='transferEmail'
-							variant='standard'
-							fullWidth
-							id='transferEmail'
-							label='Email of Receiver'
-							defaultValue=''
-						/>
-					</CardContent>
-				</Card>
-			</Box>
-			<Grid item xs={2} md={2} lg={4}>
-				<Box></Box>
-			</Grid>
-			<Grid container justifyContent='center'>
-				<Box mx={3}>
-					<Button variant='contained' color='secondary'>
-						<Typography variant='button' onClick={handleCancel}>
-							Cancel
-						</Typography>
-					</Button>
-				</Box>
-				<Button variant='contained' color='primary'>
-					<Typography variant='button' onClick={handleSubmit}>
-						Save & Close
-					</Typography>
-				</Button>
-			</Grid>
-		</Grid>
+							<Grid item xs={12}>
+								<Box
+									display='flex'
+									justifyContent='center'
+									alignItems='center'
+									xs={12}
+									md={2}
+									lg={3}
+								>
+									<TransferWithinAStationIcon fontSize='large' />
+								</Box>
+							</Grid>
+							<Grid item xs={12}>
+								<Box
+									display='flex'
+									justifyContent='center'
+									alignItems='center'
+									ml={2}
+								>
+									<Card>
+										<CardContent>
+											<TextField
+												name='transferEmail'
+												variant='standard'
+												fullWidth
+												id='transferEmail'
+												label='Email of Receiver'
+												defaultValue=''
+											/>
+										</CardContent>
+									</Card>
+								</Box>
+							</Grid>
+
+							<Box mx={3} paddingTop={2} alignItems='center'>
+								<Button variant='contained' color='secondary'>
+									<Typography variant='button' onClick={handleCancel}>
+										Cancel
+									</Typography>
+								</Button>
+
+								<Button variant='contained' color='primary'>
+									<Typography variant='button' onClick={handleSubmit}>
+										Save & Close
+									</Typography>
+								</Button>
+							</Box>
+						</Grid>
+					</div>
+				</CardContent>
+			</Card>
+		</>
 	);
 }
 
