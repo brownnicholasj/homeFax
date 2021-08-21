@@ -400,26 +400,18 @@ export const DELETE_DETAIL = gql`
 `;
 
 export const CREATE_TRANSFER = gql`
-	query CreateTransfer($transferer: String, $receiver: String, $home: ID!) {
+	mutation CreateTransfer($transferer: String, $receiver: String, $home: ID!) {
 		createTransfer(transferer: $transferer, receiver: $receiver, home: $home) {
 			_id
 			transferer
 			receiver
-			home {
-				address {
-					street1
-					street2
-					city
-					state
-					zip
-				}
-			}
+			home
 		}
 	}
 `;
 
 export const EDIT_TRANSFER = gql`
-	query EditTransfer($transferer: String, $receiver: String, $home: ID!) {
+	mutation EditTransfer($transferer: String, $receiver: String, $home: ID!) {
 		editTransfer(transferer: $transferer, receiver: $receiver, home: $home) {
 			_id
 			transferer

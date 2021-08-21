@@ -93,7 +93,6 @@ export default function SignIn() {
 	const [showPassword, setShowPassword] = useState(false);
 	const handleClickShowPassword = () => setShowPassword(!showPassword);
 	const handleMouseDownPassword = () => setShowPassword(!showPassword);
-	const history = useHistory();
 
 	const [login] = useMutation(LOGIN);
 

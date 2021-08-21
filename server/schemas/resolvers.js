@@ -285,7 +285,8 @@ const resolvers = {
 			throw new AuthenticationError('Not logged in');
 		},
 		createTransfer: async (parent, args) => {
-			return await Transfer.create(args);
+			console.log('hit')
+			return await (await Transfer.create(args));
 		},
 		editTransfer: async (parent, args) => {
 			return await Transfer.findOneAndUpdate({ home: args.home }, args, {
