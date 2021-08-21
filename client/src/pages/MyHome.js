@@ -32,6 +32,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { DELETE_AREA } from '../utils/mutations';
 import Snack from '../components/Snack';
+import { ADD_AREA } from '../utils/mutations';
 
 const useStyles = makeStyles((theme) => ({
 	modal: {
@@ -84,6 +85,32 @@ function MyHome(props) {
 		setDetailModalOpen(true);
 	};
 
+	// const handleFormSubmit = async (event, state) => {
+	// 	event.preventDefault();
+	// 	console.log('state :>> ', state);
+	// 	console.log('state.name :>> ', state.name);
+	// 	if (state.name) {
+	// 		try {
+	// 			const mutationResponse = await addArea({
+	// 				variables: {
+	// 					homeId: state.homeId,
+	// 					name: state.name,
+	// 					icon: state.icon,
+	// 				},
+	// 			});
+	// 			if (mutationResponse) {
+	// 				console.log(mutationResponse);
+	// 				setSnack({
+	// 					status: true,
+	// 					message: `${state.name} has been added to your home`,
+	// 				});
+	// 			}
+	// 		} catch (e) {
+	// 			console.log(e);
+	// 		}
+	// 	}
+	// };
+
 	const handleDeleteArea = async (areaId) => {
 		try {
 			const mutationResponse = await deleteArea({
@@ -96,11 +123,11 @@ function MyHome(props) {
 			// const newArray = home.home?.areas.filter((area) => {
 			// 	return area._id !== areaId;
 			// });
-			console.log('home :>> ', home);
+			// console.log('home :>> ', home);
 			const areas = home.home.areas;
-			console.log('areas :>> ', areas);
+			// console.log('areas :>> ', areas);
 
-			const newHome = {
+			const newHomeAfterDelete = {
 				home: {
 					address: home.home.address,
 					areas: areas.filter((area) => {
@@ -111,13 +138,14 @@ function MyHome(props) {
 				},
 			};
 
-			console.log('newhome :>> ', newHome);
+			// console.log('newHomeAfterDelete :>> ', newHomeAfterDelete);
 
 			// home.home?.areas.filter((area) => {
 			// 	return area._id !== areaId;
 			// });
-			// console.log('newHome :>> ', newHome);
-			setHome(newHome);
+			// console.log('newHomeAfterDelete :>> ', newHomeAfterDelete);
+			setHome(newHomeAfterDelete);
+			console.log('newHomeAfterDelete :>> ', newHomeAfterDelete);
 
 			if (mutationResponse) {
 				setSnack({ status: true, message: `Area has been deleted.` });
@@ -150,10 +178,8 @@ function MyHome(props) {
 										<CardHeader
 											action={
 												expandedId !== i ? (
-													<IconButton>
-														<ExpandMoreIcon
-															onClick={() => handleExpandClick(i)}
-														></ExpandMoreIcon>
+													<IconButton onClick={() => handleExpandClick(i)}>
+														<ExpandMoreIcon></ExpandMoreIcon>
 													</IconButton>
 												) : (
 													<IconButton>
@@ -183,7 +209,7 @@ function MyHome(props) {
 																alignItems="center"
 																justifyContent="space-between"
 															>
-																<Typography gutterBottom="true" variant="p" xs={12}>
+																<Typography gutterBottom={true} variant="body1" xs={12}>
 																	<Link
 																		onClick={() => {
 																			console.log('i :>> ', i);
@@ -239,7 +265,7 @@ function MyHome(props) {
 													alignItems="center"
 													justifyContent="space-between"
 												>
-													<Typography variant="p">
+													<Typography variant="body1">
 														<Button
 															onClick={handleAttributeModal}
 															variant="contained"
@@ -258,12 +284,13 @@ function MyHome(props) {
 														</Modal>
 													</Typography>
 													<Tooltip title="Delete Area">
-														<IconButton>
+														<IconButton
+															onClick={() => {
+																console.log('area :>> ', area);
+																handleDeleteArea(area._id);
+															}}
+														>
 															<HighlightOffIcon
-																onClick={() => {
-																	console.log('area :>> ', area);
-																	handleDeleteArea(area._id);
-																}}
 																fontSize="large"
 																color="secondary"
 															></HighlightOffIcon>
@@ -282,7 +309,7 @@ function MyHome(props) {
 									Add Area
 								</CardActionArea>
 								<Modal onClose={() => setAreaModalOpen(false)} open={areaModalOpen}>
-									<AddArea homeId={data.home._id}></AddArea>
+									<AddArea homeId={data.home._id} setHome={setHome}></AddArea>
 								</Modal>
 							</Card>
 						</Grid>

@@ -145,6 +145,7 @@ export const ADD_AREA = gql`
 				zip
 			}
 			areas {
+				_id
 				name
 				icon
 				attributes {
@@ -325,93 +326,84 @@ export const DELETE_DETAIL = gql`
 			_id
 		}
 	}
-
-	
 `;
 
 export const CREATE_TRANSFER = gql`
-query CreateTransfer($transferer: String, $receiver: String, $home: ID!) {
-	createTransfer(transferer: $transferer, receiver: $receiver, home: $home) {
-		_id
-		transferer
-		receiver
-		home {
-			address {
-				street1
-				street2
-				city
-				state
-				zip
+	query CreateTransfer($transferer: String, $receiver: String, $home: ID!) {
+		createTransfer(transferer: $transferer, receiver: $receiver, home: $home) {
+			_id
+			transferer
+			receiver
+			home {
+				address {
+					street1
+					street2
+					city
+					state
+					zip
+				}
 			}
 		}
 	}
-}
 `;
 
 export const EDIT_TRANSFER = gql`
-query EditTransfer($transferer: String, $receiver: String, $home: ID!) {
-	editTransfer(transferer: $transferer, receiver: $receiver, home: $home) {
-		_id
-		transferer
-		receiver
-		home {
-			address {
-				street1
-				street2
-				city
-				state
-				zip
+	query EditTransfer($transferer: String, $receiver: String, $home: ID!) {
+		editTransfer(transferer: $transferer, receiver: $receiver, home: $home) {
+			_id
+			transferer
+			receiver
+			home {
+				address {
+					street1
+					street2
+					city
+					state
+					zip
+				}
 			}
 		}
 	}
-}
 `;
 
 export const UPDATE_USER = gql`
 	mutation updateUser(
 		$firstName: String
- 		$lastName: String
- 		$email: String
- 		$username: String
+		$lastName: String
+		$email: String
+		$username: String
 	) {
 		updateUser(
 			firstName: $firstName
- 			lastName: $lastName
- 			username: $username
- 			email: $email
-			) {
-				token
-				user {
-					_id
-					firstName
-					lastName
-				}
+			lastName: $lastName
+			username: $username
+			email: $email
+		) {
+			token
+			user {
+				_id
+				firstName
+				lastName
 			}
+		}
 	}
-`
+`;
 
 export const UPDATE_PASSWORD = gql`
-	mutation updatePassword(
- 		$password: String
-		$currentPassword: String
-	) {
-		updatePassword(
- 			password: $password
-			currentPassword: $currentPassword
-			) {
-				token
-				user {
-					_id
-					firstName
-					lastName
-				}
+	mutation updatePassword($password: String, $currentPassword: String) {
+		updatePassword(password: $password, currentPassword: $currentPassword) {
+			token
+			user {
+				_id
+				firstName
+				lastName
 			}
+		}
 	}
 `;
 
 export const DELETE_PROFILE = gql`
 	mutation deleteProfile($password: String!) {
-		deleteProfile(password: $password) 
+		deleteProfile(password: $password)
 	}
 `;
-
