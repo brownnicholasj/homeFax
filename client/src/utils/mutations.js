@@ -411,7 +411,7 @@ export const CREATE_TRANSFER = gql`
 `;
 
 export const EDIT_TRANSFER = gql`
-	query EditTransfer($transferer: String, $receiver: String, $home: ID!) {
+	mutation EditTransfer($transferer: String, $receiver: String, $home: ID!) {
 		editTransfer(transferer: $transferer, receiver: $receiver, home: $home) {
 			_id
 			transferer
