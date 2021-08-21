@@ -285,12 +285,13 @@ const resolvers = {
 			throw new AuthenticationError('Not logged in');
 		},
 		createTransfer: async (parent, args) => {
-			return await Transfer.create(args);
+			console.log('hit')
+			return await (await Transfer.create(args)).populate('homes');
 		},
 		editTransfer: async (parent, args) => {
 			return await Transfer.findOneAndUpdate({ home: args.home }, args, {
 				new: true,
-			});
+			}).populate('homes');
 		},
 		login: async (parent, { identifier, password }) => {
 			const email = identifier;

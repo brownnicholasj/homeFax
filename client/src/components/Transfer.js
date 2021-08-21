@@ -54,11 +54,7 @@ function Transfer(
 	const { email, username, firstName, lastName } = Auth.getProfile().data;
 	const classes = useStyles();
 	const [formState, setFormState] = useState({
-		Street1: Street1,
-		Street2: Street2,
-		City: City,
-		State: State,
-		Zip: Zip,
+		transferEmail: ''
 	});
 	// const [snack, setSnack] = useState({ status: false, message: '' });
 	const [createTransfer, { error }] = useMutation(CREATE_TRANSFER);
@@ -93,7 +89,7 @@ function Transfer(
 			try {
 				const mutationResponse = await createTransfer({
 					variables: {
-						transferer: 'nicholas@email.com',
+						transferer: email,
 						receiver: formState.transferEmail,
 						home: homeId,
 					},
