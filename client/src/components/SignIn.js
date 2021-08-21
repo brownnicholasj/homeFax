@@ -19,12 +19,13 @@ import Auth from '../utils/auth';
 import { LOGIN } from '../utils/mutations';
 import { useStoreContext } from '../utils/GlobalState';
 import { UPDATE_USER, UPDATE_HOMES } from '../utils/actions';
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
 	return (
-		<Typography variant='body2' color='textSecondary' align='center'>
+		<Typography variant="body2" color="textSecondary" align="center">
 			{'Copyright © '}
-			<Link color='inherit' href='/'>
+			<Link color="inherit" href="/">
 				HomeFax
 			</Link>{' '}
 			{new Date().getFullYear()}
@@ -64,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
 	const classes = useStyles();
-
+	const history = useHistory();
 	const [state, dispatch] = useStoreContext();
 
 	const handleOpen = () => {
@@ -92,6 +93,7 @@ export default function SignIn() {
 	const [showPassword, setShowPassword] = useState(false);
 	const handleClickShowPassword = () => setShowPassword(!showPassword);
 	const handleMouseDownPassword = () => setShowPassword(!showPassword);
+	const history = useHistory();
 
 	const [login] = useMutation(LOGIN);
 
@@ -106,10 +108,10 @@ export default function SignIn() {
 			});
 			const { user, token } = mutationResponse.data.login;
 			dispatch({ type: UPDATE_USER, user });
-			const homes = user.homes;
-			dispatch({ type: UPDATE_HOMES, homes })
+
 
 			Auth.login(token);
+			history.push('/home');
 		} catch (e) {
 			setFormState({ errorMsg: 'Incorrect Credentials' });
 			console.log(e);
@@ -132,40 +134,40 @@ export default function SignIn() {
 				<Avatar className={classes.avatar}>
 					<LockOutlinedIcon />
 				</Avatar>
-				<Typography component='h1' variant='h5'>
+				<Typography component="h1" variant="h5">
 					Sign in
 				</Typography>
 				<form className={classes.form} noValidate>
 					<TextField
-						variant='outlined'
-						margin='normal'
+						variant="outlined"
+						margin="normal"
 						required
 						fullWidth
-						id='identifier'
-						label='Email/Username'
-						name='identifier'
-						autoComplete='identifier'
+						id="identifier"
+						label="Email/Username"
+						name="identifier"
+						autoComplete="identifier"
 						autoFocus
 						onChange={handleChange}
 					/>
 					<TextField
-						variant='outlined'
-						margin='normal'
+						variant="outlined"
+						margin="normal"
 						required
 						fullWidth
-						name='password'
-						label='Password'
+						name="password"
+						label="Password"
 						// showPassword state defaulted to false, will show text (showing) or password (hidden)
 						type={showPassword ? 'text' : 'password'}
-						id='password'
-						autoComplete='current-password'
+						id="password"
+						autoComplete="current-password"
 						onChange={handleChange}
 						InputProps={{
 							// This is where the toggle button is added.
 							endAdornment: (
-								<InputAdornment position='end'>
+								<InputAdornment position="end">
 									<IconButton
-										aria-label='toggle password visibility'
+										aria-label="toggle password visibility"
 										onClick={handleClickShowPassword}
 										onMouseDown={handleMouseDownPassword}
 									>
@@ -175,28 +177,23 @@ export default function SignIn() {
 							),
 						}}
 					/>
-					<Typography variant='body1' color='error'>
+					<Typography variant="body1" color="error">
 						{formState.errorMsg}
 					</Typography>
 					<br></br>
 					<Button
 						onClick={handleFormSubmit}
-						type='submit'
+						type="submit"
 						fullWidth
-						variant='contained'
-						color='primary'
+						variant="contained"
+						color="primary"
 						className={classes.submit}
 					>
 						Sign In
 					</Button>
-					<Grid container>
-						<Grid item xs>
-							<Link href='#' variant='body2'>
-								Forgot password?
-							</Link>
-						</Grid>
+					<Grid container justifyContent='center'>
 						<Grid item>
-							<Link href='#' variant='body2' onClick={handleOpen}>
+							<Link href="#" variant="body2" onClick={handleOpen}>
 								Or Sign Up
 							</Link>
 							{/* <button type="button" onClick={handleOpen}>
@@ -205,8 +202,8 @@ export default function SignIn() {
 							<Modal
 								open={open}
 								onClose={handleClose}
-								aria-labelledby='simple-modal-title'
-								aria-describedby='simple-modal-description'
+								aria-labelledby="simple-modal-title"
+								aria-describedby="simple-modal-description"
 								style={{
 									display: 'flex',
 									alignItems: 'center',
