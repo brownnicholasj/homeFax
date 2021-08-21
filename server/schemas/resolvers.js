@@ -296,7 +296,7 @@ const resolvers = {
 			const username = identifier;
 			console.log('logging in');
 			const user =
-				(await User.findOne({ email })) || (await User.findOne({ username }));
+				(await User.findOne({ email }).populate('homes')) || (await User.findOne({ username }).populate('homes'));
 			if (!user) {
 				throw new AuthenticationError('Incorrect credentials');
 			}

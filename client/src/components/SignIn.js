@@ -19,6 +19,7 @@ import Auth from '../utils/auth';
 import { LOGIN } from '../utils/mutations';
 import { useStoreContext } from '../utils/GlobalState';
 import { UPDATE_USER, UPDATE_HOMES } from '../utils/actions';
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
 	return (
@@ -64,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
 	const classes = useStyles();
-
+	const history = useHistory();
 	const [state, dispatch] = useStoreContext();
 
 	const handleOpen = () => {
@@ -106,10 +107,16 @@ export default function SignIn() {
 			});
 			const { user, token } = mutationResponse.data.login;
 			dispatch({ type: UPDATE_USER, user });
+
 			const homes = user.homes;
 			dispatch({ type: UPDATE_HOMES, homes });
 
+			// const homes = user.homes;
+			// dispatch({ type: UPDATE_HOMES, homes })
+
+
 			Auth.login(token);
+			history.push('/home');
 		} catch (e) {
 			setFormState({ errorMsg: 'Incorrect Credentials' });
 			console.log(e);
