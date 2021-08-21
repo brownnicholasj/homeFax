@@ -80,9 +80,20 @@ export default function SignUp() {
 				variables: { ...formState },
 			});
 
+
 			Auth.login(data.addUser.token);
 			history.push('/home');
+
+			if (formState.password !== formState.password2) {
+				setFormState({ errorMsg: "Passwords do not match" })
+			}
+			if (formState.password === formState.password2) {
+				console.log("Credentials Match")
+					(Auth.login(data.addUser.token))
+			}
+
 		} catch (e) {
+
 			console.error(e);
 		}
 	};
@@ -189,6 +200,9 @@ export default function SignUp() {
 					</Grid>
 					<br></br>
 					<br></br>
+					<Typography variant="body1" color="error">
+						{formState.errorMsg}
+					</Typography>
 					<Button
 						type="submit"
 						fullWidth
