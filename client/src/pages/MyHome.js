@@ -41,6 +41,14 @@ import { ADD_AREA } from '../utils/mutations';
 import { Divider } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { AppBar } from '@material-ui/core';
+import { Container } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { List } from '@material-ui/core';
+import { ListItem } from '@material-ui/core';
+import { ListItemAvatar } from '@material-ui/core';
+import { Avatar } from '@material-ui/core';
+import FolderIcon from '@material-ui/icons/Folder';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -68,6 +76,8 @@ function MyHome(props) {
 	const { homeid } = useParams();
 	const [expandedId, setExpandedId] = useState(-1);
 	const [open, setOpen] = useState(false);
+	const [dense, setDense] = useState(false);
+
 	const [modalIndex, setModalIndex] = useState(-1);
 	const [areaModalOpen, setAreaModalOpen] = useState(false);
 	const [attributeModalOpen, setAttributeModalOpen] = useState(false);
@@ -180,85 +190,188 @@ function MyHome(props) {
 
 	return (
 		<React.Fragment>
-			<Grid container alignItems="stretch" spacing={3}>
-				{loading ? (
-					<h1>Loading...</h1>
-				) : (
-					<React.Fragment>
-						<Grid item xs={12}>
-							<Grid container justifyContent="center">
-								<Grid item>
-									<Typography variant="h2">{data.home.address.street1}</Typography>
-								</Grid>
-								{/* <Grid item xs={12}>
+			{loading ? (
+				<h1>Loading...</h1>
+			) : (
+				<React.Fragment>
+					<Grid container alignItems="stretch" spacing={3}>
+						<React.Fragment>
+							<Grid item xs={12} style={{ borderBottom: 'black solid 1px' }}>
+								<Grid container justifyContent="center">
+									<Grid item>
+										<Typography variant="h2">
+											{data.home.address.street1}
+											<br></br>
+											<Typography variant="h4">
+												{data.home.address.city}, {data.home.address.state}
+											</Typography>
+											<Typography variant="h4">{data.home.address.zip}</Typography>
+										</Typography>
+									</Grid>
+
+									{/* <Grid item xs={12}>
 									<Typography variant="h2">{data.home.address.city}</Typography>
-								</Grid>
-								<Grid item xs={12}>
+									</Grid>
+									<Grid item xs={12}>
 									<Typography variant="h2">{data.home.address.state}</Typography>
 								</Grid> */}
-								{/* <h1>{data.home.address.city + ', ' + data.home.address.state}</h1>
+									{/* <h1>{data.home.address.city + ', ' + data.home.address.state}</h1>
 								<h1>{data.home.address.zip}</h1> */}
-								<br></br>
-
-								<h3>Areas</h3>
+									{/* <br></br>
+									<h3>Areas</h3> */}
+								</Grid>
 							</Grid>
-						</Grid>
-						{home.home?.areas.map((area, i) => (
-							<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-								<Card>
-									<CardHeader
-										action={
-											expandedId !== i ? (
-												<IconButton onClick={() => handleExpandClick(i)}>
-													<ExpandMoreIcon></ExpandMoreIcon>
-												</IconButton>
-											) : (
-												<IconButton>
-													<ExpandLessIcon
-														onClick={() => {
-															handleExpandClick(i);
-														}}
-													></ExpandLessIcon>
-												</IconButton>
-											)
-										}
-										title={capitalize(area.name)}
-									></CardHeader>
-									{expandedId !== i && (
-										<CardContent>
-											{area.attributes.length +
-												(area.attributes.length === 1 ? ' attribute' : ' attributes')}
-										</CardContent>
-									)}
-									<Collapse in={expandedId === i}>
-										<CardContent>
-											{area.attributes.map((attribute, j) => (
-												<React.Fragment>
-													<Grid item xs={12}>
-														<Box
-															display="flex"
-															alignItems="center"
-															justifyContent="space-between"
-														>
-															<Typography gutterBottom={true} variant="body1" xs={12}>
-																<Link
-																	onClick={() => {
-																		console.log('i :>> ', i);
-																		console.log('j :>> ', j);
-																		handleModalOpen(j);
-																	}}
-																	style={{ textDecoration: 'none', cursor: 'pointer' }}
+
+							{home.home?.areas.map((area, i) => (
+								<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+									<Card>
+										<CardHeader
+											action={
+												expandedId !== i ? (
+													<IconButton onClick={() => handleExpandClick(i)}>
+														<ExpandMoreIcon></ExpandMoreIcon>
+													</IconButton>
+												) : (
+													<IconButton>
+														<ExpandLessIcon
+															onClick={() => {
+																handleExpandClick(i);
+															}}
+														></ExpandLessIcon>
+													</IconButton>
+												)
+											}
+											title={capitalize(area.name)}
+										></CardHeader>
+										{expandedId !== i && (
+											<CardContent>
+												{area.attributes.length +
+													(area.attributes.length === 1 ? ' attribute' : ' attributes')}
+											</CardContent>
+										)}
+										<Collapse in={expandedId === i}>
+											<CardContent>
+												<List dense={dense}>
+													{area.attributes.map((attribute, j) => (
+														<React.Fragment>
+															<Grid item xs={12}>
+																<Box
+																	display="flex"
+																	alignItems="center"
+																	justifyContent="space-between"
 																>
-																	{capitalize(attribute.type)}
-																</Link>
-															</Typography>
-															<IconButton onClick={() => handleDeleteAttribute(attribute._id)}>
-																<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
-															</IconButton>
-														</Box>
-													</Grid>
-													<br></br>
-													<Grid item xs={3}>
+																	<Box style={{ maxWidth: '50%' }}>
+																		<Typography
+																			style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+																			variant="body1"
+																		>
+																			<Link
+																				onClick={() => {
+																					handleModalOpen(j);
+																				}}
+																				style={{ textDecoration: 'none', cursor: 'pointer' }}
+																			>
+																				{capitalize(attribute.type)}
+																			</Link>
+																		</Typography>
+																	</Box>
+
+																	<Box>
+																		<IconButton
+																			onClick={() => handleDeleteAttribute(attribute._id)}
+																		>
+																			<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
+																		</IconButton>
+																	</Box>
+																</Box>
+															</Grid>
+															<Divider></Divider>
+															<br></br>
+															<Grid item xs={3}>
+																<Modal
+																	style={{
+																		display: 'flex',
+																		justifyContent: 'center',
+																		alignContent: 'center',
+																		alignItems: 'center',
+																	}}
+																	onClose={() => setModalIndex(-1)}
+																	open={modalIndex === j && expandedId === i}
+																>
+																	<div>
+																		<Card className={classes.root} variant="outlined">
+																			<CardContent>
+																				<div className={classes.gridRoot}>
+																					<Grid container spacing={1}>
+																						<Grid item xs={12}>
+																							<h1>Detail</h1>
+																							<Divider />
+																						</Grid>
+																						<Grid item xs={12} s={6}>
+																							{attribute.detail.map((detail) => (
+																								<Box display="flex" justifyContent="space-between">
+																									<Typography variant="h3">
+																										{capitalize(detail.key) +
+																											': ' +
+																											capitalize(detail.value)}
+																									</Typography>
+																									<IconButton
+																										onClick={() => handleDeleteDetail(detail._id)}
+																									>
+																										<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
+																									</IconButton>
+																								</Box>
+																							))}
+
+																							<Link
+																								style={{ textDecoration: 'none', cursor: 'pointer' }}
+																								onClick={handleDetailModal}
+																							>
+																								Add Detail
+																							</Link>
+																							<Modal
+																								style={{
+																									display: 'flex',
+																									justifyContent: 'center',
+																									alignItems: 'center',
+																								}}
+																								onClose={() => setDetailModalOpen(false)}
+																								open={
+																									detailModalOpen && expandedId === i && modalIndex === j
+																								}
+																							>
+																								<AddDetail
+																									attributeName={attribute.type}
+																									attributeId={attribute._id}
+																									setHome={setHome}
+																									setDetailModalOpen={setDetailModalOpen}
+																								></AddDetail>
+																							</Modal>
+																						</Grid>
+																					</Grid>
+																				</div>
+																			</CardContent>
+																		</Card>
+																	</div>
+																</Modal>
+															</Grid>
+														</React.Fragment>
+													))}
+												</List>
+												<Box
+													mt={2}
+													display="flex"
+													alignItems="center"
+													justifyContent="space-between"
+												>
+													<Typography variant="body1">
+														<Button
+															onClick={handleAttributeModal}
+															variant="contained"
+															color="primary"
+														>
+															Add Attribute
+														</Button>
 														<Modal
 															style={{
 																display: 'flex',
@@ -266,170 +379,108 @@ function MyHome(props) {
 																alignContent: 'center',
 																alignItems: 'center',
 															}}
-															onClose={() => setModalIndex(-1)}
-															open={modalIndex === j && expandedId === i}
+															onClose={() => setAttributeModalOpen(false)}
+															open={attributeModalOpen && expandedId === i}
 														>
-															<div>
-																<Card className={classes.root} variant="outlined">
-																	<CardContent>
-																		<div className={classes.gridRoot}>
-																			<Grid container spacing={1}>
-																				<Grid item xs={12}>
-																					<h1>Detail</h1>
-																					<Divider />
-																				</Grid>
-																				<Grid item xs={12} s={6}>
-																					{attribute.detail.map((detail) => (
-																						<Box display="flex" justifyContent="space-between">
-																							<h3>
-																								{capitalize(detail.key) +
-																									': ' +
-																									capitalize(detail.value)}
-																							</h3>
-																							<IconButton
-																								onClick={() => handleDeleteDetail(detail._id)}
-																							>
-																								<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
-																							</IconButton>
-																						</Box>
-																					))}
-																					<Link
-																						style={{ textDecoration: 'none', cursor: 'pointer' }}
-																						onClick={handleDetailModal}
-																					>
-																						Add Detail
-																					</Link>
-																					<Modal
-																						style={{
-																							display: 'flex',
-																							justifyContent: 'center',
-																							alignItems: 'center',
-																						}}
-																						onClose={() => setDetailModalOpen(false)}
-																						open={
-																							detailModalOpen && expandedId === i && modalIndex === j
-																						}
-																					>
-																						<AddDetail
-																							attributeName={attribute.type}
-																							attributeId={attribute._id}
-																							setHome={setHome}
-																							setDetailModalOpen={setDetailModalOpen}
-																						></AddDetail>
-																					</Modal>
-																				</Grid>
-																			</Grid>
-																		</div>
-																	</CardContent>
-																</Card>
-															</div>
+															<AddAttribute
+																areaName={area.name}
+																areaId={area._id}
+																setHome={setHome}
+																setAttributeModalOpen={setAttributeModalOpen}
+															></AddAttribute>
 														</Modal>
-													</Grid>
-												</React.Fragment>
-											))}
-											<Box
-												mt={2}
-												display="flex"
-												alignItems="center"
-												justifyContent="space-between"
-											>
-												<Typography variant="body1">
-													<Button
-														onClick={handleAttributeModal}
-														variant="contained"
-														color="primary"
-													>
-														Add Attribute
-													</Button>
-													<Modal
-														style={{
-															display: 'flex',
-															justifyContent: 'center',
-															alignContent: 'center',
-															alignItems: 'center',
-														}}
-														onClose={() => setAttributeModalOpen(false)}
-														open={attributeModalOpen && expandedId === i}
-													>
-														<AddAttribute
-															areaName={area.name}
-															areaId={area._id}
-															setHome={setHome}
-															setAttributeModalOpen={setAttributeModalOpen}
-														></AddAttribute>
-													</Modal>
-												</Typography>
-												<Tooltip title="Delete Area">
-													<IconButton
-														onClick={() => {
-															handleDeleteArea(area._id);
-														}}
-													>
-														<HighlightOffIcon
-															fontSize="large"
-															color="secondary"
-														></HighlightOffIcon>
-													</IconButton>
-												</Tooltip>
-											</Box>
-										</CardContent>
-									</Collapse>
+													</Typography>
+													<Tooltip title="Delete Area">
+														<IconButton
+															onClick={() => {
+																handleDeleteArea(area._id);
+															}}
+														>
+															<HighlightOffIcon
+																fontSize="large"
+																color="secondary"
+															></HighlightOffIcon>
+														</IconButton>
+													</Tooltip>
+												</Box>
+											</CardContent>
+										</Collapse>
+									</Card>
+								</Grid>
+							))}
+							<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+								<Card
+									style={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignContent: 'center',
+										height: '100%',
+										backgroundColor: 'lightgreen',
+									}}
+								>
+									<Tooltip title="Add Area">
+										<CardActionArea
+											style={{ display: 'flex', justifyContent: 'center' }}
+											onClick={handleAddAreaModal}
+											variant="contained"
+										>
+											<IconButton>
+												<AddIcon color="primary" fontSize="large"></AddIcon>
+											</IconButton>
+										</CardActionArea>
+									</Tooltip>
 								</Card>
 							</Grid>
-						))}
-						<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-							<Button color="primary" variant="contained" onClick={handleAddAreaModal}>
-								Add Area
-							</Button>
-							{/* <CardActionArea onClick={handleAddAreaModal} variant="contained">
-								<Card>
-									<Typography>Add Area</Typography>
-								</Card>
-							</CardActionArea> */}
-						</Grid>
-						<Modal
-							style={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignContent: 'center',
-								alignItems: 'center',
-							}}
-							onClose={() => setAreaModalOpen(false)}
-							open={areaModalOpen}
-						>
-							<AddArea
-								setAreaModalOpen={setAreaModalOpen}
-								homeId={data.home._id}
-								setHome={setHome}
-							></AddArea>
-						</Modal>
-						<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-							<Button
-								onClick={handleTransferModal}
-								variant="contained"
-								color="primary"
+							<Modal
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignContent: 'center',
+									alignItems: 'center',
+								}}
+								onClose={() => setAreaModalOpen(false)}
+								open={areaModalOpen}
 							>
-								Transfer Home
-							</Button>
+								<AddArea
+									setAreaModalOpen={setAreaModalOpen}
+									homeId={data.home._id}
+									setHome={setHome}
+								></AddArea>
+							</Modal>
+							<Grid item xs={12} sm={6} md={4} lg={3} xl={2}></Grid>
+						</React.Fragment>
+					</Grid>
+					<br></br>
+					<Box mt={12}>
+						<Grid container>
+							<Grid item>
+								<Button
+									onClick={handleTransferModal}
+									variant="contained"
+									color="secondary"
+								>
+									Transfer Home
+								</Button>
+								<Modal
+									style={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+										alignContent: 'center',
+									}}
+									onClose={() => setTransferModalOpen(false)}
+									open={transferModalOpen}
+								>
+									<Transfer
+										home={data.home}
+										setTransferModalOpen={setTransferModalOpen}
+									></Transfer>
+								</Modal>
+							</Grid>
 						</Grid>
-						<Modal
-							style={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-								alignContent: 'center',
-							}}
-							onClose={() => setTransferModalOpen(false)}
-							open={transferModalOpen}
-						>
-							<Transfer
-								home={data.home}
-								setTransferModalOpen={setTransferModalOpen}
-							></Transfer>
-						</Modal>
-					</React.Fragment>
-				)}
-			</Grid>
+					</Box>
+				</React.Fragment>
+			)}
 			{snack.status ? (
 				<Snack
 					setOpen={setSnack}
