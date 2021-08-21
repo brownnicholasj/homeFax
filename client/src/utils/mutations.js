@@ -149,8 +149,10 @@ export const ADD_AREA = gql`
 				name
 				icon
 				attributes {
+					_id
 					type
 					detail {
+						_id
 						key
 						value
 						date
@@ -192,6 +194,28 @@ export const DELETE_AREA = gql`
 	mutation DeleteArea($areaId: ID!) {
 		deleteArea(areaId: $areaId) {
 			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+			areas {
+				_id
+				name
+				icon
+				attributes {
+					_id
+					type
+					detail {
+						key
+						value
+						date
+						_id
+					}
+				}
+			}
 		}
 	}
 `;
@@ -218,6 +242,7 @@ export const ADD_ATTRIBUTE = gql`
 						key
 						value
 						date
+						_id
 					}
 				}
 			}
@@ -273,6 +298,7 @@ export const DELETE_ATTRIBUTE = gql`
 					_id
 					type
 					detail {
+						_id
 						key
 						value
 						date
@@ -305,6 +331,7 @@ export const ADD_DETAIL = gql`
 						key
 						value
 						date
+						_id
 					}
 				}
 			}
@@ -345,6 +372,28 @@ export const DELETE_DETAIL = gql`
 	mutation DeleteDetail($detailId: ID!) {
 		deleteDetail(detailId: $detailId) {
 			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+			areas {
+				_id
+				name
+				icon
+				attributes {
+					_id
+					type
+					detail {
+						_id
+						key
+						value
+						date
+					}
+				}
+			}
 		}
 	}
 `;

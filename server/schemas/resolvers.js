@@ -233,14 +233,12 @@ const resolvers = {
 
 			return updatedHome;
 		},
-		deleteDetail: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const detail = await Home.findOneAndDelete({
-					'areas.attributes.detail._id': args.detailId,
-				});
-				return detail;
-			}
-			return;
+		deleteDetail: async (parent, { detailId }) => {
+			const home = await Home.findOneAndUpdate(
+				{ 'areas.attributes.detail._id': detailId },
+				{ $pull: { 'areas.$[].attributes.$[].detail': { _id: detailId } } }
+			);
+			return home;
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
 			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.

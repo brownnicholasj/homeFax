@@ -30,7 +30,11 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { Tooltip } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { DELETE_AREA, DELETE_ATTRIBUTE } from '../utils/mutations';
+import {
+	DELETE_AREA,
+	DELETE_ATTRIBUTE,
+	DELETE_DETAIL,
+} from '../utils/mutations';
 import Snack from '../components/Snack';
 import { ADD_AREA } from '../utils/mutations';
 
@@ -54,6 +58,7 @@ function MyHome(props) {
 	const [detailModalOpen, setDetailModalOpen] = useState(false);
 	const [deleteArea] = useMutation(DELETE_AREA);
 	const [deleteAttribute] = useMutation(DELETE_ATTRIBUTE);
+	const [deleteDetail] = useMutation(DELETE_DETAIL);
 	const [home, setHome] = useState([]);
 
 	const { loading, error, data } = useQuery(QUERY_GET_HOME, {
@@ -109,7 +114,6 @@ function MyHome(props) {
 				};
 
 				setHome(newHomeAfterDelete);
-				console.log('newHomeAfterDelete :>> ', newHomeAfterDelete);
 				setSnack({ status: true, message: `Area has been deleted.` });
 			}
 		} catch (e) {
@@ -129,7 +133,6 @@ function MyHome(props) {
 					const newArea = area.attributes.filter((attribute) => {
 						return attribute._id !== attributeId;
 					});
-					console.log('newArea :>> ', newArea);
 					area.attributes = newArea;
 					return area;
 				});
@@ -140,6 +143,45 @@ function MyHome(props) {
 						areas: areas,
 						_typename: mutationResponse.data.deleteAttribute._typename,
 						_id: mutationResponse.data.deleteAttribute._id,
+					},
+				};
+
+				setHome(newHomeAfterDelete);
+				setSnack({ status: true, message: `Area has been deleted.` });
+			}
+		} catch (e) {
+			console.log('error :>> ', e);
+		}
+	};
+	const handleDeleteDetail = async (detailId) => {
+		try {
+			const mutationResponse = await deleteDetail({
+				variables: {
+					detailId: detailId,
+				},
+			});
+
+			if (mutationResponse) {
+				console.log('mutationResponse :>> ', mutationResponse);
+				const areas = mutationResponse.data.deleteDetail.areas.map((area) => {
+					const newArea = area.attributes.map((attribute) => {
+						const newAttribute = attribute.detail.filter((detail) => {
+							return detail._id !== detailId;
+						});
+						attribute.detail = newAttribute;
+						return attribute;
+					});
+
+					area.attributes = newArea;
+					return area;
+				});
+
+				const newHomeAfterDelete = {
+					home: {
+						address: mutationResponse.data.deleteDetail.address,
+						areas: areas,
+						_typename: mutationResponse.data.deleteDetail._typename,
+						_id: mutationResponse.data.deleteDetail._id,
 					},
 				};
 
@@ -165,8 +207,6 @@ function MyHome(props) {
 							<br></br>
 							<h3>Areas</h3>
 						</Grid>
-						{console.log('home :>> ', home)}
-						{console.log('home.areas :>> ', home.home?.areas)}
 						{home.home?.areas.map((area, i) => (
 							<React.Fragment>
 								<Grid item xs={3}>
@@ -233,9 +273,12 @@ function MyHome(props) {
 																<div className={classes.modal}>
 																	<h1>Details</h1>
 																	{attribute.detail.map((detail) => (
-																		<React.Fragment>
+																		<Box display="flex" justifyContent="space-between">
 																			<h3>{detail.key + ': ' + detail.value}</h3>
-																		</React.Fragment>
+																			<IconButton onClick={() => handleDeleteDetail(detail._id)}>
+																				<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
+																			</IconButton>
+																		</Box>
 																	))}
 																	<Link
 																		style={{ textDecoration: 'none', cursor: 'pointer' }}
@@ -286,7 +329,6 @@ function MyHome(props) {
 													<Tooltip title="Delete Area">
 														<IconButton
 															onClick={() => {
-																console.log('area :>> ', area);
 																handleDeleteArea(area._id);
 															}}
 														>

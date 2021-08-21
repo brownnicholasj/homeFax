@@ -51,7 +51,6 @@ export default function AddArea({ homeId, setHome }) {
 		event.preventDefault();
 		if (formState.name) {
 			try {
-				console.log('adding area');
 				const mutationResponse = await addArea({
 					variables: {
 						homeId: formState.homeId,
@@ -60,19 +59,16 @@ export default function AddArea({ homeId, setHome }) {
 					},
 				});
 				if (mutationResponse) {
-					console.log('mutationResponse :>> ', mutationResponse);
 					setSnack({
 						status: true,
 						message: `${formState.name} has been added to your home`,
 					});
-					console.log('mutationResponse :>> ', mutationResponse);
 
 					const newHome = {
 						home: {
 							...mutationResponse.data.addArea,
 						},
 					};
-					console.log('newHome :>> ', newHome);
 					setHome(newHome);
 				}
 			} catch (e) {
