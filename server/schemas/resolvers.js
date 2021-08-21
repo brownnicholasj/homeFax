@@ -12,6 +12,7 @@ const resolvers = {
 		name: 'Date',
 		description: 'Custom Date Scalar type',
 		parseValue(value) {
+			console.log('value :>> ', value);
 			return dayjs(value);
 		},
 		serialize(value) {
@@ -180,7 +181,8 @@ const resolvers = {
 		deleteAttribute: async (parent, { attributeId }) => {
 			const home = await Home.findOneAndUpdate(
 				{ 'areas.attributes._id': attributeId },
-				{ $pull: { 'areas.$[].attributes': { _id: attributeId } } }
+				{ $pull: { 'areas.$[].attributes': { _id: attributeId } } },
+				{ new: true }
 			);
 			return home;
 		},
@@ -236,7 +238,8 @@ const resolvers = {
 		deleteDetail: async (parent, { detailId }) => {
 			const home = await Home.findOneAndUpdate(
 				{ 'areas.attributes.detail._id': detailId },
-				{ $pull: { 'areas.$[].attributes.$[].detail': { _id: detailId } } }
+				{ $pull: { 'areas.$[].attributes.$[].detail': { _id: detailId } } },
+				{ new: true }
 			);
 			return home;
 		},

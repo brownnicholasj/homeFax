@@ -13,6 +13,7 @@ import Container from '@material-ui/core/Container';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
 	return (
@@ -49,6 +50,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
 	const classes = useStyles();
+	const history = useHistory();
+
 	const [formState, setFormState] = useState({
 		dob: '',
 		firstName: '',
@@ -76,6 +79,11 @@ export default function SignUp() {
 			const { data } = await addUser({
 				variables: { ...formState },
 			});
+
+
+			Auth.login(data.addUser.token);
+			history.push('/home');
+
 			if (formState.password !== formState.password2) {
 				setFormState({ errorMsg: "Passwords do not match" })
 			}
@@ -83,6 +91,7 @@ export default function SignUp() {
 				console.log("Credentials Match")
 					(Auth.login(data.addUser.token))
 			}
+
 		} catch (e) {
 
 			console.error(e);

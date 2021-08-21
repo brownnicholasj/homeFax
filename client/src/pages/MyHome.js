@@ -38,13 +38,28 @@ import {
 } from '../utils/mutations';
 import Snack from '../components/Snack';
 import { ADD_AREA } from '../utils/mutations';
+import { Divider } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
+import { AppBar } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-	modal: {
-		width: '50%',
-		justifyContent: 'center',
-		backgroundColor: theme.palette.background.paper,
-		borderRadius: '1rem',
+	root: {
+		// minWidth: 275,
+	},
+	title: {
+		fontSize: 14,
+	},
+	pos: {
+		marginBottom: 12,
+	},
+	inputRoot: {
+		'& .MuiTextField-root': {
+			margin: theme.spacing(1),
+			width: '25ch',
+		},
+	},
+	gridRoot: {
+		flexGrow: 1,
 	},
 }));
 
@@ -105,16 +120,9 @@ function MyHome(props) {
 			});
 
 			if (mutationResponse) {
-				const areas = home.home.areas;
-
 				const newHomeAfterDelete = {
 					home: {
-						address: home.home.address,
-						areas: areas.filter((area) => {
-							return area._id !== areaId;
-						}),
-						_typename: home.home._typename,
-						_id: home.home._id,
+						...mutationResponse.data.deleteArea,
 					},
 				};
 
@@ -134,25 +142,14 @@ function MyHome(props) {
 			});
 
 			if (mutationResponse) {
-				const areas = mutationResponse.data.deleteAttribute.areas.map((area) => {
-					const newArea = area.attributes.filter((attribute) => {
-						return attribute._id !== attributeId;
-					});
-					area.attributes = newArea;
-					return area;
-				});
-
 				const newHomeAfterDelete = {
 					home: {
-						address: mutationResponse.data.deleteAttribute.address,
-						areas: areas,
-						_typename: mutationResponse.data.deleteAttribute._typename,
-						_id: mutationResponse.data.deleteAttribute._id,
+						...mutationResponse.data.deleteAttribute,
 					},
 				};
 
 				setHome(newHomeAfterDelete);
-				setSnack({ status: true, message: `Area has been deleted.` });
+				setSnack({ status: true, message: `Attribute has been deleted.` });
 			}
 		} catch (e) {
 			console.log('error :>> ', e);
@@ -167,31 +164,14 @@ function MyHome(props) {
 			});
 
 			if (mutationResponse) {
-				console.log('mutationResponse :>> ', mutationResponse);
-				const areas = mutationResponse.data.deleteDetail.areas.map((area) => {
-					const newArea = area.attributes.map((attribute) => {
-						const newAttribute = attribute.detail.filter((detail) => {
-							return detail._id !== detailId;
-						});
-						attribute.detail = newAttribute;
-						return attribute;
-					});
-
-					area.attributes = newArea;
-					return area;
-				});
-
 				const newHomeAfterDelete = {
 					home: {
-						address: mutationResponse.data.deleteDetail.address,
-						areas: areas,
-						_typename: mutationResponse.data.deleteDetail._typename,
-						_id: mutationResponse.data.deleteDetail._id,
+						...mutationResponse.data.deleteDetail,
 					},
 				};
 
 				setHome(newHomeAfterDelete);
-				setSnack({ status: true, message: `Area has been deleted.` });
+				setSnack({ status: true, message: `Detail has been deleted.` });
 			}
 		} catch (e) {
 			console.log('error :>> ', e);
@@ -200,140 +180,85 @@ function MyHome(props) {
 
 	return (
 		<React.Fragment>
-			<Grid container spacing={3}>
+			<Grid container alignItems="stretch" spacing={3}>
 				{loading ? (
 					<h1>Loading...</h1>
 				) : (
 					<React.Fragment>
 						<Grid item xs={12}>
-							<h1>{data.home.address.street1}</h1>
-							<h1>{data.home.address.city + ', ' + data.home.address.state}</h1>
-							<h1>{data.home.address.zip}</h1>
-							<br></br>
-							<h3>Areas</h3>
+							<Grid container justifyContent="center">
+								<Grid item>
+									<Typography variant="h2">{data.home.address.street1}</Typography>
+								</Grid>
+								{/* <Grid item xs={12}>
+									<Typography variant="h2">{data.home.address.city}</Typography>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="h2">{data.home.address.state}</Typography>
+								</Grid> */}
+								{/* <h1>{data.home.address.city + ', ' + data.home.address.state}</h1>
+								<h1>{data.home.address.zip}</h1> */}
+								<br></br>
+
+								<h3>Areas</h3>
+							</Grid>
 						</Grid>
 						{home.home?.areas.map((area, i) => (
-							<React.Fragment>
-								<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-									<Card>
-										<CardHeader
-											action={
-												expandedId !== i ? (
-													<IconButton onClick={() => handleExpandClick(i)}>
-														<ExpandMoreIcon></ExpandMoreIcon>
-													</IconButton>
-												) : (
-													<IconButton>
-														<ExpandLessIcon
-															onClick={() => {
-																handleExpandClick(i);
-															}}
-														></ExpandLessIcon>
-													</IconButton>
-												)
-											}
-											title={capitalize(area.name)}
-										></CardHeader>
-										{expandedId !== i && (
-											<CardContent>
-												{area.attributes.length +
-													(area.attributes.length === 1 ? ' attribute' : ' attributes')}
-											</CardContent>
-										)}
-										<Collapse in={expandedId === i}>
-											<CardContent>
-												{area.attributes.map((attribute, j) => (
-													<React.Fragment>
-														<Grid item xs={12}>
-															<Box
-																display="flex"
-																alignItems="center"
-																justifyContent="space-between"
-															>
-																<Typography gutterBottom={true} variant="body1" xs={12}>
-																	<Link
-																		onClick={() => {
-																			console.log('i :>> ', i);
-																			console.log('j :>> ', j);
-																			handleModalOpen(j);
-																		}}
-																		style={{ textDecoration: 'none', cursor: 'pointer' }}
-																	>
-																		{capitalize(attribute.type)}
-																	</Link>
-																</Typography>
-																<IconButton
-																	onClick={() => handleDeleteAttribute(attribute._id)}
-																>
-																	<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
-																</IconButton>
-															</Box>
-														</Grid>
-														<br></br>
-														<Grid item xs={3}>
-															<Modal
-																style={{
-																	display: 'flex',
-																	justifyContent: 'center',
-																	alignContent: 'center',
-																	alignItems: 'center',
-																}}
-																onClose={() => setModalIndex(-1)}
-																open={modalIndex === j && expandedId === i}
-															>
-																<div className={classes.modal}>
-																	<h1>Details</h1>
-																	{attribute.detail.map((detail) => (
-																		<Box display="flex" justifyContent="space-between">
-																			<h3>
-																				{capitalize(detail.key) + ': ' + capitalize(detail.value)}
-																			</h3>
-																			<IconButton onClick={() => handleDeleteDetail(detail._id)}>
-																				<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
-																			</IconButton>
-																		</Box>
-																	))}
-																	<Link
-																		style={{ textDecoration: 'none', cursor: 'pointer' }}
-																		onClick={handleDetailModal}
-																	>
-																		Add Detail
-																	</Link>
-																	<Modal
-																		style={{
-																			display: 'flex',
-																			justifyContent: 'center',
-																			alignItems: 'center',
-																		}}
-																		onClose={() => setDetailModalOpen(false)}
-																		open={detailModalOpen && expandedId === i && modalIndex === j}
-																	>
-																		<AddDetail
-																			attributeName={attribute.type}
-																			attributeId={attribute._id}
-																			setHome={setHome}
-																			setDetailModalOpen={setDetailModalOpen}
-																		></AddDetail>
-																	</Modal>
-																</div>
-															</Modal>
-														</Grid>
-													</React.Fragment>
-												))}
-												<Box
-													mt={2}
-													display="flex"
-													alignItems="center"
-													justifyContent="space-between"
-												>
-													<Typography variant="body1">
-														<Button
-															onClick={handleAttributeModal}
-															variant="contained"
-															color="primary"
+							<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+								<Card>
+									<CardHeader
+										action={
+											expandedId !== i ? (
+												<IconButton onClick={() => handleExpandClick(i)}>
+													<ExpandMoreIcon></ExpandMoreIcon>
+												</IconButton>
+											) : (
+												<IconButton>
+													<ExpandLessIcon
+														onClick={() => {
+															handleExpandClick(i);
+														}}
+													></ExpandLessIcon>
+												</IconButton>
+											)
+										}
+										title={capitalize(area.name)}
+									></CardHeader>
+									{expandedId !== i && (
+										<CardContent>
+											{area.attributes.length +
+												(area.attributes.length === 1 ? ' attribute' : ' attributes')}
+										</CardContent>
+									)}
+									<Collapse in={expandedId === i}>
+										<CardContent>
+											{area.attributes.map((attribute, j) => (
+												<React.Fragment>
+													<Grid item xs={12}>
+														<Box
+															display="flex"
+															alignItems="center"
+															justifyContent="space-between"
 														>
-															Add Attribute
-														</Button>
+															<Typography gutterBottom={true} variant="body1" xs={12}>
+																<Link
+																	onClick={() => {
+																		console.log('i :>> ', i);
+																		console.log('j :>> ', j);
+																		handleModalOpen(j);
+																	}}
+																	style={{ textDecoration: 'none', cursor: 'pointer' }}
+																>
+																	{capitalize(attribute.type)}
+																</Link>
+															</Typography>
+															<IconButton onClick={() => handleDeleteAttribute(attribute._id)}>
+																<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
+															</IconButton>
+														</Box>
+													</Grid>
+													<br></br>
+													<Grid item xs={3}>
 														<Modal
 															style={{
 																display: 'flex',
@@ -341,59 +266,143 @@ function MyHome(props) {
 																alignContent: 'center',
 																alignItems: 'center',
 															}}
-															onClose={() => setAttributeModalOpen(false)}
-															open={attributeModalOpen && expandedId === i}
+															onClose={() => setModalIndex(-1)}
+															open={modalIndex === j && expandedId === i}
 														>
-															<AddAttribute
-																areaName={area.name}
-																areaId={area._id}
-																setHome={setHome}
-																setAttributeModalOpen={setAttributeModalOpen}
-															></AddAttribute>
+															<div>
+																<Card className={classes.root} variant="outlined">
+																	<CardContent>
+																		<div className={classes.gridRoot}>
+																			<Grid container spacing={1}>
+																				<Grid item xs={12}>
+																					<h1>Detail</h1>
+																					<Divider />
+																				</Grid>
+																				<Grid item xs={12} s={6}>
+																					{attribute.detail.map((detail) => (
+																						<Box display="flex" justifyContent="space-between">
+																							<h3>
+																								{capitalize(detail.key) +
+																									': ' +
+																									capitalize(detail.value)}
+																							</h3>
+																							<IconButton
+																								onClick={() => handleDeleteDetail(detail._id)}
+																							>
+																								<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
+																							</IconButton>
+																						</Box>
+																					))}
+																					<Link
+																						style={{ textDecoration: 'none', cursor: 'pointer' }}
+																						onClick={handleDetailModal}
+																					>
+																						Add Detail
+																					</Link>
+																					<Modal
+																						style={{
+																							display: 'flex',
+																							justifyContent: 'center',
+																							alignItems: 'center',
+																						}}
+																						onClose={() => setDetailModalOpen(false)}
+																						open={
+																							detailModalOpen && expandedId === i && modalIndex === j
+																						}
+																					>
+																						<AddDetail
+																							attributeName={attribute.type}
+																							attributeId={attribute._id}
+																							setHome={setHome}
+																							setDetailModalOpen={setDetailModalOpen}
+																						></AddDetail>
+																					</Modal>
+																				</Grid>
+																			</Grid>
+																		</div>
+																	</CardContent>
+																</Card>
+															</div>
 														</Modal>
-													</Typography>
-													<Tooltip title="Delete Area">
-														<IconButton
-															onClick={() => {
-																handleDeleteArea(area._id);
-															}}
-														>
-															<HighlightOffIcon
-																fontSize="large"
-																color="secondary"
-															></HighlightOffIcon>
-														</IconButton>
-													</Tooltip>
-												</Box>
-											</CardContent>
-										</Collapse>
-									</Card>
-								</Grid>
-							</React.Fragment>
+													</Grid>
+												</React.Fragment>
+											))}
+											<Box
+												mt={2}
+												display="flex"
+												alignItems="center"
+												justifyContent="space-between"
+											>
+												<Typography variant="body1">
+													<Button
+														onClick={handleAttributeModal}
+														variant="contained"
+														color="primary"
+													>
+														Add Attribute
+													</Button>
+													<Modal
+														style={{
+															display: 'flex',
+															justifyContent: 'center',
+															alignContent: 'center',
+															alignItems: 'center',
+														}}
+														onClose={() => setAttributeModalOpen(false)}
+														open={attributeModalOpen && expandedId === i}
+													>
+														<AddAttribute
+															areaName={area.name}
+															areaId={area._id}
+															setHome={setHome}
+															setAttributeModalOpen={setAttributeModalOpen}
+														></AddAttribute>
+													</Modal>
+												</Typography>
+												<Tooltip title="Delete Area">
+													<IconButton
+														onClick={() => {
+															handleDeleteArea(area._id);
+														}}
+													>
+														<HighlightOffIcon
+															fontSize="large"
+															color="secondary"
+														></HighlightOffIcon>
+													</IconButton>
+												</Tooltip>
+											</Box>
+										</CardContent>
+									</Collapse>
+								</Card>
+							</Grid>
 						))}
 						<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-							<Card>
-								<CardActionArea onClick={handleAddAreaModal} variant="contained">
-									Add Area
-								</CardActionArea>
-								<Modal
-									style={{
-										display: 'flex',
-										justifyContent: 'center',
-										alignContent: 'center',
-										alignItems: 'center',
-									}}
-									onClose={() => setAreaModalOpen(false)}
-									open={areaModalOpen}
-								>
-									<AddArea
-										setAreaModalOpen={setAreaModalOpen}
-										homeId={data.home._id}
-										setHome={setHome}
-									></AddArea>
-								</Modal>
-							</Card>
+							<Button color="primary" variant="contained" onClick={handleAddAreaModal}>
+								Add Area
+							</Button>
+							{/* <CardActionArea onClick={handleAddAreaModal} variant="contained">
+								<Card>
+									<Typography>Add Area</Typography>
+								</Card>
+							</CardActionArea> */}
 						</Grid>
+						<Modal
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignContent: 'center',
+								alignItems: 'center',
+							}}
+							onClose={() => setAreaModalOpen(false)}
+							open={areaModalOpen}
+						>
+							<AddArea
+								setAreaModalOpen={setAreaModalOpen}
+								homeId={data.home._id}
+								setHome={setHome}
+							></AddArea>
+						</Modal>
 						<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
 							<Button
 								onClick={handleTransferModal}
