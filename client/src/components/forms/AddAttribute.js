@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
 		flexGrow: 1,
 	},
 }));
+function capitalize(str) {
+	const lower = str.toLowerCase();
+	return str.charAt(0).toUpperCase() + lower.slice(1);
+}
 
 export default function AddAttribute({
 	areaName,
@@ -93,7 +97,7 @@ export default function AddAttribute({
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
 							<Grid item xs={12}>
-								<h3>{areaName}</h3>
+								<h3>{capitalize(areaName)}</h3>
 								<Divider />
 							</Grid>
 							<Grid item xs={12} s={6}>

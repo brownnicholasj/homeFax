@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+function capitalize(str) {
+	const lower = str.toLowerCase();
+	return str.charAt(0).toUpperCase() + lower.slice(1);
+}
+
 export default function AddDetail({
 	attributeName,
 	attributeId,
@@ -98,7 +103,7 @@ export default function AddDetail({
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
 							<Grid item xs={12}>
-								<h1>{attributeName}</h1>
+								<h1>{capitalize(attributeName)}</h1>
 								<Divider />
 							</Grid>
 							<Grid item xs={12} s={6}>

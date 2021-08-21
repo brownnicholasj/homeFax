@@ -274,7 +274,9 @@ function MyHome(props) {
 																	<h1>Details</h1>
 																	{attribute.detail.map((detail) => (
 																		<Box display="flex" justifyContent="space-between">
-																			<h3>{detail.key + ': ' + detail.value}</h3>
+																			<h3>
+																				{capitalize(detail.key) + ': ' + capitalize(detail.value)}
+																			</h3>
 																			<IconButton onClick={() => handleDeleteDetail(detail._id)}>
 																				<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
 																			</IconButton>
