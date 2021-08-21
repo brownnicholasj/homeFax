@@ -85,32 +85,6 @@ function MyHome(props) {
 		setDetailModalOpen(true);
 	};
 
-	// const handleFormSubmit = async (event, state) => {
-	// 	event.preventDefault();
-	// 	console.log('state :>> ', state);
-	// 	console.log('state.name :>> ', state.name);
-	// 	if (state.name) {
-	// 		try {
-	// 			const mutationResponse = await addArea({
-	// 				variables: {
-	// 					homeId: state.homeId,
-	// 					name: state.name,
-	// 					icon: state.icon,
-	// 				},
-	// 			});
-	// 			if (mutationResponse) {
-	// 				console.log(mutationResponse);
-	// 				setSnack({
-	// 					status: true,
-	// 					message: `${state.name} has been added to your home`,
-	// 				});
-	// 			}
-	// 		} catch (e) {
-	// 			console.log(e);
-	// 		}
-	// 	}
-	// };
-
 	const handleDeleteArea = async (areaId) => {
 		try {
 			const mutationResponse = await deleteArea({
@@ -118,14 +92,8 @@ function MyHome(props) {
 					areaId: areaId,
 				},
 			});
-			// console.log('areaId :>> ', areaId);
 
-			// const newArray = home.home?.areas.filter((area) => {
-			// 	return area._id !== areaId;
-			// });
-			// console.log('home :>> ', home);
 			const areas = home.home.areas;
-			// console.log('areas :>> ', areas);
 
 			const newHomeAfterDelete = {
 				home: {
@@ -138,12 +106,6 @@ function MyHome(props) {
 				},
 			};
 
-			// console.log('newHomeAfterDelete :>> ', newHomeAfterDelete);
-
-			// home.home?.areas.filter((area) => {
-			// 	return area._id !== areaId;
-			// });
-			// console.log('newHomeAfterDelete :>> ', newHomeAfterDelete);
 			setHome(newHomeAfterDelete);
 			console.log('newHomeAfterDelete :>> ', newHomeAfterDelete);
 
@@ -280,6 +242,7 @@ function MyHome(props) {
 															<AddAttribute
 																areaName={area.name}
 																areaId={area._id}
+																setHome={setHome}
 															></AddAttribute>
 														</Modal>
 													</Typography>
