@@ -30,7 +30,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { Tooltip } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { DELETE_AREA } from '../utils/mutations';
+import { DELETE_AREA, DELETE_ATTRIBUTE } from '../utils/mutations';
 import Snack from '../components/Snack';
 import { ADD_AREA } from '../utils/mutations';
 
@@ -53,6 +53,7 @@ function MyHome(props) {
 	const [attributeModalOpen, setAttributeModalOpen] = useState(false);
 	const [detailModalOpen, setDetailModalOpen] = useState(false);
 	const [deleteArea] = useMutation(DELETE_AREA);
+	const [deleteAttribute] = useMutation(DELETE_ATTRIBUTE);
 	const [home, setHome] = useState([]);
 
 	const { loading, error, data } = useQuery(QUERY_GET_HOME, {
@@ -93,23 +94,56 @@ function MyHome(props) {
 				},
 			});
 
-			const areas = home.home.areas;
+			if (mutationResponse) {
+				const areas = home.home.areas;
 
-			const newHomeAfterDelete = {
-				home: {
-					address: home.home.address,
-					areas: areas.filter((area) => {
-						return area._id !== areaId;
-					}),
-					_typename: home.home._typename,
-					_id: home.home._id,
+				const newHomeAfterDelete = {
+					home: {
+						address: home.home.address,
+						areas: areas.filter((area) => {
+							return area._id !== areaId;
+						}),
+						_typename: home.home._typename,
+						_id: home.home._id,
+					},
+				};
+
+				setHome(newHomeAfterDelete);
+				console.log('newHomeAfterDelete :>> ', newHomeAfterDelete);
+				setSnack({ status: true, message: `Area has been deleted.` });
+			}
+		} catch (e) {
+			console.log('error :>> ', e);
+		}
+	};
+	const handleDeleteAttribute = async (attributeId) => {
+		try {
+			const mutationResponse = await deleteAttribute({
+				variables: {
+					attributeId: attributeId,
 				},
-			};
-
-			setHome(newHomeAfterDelete);
-			console.log('newHomeAfterDelete :>> ', newHomeAfterDelete);
+			});
 
 			if (mutationResponse) {
+				const areas = mutationResponse.data.deleteAttribute.areas.map((area) => {
+					const newArea = area.attributes.filter((attribute) => {
+						return attribute._id !== attributeId;
+					});
+					console.log('newArea :>> ', newArea);
+					area.attributes = newArea;
+					return area;
+				});
+
+				const newHomeAfterDelete = {
+					home: {
+						address: mutationResponse.data.deleteAttribute.address,
+						areas: areas,
+						_typename: mutationResponse.data.deleteAttribute._typename,
+						_id: mutationResponse.data.deleteAttribute._id,
+					},
+				};
+
+				setHome(newHomeAfterDelete);
 				setSnack({ status: true, message: `Area has been deleted.` });
 			}
 		} catch (e) {
@@ -183,7 +217,9 @@ function MyHome(props) {
 																		{capitalize(attribute.type)}
 																	</Link>
 																</Typography>
-																<IconButton>
+																<IconButton
+																	onClick={() => handleDeleteAttribute(attribute._id)}
+																>
 																	<DeleteForeverIcon color="secondary"></DeleteForeverIcon>
 																</IconButton>
 															</Box>

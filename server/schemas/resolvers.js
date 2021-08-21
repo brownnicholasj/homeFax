@@ -177,14 +177,12 @@ const resolvers = {
 
 			return updatedHome;
 		},
-		deleteAttribute: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const attribute = await Home.findOneAndDelete({
-					'areas.attributes._id': args.attributeId,
-				});
-				return attribute;
-			}
-			return;
+		deleteAttribute: async (parent, { attributeId }) => {
+			const home = await Home.findOneAndUpdate(
+				{ 'areas.attributes._id': attributeId },
+				{ $pull: { 'areas.$[].attributes': { _id: attributeId } } }
+			);
+			return home;
 		},
 		addDetail: async (parent, { attributeId, key, value, date }) => {
 			const home = await Home.findOne({ 'areas.attributes._id': attributeId });

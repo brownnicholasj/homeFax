@@ -258,6 +258,27 @@ export const DELETE_ATTRIBUTE = gql`
 	mutation DeleteAttribute($attributeId: ID!) {
 		deleteAttribute(attributeId: $attributeId) {
 			_id
+			address {
+				street1
+				street2
+				city
+				state
+				zip
+			}
+			areas {
+				_id
+				name
+				icon
+				attributes {
+					_id
+					type
+					detail {
+						key
+						value
+						date
+					}
+				}
+			}
 		}
 	}
 `;
