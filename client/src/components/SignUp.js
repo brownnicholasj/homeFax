@@ -76,9 +76,15 @@ export default function SignUp() {
 			const { data } = await addUser({
 				variables: { ...formState },
 			});
-
-			Auth.login(data.addUser.token);
+			if (formState.password !== formState.password2) {
+				setFormState({ errorMsg: "Passwords do not match" })
+			}
+			if (formState.password === formState.password2) {
+				console.log("Credentials Match")
+					(Auth.login(data.addUser.token))
+			}
 		} catch (e) {
+
 			console.error(e);
 		}
 	};
@@ -179,11 +185,15 @@ export default function SignUp() {
 								label="Confirm Password"
 								type="password"
 								id="password2"
+								onChange={handleChange}
 							/>
 						</Grid>
 					</Grid>
 					<br></br>
 					<br></br>
+					<Typography variant="body1" color="error">
+						{formState.errorMsg}
+					</Typography>
 					<Button
 						type="submit"
 						fullWidth
