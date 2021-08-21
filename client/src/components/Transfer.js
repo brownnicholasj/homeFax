@@ -48,7 +48,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Transfer(
-	{ user, homes, transfers, homeId, Street1, Street2, City, State, Zip },
+	{
+		user,
+		homes,
+		transfers,
+		homeId,
+		Street1,
+		Street2,
+		City,
+		State,
+		Zip,
+		setTransferModalOpen,
+	},
 	...props
 ) {
 	const { email, username, firstName, lastName } = Auth.getProfile().data;
@@ -87,6 +98,9 @@ function Transfer(
 
 		if (formState.transferEmail) {
 			try {
+				console.log('transferer :>> ', 'test');
+				console.log('receiver :>> ', formState.transferEmail);
+				console.log('homeId :>> ', homeId);
 				const mutationResponse = await createTransfer({
 					variables: {
 						transferer: email,
@@ -96,6 +110,7 @@ function Transfer(
 				});
 				if (mutationResponse) {
 					console.log(mutationResponse);
+					setTransferModalOpen(false);
 					// setSnack({
 					// 	status: true,
 					// 	message: `${formState.transferEmail} has been added to transfer`,
@@ -114,58 +129,53 @@ function Transfer(
 	};
 
 	const handleCancel = (event) => {
-		console.log('send user back to homes?');
+		setTransferModalOpen(false);
 	};
 
 	return (
 		<>
-			<Card key={'homeId'} className={classes.root} variant='outlined'>
+			<Card key={'homeId'} className={classes.root} variant="outlined">
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
 							<Typography
 								className={classes.title}
-								color='Primary'
+								color="Primary"
 								gutterBottom
-								align='center'
+								align="center"
 							>
 								<HomeIcon /> Transfer
-								<Typography color='textPrimary'>{formState.Street1}</Typography>
-								<Typography className={classes.pos} color='textPrimary'>
+								<Typography color="textPrimary">{formState.Street1}</Typography>
+								<Typography className={classes.pos} color="textPrimary">
 									{formState.Street2}
 								</Typography>
-								<Typography color='textPrimary' component='p'>
+								<Typography color="textPrimary" component="p">
 									{formState.City}, {formState.State} {formState.Zip}
 								</Typography>
 							</Typography>
 							<Grid item xs={12}>
 								<Box
-									display='flex'
-									justifyContent='center'
-									alignItems='center'
+									display="flex"
+									justifyContent="center"
+									alignItems="center"
 									xs={12}
 									md={2}
 									lg={3}
 								>
-									<TransferWithinAStationIcon fontSize='large' />
+									<TransferWithinAStationIcon fontSize="large" />
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<Box
-									display='flex'
-									justifyContent='center'
-									alignItems='center'
-									ml={2}
-								>
+								<Box display="flex" justifyContent="center" alignItems="center" ml={2}>
 									<Card>
 										<CardContent>
 											<TextField
-												name='transferEmail'
-												variant='standard'
+												name="transferEmail"
+												variant="standard"
 												fullWidth
-												id='transferEmail'
-												label='Email of Receiver'
-												defaultValue=''
+												id="transferEmail"
+												label="Email of Receiver"
+												defaultValue=""
 												onChange={handleChange}
 											/>
 										</CardContent>
@@ -173,15 +183,15 @@ function Transfer(
 								</Box>
 							</Grid>
 
-							<Box mx={3} paddingTop={2} alignItems='center'>
-								<Button variant='contained' color='secondary'>
-									<Typography variant='button' onClick={handleCancel}>
+							<Box mx={3} paddingTop={2} alignItems="center">
+								<Button variant="contained" color="secondary">
+									<Typography variant="button" onClick={handleCancel}>
 										Cancel
 									</Typography>
 								</Button>
 
-								<Button variant='contained' color='primary'>
-									<Typography variant='button' onClick={handleSubmit}>
+								<Button variant="contained" color="primary">
+									<Typography variant="button" onClick={handleSubmit}>
 										Save & Close
 									</Typography>
 								</Button>

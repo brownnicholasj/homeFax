@@ -67,7 +67,7 @@ const typeDefs = gql`
 		_id: ID!
 		transferer: [String]
 		receiver: [String]
-		home: String
+		home: ID!
 	}
 
 	type Query {

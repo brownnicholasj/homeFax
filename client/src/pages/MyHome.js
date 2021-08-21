@@ -214,7 +214,7 @@ function MyHome(props) {
 						</Grid>
 						{home.home?.areas.map((area, i) => (
 							<React.Fragment>
-								<Grid item xs={3}>
+								<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
 									<Card>
 										<CardHeader
 											action={
@@ -237,9 +237,7 @@ function MyHome(props) {
 										{expandedId !== i && (
 											<CardContent>
 												{area.attributes.length +
-													(area.attributes.length === 1
-														? ' attribute'
-														: ' attributes')}
+													(area.attributes.length === 1 ? ' attribute' : ' attributes')}
 											</CardContent>
 										)}
 										<Collapse in={expandedId === i}>
@@ -274,6 +272,12 @@ function MyHome(props) {
 														<br></br>
 														<Grid item xs={3}>
 															<Modal
+																style={{
+																	display: 'flex',
+																	justifyContent: 'center',
+																	alignContent: 'center',
+																	alignItems: 'center',
+																}}
 																onClose={() => setModalIndex(-1)}
 																open={modalIndex === j && expandedId === i}
 															>
@@ -296,12 +300,13 @@ function MyHome(props) {
 																		Add Detail
 																	</Link>
 																	<Modal
+																		style={{
+																			display: 'flex',
+																			justifyContent: 'center',
+																			alignItems: 'center',
+																		}}
 																		onClose={() => setDetailModalOpen(false)}
-																		open={
-																			detailModalOpen &&
-																			expandedId === i &&
-																			modalIndex === j
-																		}
+																		open={detailModalOpen && expandedId === i && modalIndex === j}
 																	>
 																		<AddDetail
 																			attributeName={attribute.type}
@@ -330,6 +335,12 @@ function MyHome(props) {
 															Add Attribute
 														</Button>
 														<Modal
+															style={{
+																display: 'flex',
+																justifyContent: 'center',
+																alignContent: 'center',
+																alignItems: 'center',
+															}}
 															onClose={() => setAttributeModalOpen(false)}
 															open={attributeModalOpen && expandedId === i}
 														>
@@ -360,15 +371,21 @@ function MyHome(props) {
 								</Grid>
 							</React.Fragment>
 						))}
-						<Grid item xs={3}>
+						<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
 							<Card>
-								<CardActionArea
-									onClick={handleAddAreaModal}
-									variant='contained'
-								>
+								<CardActionArea onClick={handleAddAreaModal} variant="contained">
 									Add Area
 								</CardActionArea>
-								<Modal onClose={() => setAreaModalOpen(false)} open={areaModalOpen}>
+								<Modal
+									style={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignContent: 'center',
+										alignItems: 'center',
+									}}
+									onClose={() => setAreaModalOpen(false)}
+									open={areaModalOpen}
+								>
 									<AddArea
 										setAreaModalOpen={setAreaModalOpen}
 										homeId={data.home._id}
@@ -377,18 +394,27 @@ function MyHome(props) {
 								</Modal>
 							</Card>
 						</Grid>
-						<Button
-							onClick={handleTransferModal}
-							variant='contained'
-							color='primary'
-						>
-							Transfer Home
-						</Button>
+						<Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+							<Button
+								onClick={handleTransferModal}
+								variant="contained"
+								color="primary"
+							>
+								Transfer Home
+							</Button>
+						</Grid>
 						<Modal
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								alignContent: 'center',
+							}}
 							onClose={() => setTransferModalOpen(false)}
 							open={transferModalOpen}
 						>
 							<Transfer
+								setTransferModalOpen={setTransferModalOpen}
 								homeId={data.home._id}
 								Street1={data.home.address.street1}
 								Street2={data.home.address.street2}
