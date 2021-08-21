@@ -33,7 +33,12 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function AddDetail({ attributeName, attributeId, setHome }) {
+export default function AddDetail({
+	attributeName,
+	attributeId,
+	setHome,
+	setDetailModalOpen,
+}) {
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
 	const [formState, setFormState] = useState({
@@ -70,6 +75,7 @@ export default function AddDetail({ attributeName, attributeId, setHome }) {
 					};
 					console.log('newHome :>> ', newHome);
 					setHome(newHome);
+					setDetailModalOpen(false);
 				}
 			} catch (e) {
 				console.log(e);

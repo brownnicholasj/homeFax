@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function AddArea({ homeId, setHome }) {
+export default function AddArea({ homeId, setHome, setAreaModalOpen }) {
 	// return <h1>Test</h1>;
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
@@ -70,6 +70,7 @@ export default function AddArea({ homeId, setHome }) {
 						},
 					};
 					setHome(newHome);
+					setAreaModalOpen(false);
 				}
 			} catch (e) {
 				console.log(e);

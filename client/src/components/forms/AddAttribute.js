@@ -36,7 +36,12 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function AddAttribute({ areaName, areaId, setHome }) {
+export default function AddAttribute({
+	areaName,
+	areaId,
+	setHome,
+	setAttributeModalOpen,
+}) {
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
 	const [formState, setFormState] = useState({ areaId: areaId, type: '' });
@@ -65,6 +70,7 @@ export default function AddAttribute({ areaName, areaId, setHome }) {
 					};
 					console.log('newHome :>> ', newHome);
 					setHome(newHome);
+					setAttributeModalOpen(false);
 				}
 			} catch (e) {
 				console.log(e);

@@ -294,6 +294,7 @@ function MyHome(props) {
 																			attributeName={attribute.type}
 																			attributeId={attribute._id}
 																			setHome={setHome}
+																			setDetailModalOpen={setDetailModalOpen}
 																		></AddDetail>
 																	</Modal>
 																</div>
@@ -323,6 +324,7 @@ function MyHome(props) {
 																areaName={area.name}
 																areaId={area._id}
 																setHome={setHome}
+																setAttributeModalOpen={setAttributeModalOpen}
 															></AddAttribute>
 														</Modal>
 													</Typography>
@@ -351,7 +353,11 @@ function MyHome(props) {
 									Add Area
 								</CardActionArea>
 								<Modal onClose={() => setAreaModalOpen(false)} open={areaModalOpen}>
-									<AddArea homeId={data.home._id} setHome={setHome}></AddArea>
+									<AddArea
+										setAreaModalOpen={setAreaModalOpen}
+										homeId={data.home._id}
+										setHome={setHome}
+									></AddArea>
 								</Modal>
 							</Card>
 						</Grid>
