@@ -15,6 +15,9 @@ import {
 
 import Snack from '../Snack';
 
+// This is for autocomplete testing.
+import { zipAutoComplete } from '../../utils/helpers';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function AddHome({ userId }) {
+export default function AddHome({ userId, handleNext, setHomeData }) {
     const classes = useStyles();
     const [snack, setSnack] = useState({ status: false, message: '' });
     const [formState, setFormState] = useState({ street1: '', street2: '', city: '', state: '', zip: '' });
@@ -51,9 +54,11 @@ export default function AddHome({ userId }) {
                 const mutationResponse = await addHome({
                     variables: {
                         address: formState,
+                        areas: []
                     },
                 });
                 if (mutationResponse) {
+                    setHomeData(mutationResponse.data.addHome);
                     const user = await assignHome({
                         variables: {
                             receiver: userId,
@@ -62,6 +67,7 @@ export default function AddHome({ userId }) {
                     });
                     console.log(user);
                     setSnack({ status: true, message: 'Home added' });
+                    handleNext();
                 }
             } catch (e) {
                 console.log(e);
@@ -75,6 +81,10 @@ export default function AddHome({ userId }) {
 			...formState,
 			[id]: value,
 		});
+        // This is from autocomplete testing.
+        // if (id === 'zip') {
+        //     const data = zipAutoComplete(value);
+        // }
 	};
 
 

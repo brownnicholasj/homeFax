@@ -67,8 +67,8 @@ function App(props) {
 						<Route exact path='/transfer'>
 							<PaperBase content={<Transfer></Transfer>}></PaperBase>
 						</Route>
-						<Route exact path='/friends'>
-							<PaperBase content={<Friends></Friends>}></PaperBase>
+						<Route exact path='/createHome'>
+							<PaperBase content={<Misc></Misc>}></PaperBase>
 						</Route>
 						<Route exact path='/zillow'>
 							<PaperBase content={<Zillow></Zillow>}></PaperBase>

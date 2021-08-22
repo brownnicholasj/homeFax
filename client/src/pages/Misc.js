@@ -8,6 +8,7 @@ import EditArea from '../components/forms/EditArea';
 import AddHome from '../components/forms/AddHome';
 import GenericList from '../components/GenericList';
 import HomeCard from '../components/HomeCard';
+import NewHome from '../components/NewHome';
 
 
 import Card from '../components/Card';
@@ -28,10 +29,6 @@ import {
 
 
 function Misc(props) {
-	const [state] = useStoreContext();
-	const { user, homes } = state;
-
-	console.log(homes);
 
 	// const homes = user.homes;	
 	// const testHome = user.homes[0];
@@ -52,6 +49,7 @@ function Misc(props) {
 	return (
 		<React.Fragment>
 				<div>
+					<NewHome />
 					{/* <AddDetail attributeName={testAttribute.type} attributeId={testAttribute._id}/> */}
 					{/* <EditDetail detailId={testDetail._id} detailKey={testDetail.key} detailValue={testDetail.value} detailDate={testDetail.date} /> */}
 					{/* <GenericList items={testAttribute.detail} itemsKey={'key'} />

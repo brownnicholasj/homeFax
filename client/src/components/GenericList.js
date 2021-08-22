@@ -6,12 +6,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 
-import KitchenIcon from '@material-ui/icons/Kitchen';
-import WeekendIcon from '@material-ui/icons/Weekend';
-import RestaurantIcon from '@material-ui/icons/Restaurant';
-import LocalBarIcon from '@material-ui/icons/LocalBar';
-import BuildIcon from '@material-ui/icons/Build';
-import WcIcon from '@material-ui/icons/Wc';
 import ListIcon from '@material-ui/icons/List';
 
 
@@ -50,7 +44,6 @@ export default function InteractiveList({ items, itemsKey, subItems, subItemsKey
                     secondary={subItems ? (
                       item[subItems].map((subItem, idx) => (
                         <span key={`subItem_${idx}`}>•{subItem[subItemsKey]} </span>
-                        // <span key={`subItem_${index}`}>{subItem[subItemsKey]}</span>
                       )
                     )) : (
                       null
