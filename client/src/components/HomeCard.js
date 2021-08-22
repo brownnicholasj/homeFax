@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import { useQuery } from '@apollo/client';
-import { QUERY_USER } from '../utils/queries';
 import HomeIcon from '@material-ui/icons/Home';
-import Modal from './Modal';
-import HomeList from './HomeList';
 
 const useStyles = makeStyles({
     root: {

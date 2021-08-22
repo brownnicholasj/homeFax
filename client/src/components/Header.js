@@ -14,10 +14,14 @@ import Badge from '@material-ui/core/Badge';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Auth from '../utils/auth';
 import { MenuItem, Menu } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+
+import HomeIcon from '@material-ui/icons/Home';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+
 // import Tab from '@material-ui/core/Tab';
 // import Tabs from '@material-ui/core/Tabs';
 
@@ -87,17 +91,29 @@ function Header(props) {
 							<Grid item>
 								{Auth.loggedIn() ? (
 									<Link
-										onClick={Auth.logout}
-										className={classes.link}
-										href='#'
-										variant='body2'
+									onClick={Auth.logout}
+									className={classes.link}
+									href='#'
+									variant='body2'
 									>
 										Logout
 									</Link>
 								) : (
 									<Link></Link>
-								)}
+									)}
 							</Grid>
+							{Auth.loggedIn() && (
+								<Grid item>
+									<Link href='/createHome'>
+										<Button
+											variant='contained'
+											>
+											<HomeIcon />
+											<AddCircleIcon />
+										</Button>
+									</Link>
+								</Grid>
+							)}
 							{Auth.loggedIn() && (
 								<Grid item>
 									<Tooltip
@@ -116,7 +132,7 @@ function Header(props) {
 							{Auth.loggedIn() && (
 								<Grid item>
 									<div>
-										<IconButton
+									<IconButton
 											aria-label='account of current user'
 											aria-controls='menu-appbar'
 											aria-haspopup='true'
