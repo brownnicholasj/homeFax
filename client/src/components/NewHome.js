@@ -147,23 +147,83 @@ export default function HorizontalLinearStepper() {
 						aria-labelledby="simple-modal-title"
 						aria-describedby="simple-modal-description"
 					>
-					<span>Here's the stuff</span>
+							<AddArea
+								setAreaModalOpen={setAreaModalOpen}
+								homeId={homeData._id}
+								setHomeData={setHomeData}
+							></AddArea>
 					</Modal>
-
 					{homeData.areas ? <GenericList items={homeData.areas} itemsKey={'name'} /> : null}
-				</div>
+          <div>
+            <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+              Back
+            </Button>
+            {isStepOptional(activeStep) && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSkip}
+                className={classes.button}
+              >
+                Skip
+              </Button>
+            )}
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleNext}
+              className={classes.button}
+            >
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </div>
+        </div>
+			) : (
+			  null
+		  )}
+			{activeStep === 2 ? (
+				<div>
+					<HomeCard home={homeData} />
+					{homeData.areas ? <GenericList items={homeData.areas} itemsKey={'name'} /> : null}
+          <div>
+            <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+              Back
+            </Button>
+            {isStepOptional(activeStep) && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSkip}
+                className={classes.button}
+              >
+                Skip
+              </Button>
+            )}
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleNext}
+              className={classes.button}
+            >
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </div>
+        </div>
 			) : (
 			  null
 		  )}
         {activeStep === steps.length ? (
           <div>
-			  <HomeCard />
-            <Typography className={classes.instructions}>
+    			  <HomeCard home={homeData} />
+            <span>ADD LINK TO MYHOMES SECTION</span>
+            {/* <Typography className={classes.instructions}>
               All steps completed - you&apos;re finished
             </Typography>
             <Button onClick={handleReset} className={classes.button}>
               Reset
-            </Button>
+            </Button> */}
           </div>
         ) : (
 			null
