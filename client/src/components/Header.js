@@ -108,8 +108,8 @@ function Header(props) {
 										<Button
 											variant='contained'
 											>
-											<HomeIcon />
 											<AddCircleIcon />
+											<HomeIcon />
 										</Button>
 									</Link>
 								</Grid>

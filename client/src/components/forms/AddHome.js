@@ -15,6 +15,9 @@ import {
 
 import Snack from '../Snack';
 
+// This is for autocomplete testing.
+import { zipAutoComplete } from '../../utils/helpers';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -78,6 +81,10 @@ export default function AddHome({ userId, handleNext, setHomeData }) {
 			...formState,
 			[id]: value,
 		});
+        // This is from autocomplete testing.
+        // if (id === 'zip') {
+        //     const data = zipAutoComplete(value);
+        // }
 	};
 
 

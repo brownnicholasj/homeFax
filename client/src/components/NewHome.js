@@ -6,7 +6,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Modal } from '@material-ui/core';
-
+import { Link } from 'react-router-dom';
 // Forms
 import AddHome from './forms/AddHome';
 import AddArea from './forms/AddArea';
@@ -129,18 +129,15 @@ export default function HorizontalLinearStepper() {
       </Stepper>
       <div>
 		  {activeStep === 0 ? (
-			  <AddHome userId={userId} handleNext={handleNext} setHomeData={setHomeData} />
+        <div className={classes.instructions}>
+          <AddHome userId={userId} handleNext={handleNext} setHomeData={setHomeData} />
+        </div>
 		  ) : (
 			  null
 		  )}
 			{activeStep === 1 ? (
-				<div>
+				<div className={classes.instructions}>
 					<HomeCard home={homeData} />
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={handleAddAreaModal}
-						>Add Area</Button>
 					<Modal
 						open={areaModalOpen}
 						onClose={handleAddAreaModal}
@@ -153,29 +150,24 @@ export default function HorizontalLinearStepper() {
 								setHomeData={setHomeData}
 							></AddArea>
 					</Modal>
-					{homeData.areas ? <GenericList items={homeData.areas} itemsKey={'name'} /> : null}
-          <div>
-            <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-              Back
+          <div className={classes.instructions}>
+            {homeData.areas ? <GenericList items={homeData.areas} itemsKey={'name'} /> : null}
+          </div>
+          <div className={classes.instructions}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddAreaModal}
+              className={classes.button}
+              >Add Area
             </Button>
-            {isStepOptional(activeStep) && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSkip}
-                className={classes.button}
-              >
-                Skip
-              </Button>
-            )}
-
             <Button
               variant="contained"
               color="primary"
               onClick={handleNext}
               className={classes.button}
-            >
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              >
+              Next
             </Button>
           </div>
         </div>
@@ -183,31 +175,23 @@ export default function HorizontalLinearStepper() {
 			  null
 		  )}
 			{activeStep === 2 ? (
-				<div>
+				<div className={classes.instructions}>
 					<HomeCard home={homeData} />
-					{homeData.areas ? <GenericList items={homeData.areas} itemsKey={'name'} /> : null}
+          <div className={classes.instructions}>
+            {homeData.areas ? <GenericList items={homeData.areas} itemsKey={'name'} /> : null}
+          </div>
           <div>
             <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
               Back
             </Button>
-            {isStepOptional(activeStep) && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSkip}
-                className={classes.button}
-              >
-                Skip
-              </Button>
-            )}
-
             <Button
               variant="contained"
               color="primary"
               onClick={handleNext}
               className={classes.button}
+              href={`/myhomes/${homeData._id}`}
             >
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              Take me to My Home
             </Button>
           </div>
         </div>
@@ -227,34 +211,6 @@ export default function HorizontalLinearStepper() {
           </div>
         ) : (
 			null
-        //   <div>
-		// 	  {/* <div className={classes.instructions}>{getStepContent(activeStep)}</div> */}
-        //     {/* <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography> */}
-        //     <div>
-        //       <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-        //         Back
-        //       </Button>
-        //       {isStepOptional(activeStep) && (
-        //         <Button
-        //           variant="contained"
-        //           color="primary"
-        //           onClick={handleSkip}
-        //           className={classes.button}
-        //         >
-        //           Skip
-        //         </Button>
-        //       )}
-
-        //       <Button
-        //         variant="contained"
-        //         color="primary"
-        //         onClick={handleNext}
-        //         className={classes.button}
-        //       >
-        //         {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-        //       </Button>
-        //     </div>
-        //   </div>
         )}
       </div>
     </div>
