@@ -176,11 +176,14 @@ export const EDIT_AREA = gql`
 				zip
 			}
 			areas {
+				_id
 				name
 				icon
 				attributes {
+					_id
 					type
 					detail {
+						_id
 						key
 						value
 						date
@@ -270,6 +273,7 @@ export const EDIT_ATTRIBUTE = gql`
 					_id
 					type
 					detail {
+						_id
 						key
 						value
 						date
@@ -359,6 +363,7 @@ export const EDIT_DETAIL = gql`
 					_id
 					type
 					detail {
+						_id
 						key
 						value
 						date
