@@ -20,6 +20,7 @@ import { LOGIN } from '../utils/mutations';
 import { useStoreContext } from '../utils/GlobalState';
 import { UPDATE_USER, UPDATE_HOMES } from '../utils/actions';
 import { useHistory } from 'react-router-dom';
+import { useTheme } from '@material-ui/core';
 
 function Copyright() {
 	return (
@@ -55,18 +56,13 @@ const useStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
-	modal: {
-		width: '50%',
-		justifyContent: 'center',
-		backgroundColor: theme.palette.background.paper,
-		borderRadius: '1rem',
-	},
 }));
 
 export default function SignIn() {
 	const classes = useStyles();
 	const history = useHistory();
 	const [state, dispatch] = useStoreContext();
+	const theme = useTheme();
 
 	const handleOpen = () => {
 		setOpen(true);
@@ -79,9 +75,18 @@ export default function SignIn() {
 	const [open, setOpen] = useState(false);
 
 	const modal = (
-		<div className={classes.modal}>
-			<SignUp></SignUp>
-		</div>
+		<Grid
+			container
+			style={{
+				justifyContent: 'center',
+				backgroundColor: theme.palette.background.paper,
+				borderRadius: '1rem',
+			}}
+		>
+			<Grid item xs={6}>
+				<SignUp></SignUp>
+			</Grid>
+		</Grid>
 	);
 
 	const [formState, setFormState] = useState({
@@ -208,7 +213,22 @@ export default function SignIn() {
 									justifyContent: 'center',
 								}}
 							>
-								{modal}
+								<Grid
+									xs={10}
+									md={8}
+									container
+									style={{
+										justifyContent: 'center',
+										backgroundColor: theme.palette.background.paper,
+										borderRadius: '1rem',
+										maxHeight: '80vh',
+										overflowY: 'auto',
+									}}
+								>
+									<Grid item style={{ maxHeight: '80vh', overflowY: 'auto' }} xs={12}>
+										<SignUp></SignUp>
+									</Grid>
+								</Grid>
 							</Modal>
 						</Grid>
 					</Grid>

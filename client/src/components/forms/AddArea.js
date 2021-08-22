@@ -88,7 +88,10 @@ export default function AddArea({ homeId, setHome, setAreaModalOpen }) {
 
 	return (
 		<>
-			<Card className={classes.root} variant="outlined">
+			<Card
+				// className={classes.root}
+				variant="outlined"
+			>
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
