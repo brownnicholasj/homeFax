@@ -16,13 +16,18 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Auth from '../utils/auth';
-import { MenuItem, Menu } from '@material-ui/core';
+import { MenuItem, Menu, Modal } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import TransferAccept from './TransferAccept';
+import { QUERY_GET_HOME } from '../utils/queries';
+import { useLazyQuery } from '@apollo/client';
 
 import { Link } from 'react-router-dom';
 
 import HomeIcon from '@material-ui/icons/Home';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { useStoreContext } from '../utils/GlobalState';
+
 
 // import Tab from '@material-ui/core/Tab';
 // import Tabs from '@material-ui/core/Tabs';
@@ -55,6 +60,36 @@ const styles = (theme) => ({
 
 function Header(props) {
 	const { classes, onDrawerToggle, transferCount } = props;
+	const [state, dispatch] = useStoreContext();
+	// const [getTransfer, { data }] = useLazyQuery(QUERY_GET_HOME);
+	console.log(state.transfers)
+	let transferHome;
+	if (state.transfers.length) {
+		const transferHomeId = state.transfers[0].home;
+		console.log(transferHomeId)
+		// getTransfer({ variables: { homeId: transferHomeId } });
+		// transferHome = data?.;
+		// console.log(transferHome)
+	} else {
+		transferHome = {}
+	};
+
+	
+	const [transferAcceptModalOpen, setTransferAcceptModalOpen] = useState(false);
+
+
+	// const transferAddress = data;
+	// console.log('header data >> ' + transferAddress);
+
+	// var transferHome = '';
+	// if (transferCount) {
+	// 	transferHome = transferCount[0].home;
+	// }
+
+	const handleTransferAcceptModal = () => {
+		setTransferAcceptModalOpen(true);
+	};
+
 	const [anchorEl, setAnchorEl] = useState(null);
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -93,10 +128,10 @@ function Header(props) {
 							<Grid item>
 								{Auth.loggedIn() ? (
 									<Link
-									onClick={Auth.logout}
-									// className={classes.link}
-									to='#'
-									variant='body2'
+										onClick={Auth.logout}
+										className={classes.link}
+										href='#'
+										variant='body2'
 									>
 										<span className={classes.link}>Logout</span>
 									</Link>
@@ -120,21 +155,45 @@ function Header(props) {
 								<Grid item>
 									<Tooltip
 										title={
-											transferCount > 0 ? 'Pending Transfer' : 'No Transfers'
+											transferCount.length > 0
+												? 'Pending Transfer'
+												: 'No Transfers'
 										}
 									>
-										<IconButton color='inherit'>
-											<Badge badgeContent={transferCount} color='secondary'>
+										<IconButton
+											style={{ color: '#fff' }}
+											onClick={handleTransferAcceptModal}
+										>
+											<Badge
+												badgeContent={transferCount}
+												color='secondary'
+											>
 												<NotificationsIcon />
 											</Badge>
 										</IconButton>
 									</Tooltip>
 								</Grid>
 							)}
+							<Modal
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignContent: 'center',
+									alignItems: 'center',
+								}}
+								onClose={() => setTransferAcceptModalOpen(false)}
+								open={transferAcceptModalOpen}
+							>
+								<TransferAccept
+									home={transferHome}
+									transfer={state.transfers[0]}
+									setTransferModalOpen={setTransferAcceptModalOpen}
+								></TransferAccept>
+							</Modal>
 							{Auth.loggedIn() && (
 								<Grid item>
 									<div>
-									<IconButton
+										<IconButton
 											aria-label='account of current user'
 											aria-controls='menu-appbar'
 											aria-haspopup='true'

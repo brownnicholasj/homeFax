@@ -247,23 +247,18 @@ const resolvers = {
 			return home;
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
-			console.log('transferer :>> ', transferer);
-			console.log('receiver :>> ', receiver);
-			console.log('home :>> ', home);
-			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
-			console.log('hit');
-			if (transferer) {
-				await User.findByIdAndUpdate(transferer, {
-					$pull: { homes: home },
-				});
-			}
-			if (receiver) {
-				await User.findByIdAndUpdate(receiver, {
+			await User.findOneAndUpdate({ email: transferer},
+				{
+				$pull: { homes: home },
+			});
+			const newHomeUser = await User.findOneAndUpdate({ email: receiver }, {
 					$addToSet: { homes: home },
-				});
-			}
-			const user = await User.findById(context.user._id).populate('homes');
-			return user;
+				}).populate('homes');
+			
+			await Transfer.findOneAndDelete({ home: home });
+			const transfers = await Transfer.find({ receiver: receiver });
+
+			return { newHomeUser, transfers };
 
 			// CODE USED FOR TESTING IN INSOMNIA - PLEASE DON'T DELETE.
 			// let transferUser;
@@ -318,8 +313,6 @@ const resolvers = {
 				throw new AuthenticationError('Incorrect credentials');
 			}
 			const token = signToken(user);
-			console.log(user)
-			// const transfers = [{ _id: '4684as635f4a68s4ef354as6f', transferer: ['bryan@email.com'], receiver: ['pam@gmail.com'], home: '46+a4sd6f846as4d64f68as7df'}];
 			const receiverEmail = user.email;
 			const transfers = await Transfer.find({ receiver: receiverEmail });
 			return { token, user, transfers };
