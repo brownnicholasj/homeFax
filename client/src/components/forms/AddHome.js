@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Divider, Card, CardContent, Button, Grid, TextField, Select, MenuItem, InputLabel } from '@material-ui/core';
-
+import Snack from '../Snack';
 import { useMutation } from '@apollo/client';
 import {
     ADD_HOME,
     TRANSFER_HOME
  } from '../../utils/mutations';
-
-import Snack from '../Snack';
+ import { useStoreContext } from '../../utils/GlobalState';
+ import { ADD_HOME_TO_USER } from '../../utils/actions';
+ 
 
 // This is for autocomplete testing.
 import { zipAutoComplete } from '../../utils/helpers';
@@ -278,6 +279,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function AddHome({ userId, handleNext, setHomeData }) {
+    const [state, dispatch] = useStoreContext();
     const classes = useStyles();
     const [snack, setSnack] = useState({ status: false, message: '' });
     const [formState, setFormState] = useState({ street1: '', street2: '', city: '', state: '', zip: '' });
@@ -295,11 +297,13 @@ export default function AddHome({ userId, handleNext, setHomeData }) {
                     },
                 });
                 if (mutationResponse) {
-                    setHomeData(mutationResponse.data.addHome);
+                    const stateHome = mutationResponse.data.addHome;
+                    dispatch({ type: ADD_HOME_TO_USER, home: stateHome })
+                    setHomeData(stateHome);
                     const user = await assignHome({
                         variables: {
                             receiver: userId,
-                            home: mutationResponse.data.addHome._id
+                            home: stateHome._id
                         }
                     });
                     console.log(user);

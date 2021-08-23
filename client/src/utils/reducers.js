@@ -1,26 +1,56 @@
 import { useReducer } from 'react';
 import {
   UPDATE_USER,
-  UPDATE_TRANSFERS
+  UPDATE_HOME,
+  UPDATE_TRANSFERS,
+  ADD_HOME_TO_USER
 } from './actions';
 import { idbPromise } from './helpers'
 
-// The reducer is a function that accepts the current state and an action. It returns a new state based on that action.
 export const reducer = (state, action) => {
   switch (action.type) {
-    // Returns a copy of state with an update products array. We use the action.products property and spread it's contents into the new array.
     case UPDATE_USER:
-      const updatedState = {
+      const updatedUserState = {
         ...state,
         user: action.user,
         homes: action.user.homes
       }
+      idbPromise('user', 'clear');
       idbPromise('user', 'put', action.user);
       action.user.homes.forEach((home) => {
         idbPromise('homes', 'put', home);
       });
-      return updatedState;
+      return updatedUserState;
     
+    case UPDATE_HOME:
+      const updatedHomeArray = state.homes.map((home) => {
+        if (home._id == action.home._id) {
+          return action.home;
+        };
+        return home;
+      });
+      const updatedHomeState = {
+        ...state,
+        homes: updatedHomeArray
+      };
+      updatedHomeArray.forEach((home) => {
+        idbPromise('homes', 'put', home)
+      });
+      return updatedHomeState;
+          
+    case ADD_HOME_TO_USER:
+      const addedHomeArray = state.homes;
+      addedHomeArray.push(action.home);
+
+      const addedHomeState = {
+        ...state,
+        homes: addedHomeArray
+      };
+      addedHomeArray.forEach((home) => {
+        idbPromise('homes', 'put', home)
+      });
+      return addedHomeState;
+            
     case UPDATE_TRANSFERS:
       const updatedUserTransfers = {
         ...state,
@@ -30,7 +60,8 @@ export const reducer = (state, action) => {
         idbPromise('transfers', 'put', transfer)
       });
       return updatedUserTransfers;
-		default:
+      
+    default:
 			return state;
 	}
 };

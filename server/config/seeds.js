@@ -349,8 +349,6 @@ db.once('open', async () => {
 
 	console.log('homes seeded');
 
-	await User.deleteMany();
-
 	await User.create(
 		//OWNS HOME[0] IN TOPEKA KS -- SIMPLE EXAMPLE
 		{

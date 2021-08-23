@@ -6,10 +6,6 @@ import { MenuItem } from '@material-ui/core';
 
 // CODE ADDED FOR USE STATE TESTING
 import { useStoreContext } from '../utils/GlobalState';
-import Auth from '../utils/auth';
-import { UPDATE_TRANSFERS } from '../utils/actions';
-import { useQuery } from '@apollo/client';
-import { QUERY_ALL_USER_TRANSFERS } from '../utils/queries';
 
 function Home() {
 	const [state, dispatch] = useStoreContext();

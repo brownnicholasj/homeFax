@@ -1,26 +1,14 @@
-import React from 'react';
-import { CardActionArea, CardContent, Typography } from '@material-ui/core';
-import { Button } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Divider, List, useTheme, CardActionArea, CardContent, Typography, Button, Card, Grid, CardHeader, Collapse, Link, Modal, makeStyles, IconButton, Tooltip, Box } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_GET_HOME } from '../utils/queries';
-import { Card } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
-import { CardHeader } from '@material-ui/core';
-import { Collapse } from '@material-ui/core';
-import { useState } from 'react';
-import { Link } from '@material-ui/core';
-import { Modal } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core';
 import AddArea from '../components/forms/AddArea';
 import AddAttribute from '../components/forms/AddAttribute';
 import AddDetail from '../components/forms/AddDetail';
 import Transfer from '../components/Transfer';
-import { Box } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { IconButton } from '@material-ui/core';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import { Tooltip } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {
@@ -29,15 +17,16 @@ import {
 	DELETE_DETAIL,
 } from '../utils/mutations';
 import Snack from '../components/Snack';
-import { Divider } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { List } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import { useTheme } from '@material-ui/core';
 import EditAttribute from '../components/forms/EditAttribute';
 import EditDetail from '../components/forms/EditDetail';
 import SettingsIcon from '@material-ui/icons/Settings';
 import EditArea from '../components/forms/EditArea';
+
+import { useStoreContext } from '../utils/GlobalState';
+import { UPDATE_HOME } from '../utils/actions';
+
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -61,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MyHome(props) {
+	const [state, dispatch] = useStoreContext();
 	const classes = useStyles();
 	const { homeid } = useParams();
 	const [expandedId, setExpandedId] = useState(-1);
@@ -131,6 +121,8 @@ function MyHome(props) {
 			});
 
 			if (mutationResponse) {
+				const stateHome = mutationResponse.data.deleteArea;
+				dispatch({ type: UPDATE_HOME, home: stateHome })
 				const newHomeAfterDelete = {
 					home: {
 						...mutationResponse.data.deleteArea,
@@ -153,6 +145,8 @@ function MyHome(props) {
 			});
 
 			if (mutationResponse) {
+				const stateHome = mutationResponse.data.deleteAttribute;
+				dispatch({ type: UPDATE_HOME, home: stateHome })
 				const newHomeAfterDelete = {
 					home: {
 						...mutationResponse.data.deleteAttribute,
@@ -175,6 +169,8 @@ function MyHome(props) {
 			});
 
 			if (mutationResponse) {
+				const stateHome = mutationResponse.data.deleteDetail;
+				dispatch({ type: UPDATE_HOME, home: stateHome })
 				const newHomeAfterDelete = {
 					home: {
 						...mutationResponse.data.deleteDetail,
