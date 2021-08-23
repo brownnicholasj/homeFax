@@ -9,6 +9,9 @@ import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useMutation } from '@apollo/client';
 import { EDIT_DETAIL } from '../../utils/mutations';
+import { useStoreContext } from '../../utils/GlobalState';
+import { UPDATE_HOME } from '../../utils/actions';
+
 
 import Snack from '../Snack';
 
@@ -41,10 +44,7 @@ export default function EditDetail({
 	setHome,
 	setDetailIndex,
 }) {
-	console.log('detailId :>> ', detailId);
-	console.log('detailKey :>> ', detailKey);
-	console.log('detailValue :>> ', detailValue);
-	console.log('detailDate :>> ', detailDate);
+	const [state, dispatch] = useStoreContext();
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
 	const [formState, setFormState] = useState({
@@ -67,6 +67,8 @@ export default function EditDetail({
 					},
 				});
 				if (mutationResponse) {
+					const stateHome = mutationResponse.data.editDetail;
+					dispatch({ type: UPDATE_HOME, home: stateHome})
 					const newHome = {
 						home: {
 							...mutationResponse.data.editDetail,

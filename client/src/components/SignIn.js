@@ -1,26 +1,27 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { Modal, InputAdornment, IconButton } from '@material-ui/core';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { useState } from 'react';
-import SignUp from '../components/SignUp';
-import { useMutation } from '@apollo/client';
+import React, { useState } from 'react';
+import {
+	Avatar,
+	Button,
+	CssBaseline,
+	TextField,
+	Link,
+	Grid,
+	Typography,
+	Modal,
+	InputAdornment,
+	IconButton,
+	useTheme,
+	makeStyles
+ } from '@material-ui/core';
+import { LockOutlined, Visibility, VisibilityOff } from '@material-ui/icons';
+import { useMutation, useQuery } from '@apollo/client';
 import Auth from '../utils/auth';
 import { LOGIN } from '../utils/mutations';
 import { useStoreContext } from '../utils/GlobalState';
-import { UPDATE_USER, UPDATE_HOMES } from '../utils/actions';
+import { UPDATE_USER, UPDATE_TRANSFERS } from '../utils/actions';
 import { useHistory } from 'react-router-dom';
-import { useTheme } from '@material-ui/core';
+import SignUp from '../components/SignUp';
+
 
 function Copyright() {
 	return (
@@ -99,26 +100,27 @@ export default function SignIn() {
 	const handleClickShowPassword = () => setShowPassword(!showPassword);
 	const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
+
 	const [login] = useMutation(LOGIN);
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
-		try {
-			const mutationResponse = await login({
-				variables: {
-					identifier: formState.identifier.toLowerCase(),
-					password: formState.password,
-				},
-			});
-			const { user, token } = mutationResponse.data.login;
-			dispatch({ type: UPDATE_USER, user });
-
-			Auth.login(token);
-			history.push('/home');
-		} catch (e) {
-			setFormState({ errorMsg: 'Incorrect Credentials' });
-			console.log(e);
-		}
+			try {
+				const mutationResponse = await login({
+					variables: {
+						identifier: formState.identifier.toLowerCase(),
+						password: formState.password,
+					},
+				});
+				const { user, token, transfers } = mutationResponse.data.login;
+				dispatch({ type: UPDATE_USER, user });
+				dispatch({ type: UPDATE_TRANSFERS, transfers });
+				Auth.login(token);
+				history.push('/home');
+			} catch (e) {
+				setFormState({ errorMsg: 'Incorrect Credentials' });
+				console.log(e);
+			}
 	};
 
 	const handleChange = (event) => {
@@ -135,7 +137,7 @@ export default function SignIn() {
 
 			<div className={classes.paper}>
 				<Avatar className={classes.avatar}>
-					<LockOutlinedIcon />
+					<LockOutlined />
 				</Avatar>
 				<Typography component="h1" variant="h5">
 					Sign in
@@ -214,8 +216,8 @@ export default function SignIn() {
 								}}
 							>
 								<Grid
-									xs={10}
-									md={8}
+									// xs={10}
+									// md={8}
 									container
 									style={{
 										justifyContent: 'center',

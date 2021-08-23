@@ -4,8 +4,29 @@ export const LOGIN = gql`
 	mutation login($identifier: String!, $password: String!) {
 		login(identifier: $identifier, password: $password) {
 			token
+			transfers {
+				_id
+				transferer
+				receiver
+				home {
+					_id
+					address {
+						_id
+						street1
+						street2
+						city
+						state
+						zip
+					}
+				}
+			}
 			user {
 				_id
+				firstName
+				lastName
+				username
+				email
+				dob
 				homes {
 					_id
 					address {
@@ -120,16 +141,6 @@ export const DELETE_HOME = gql`
 	mutation DeleteHome($homeId: ID!) {
 		deleteHome(homeId: $homeId) {
 			_id
-		}
-	}
-`;
-
-export const TRANSFER_HOME = gql`
-	mutation TransferHome($receiver: ID, $home: ID!) {
-		transferHome(receiver: $receiver, home: $home) {
-			_id
-			firstName
-			lastName
 		}
 	}
 `;
@@ -410,9 +421,76 @@ export const CREATE_TRANSFER = gql`
 			_id
 			transferer
 			receiver
-			home
+			home {
+				_id
+				address {
+					_id
+					street1
+					street2
+					city
+					state
+					zip
+				}
+			}
 		}
 	}
+`;
+
+export const TRANSFER_HOME = gql`
+mutation TransferHome($transferer: String, $receiver: String, $home: ID!) {
+    transferHome(transferer: $transferer, receiver: $receiver, home: $home) {
+		user {
+			_id
+			firstName
+			lastName
+			username
+			email
+			dob
+			homes {
+				_id
+				address {
+					_id
+					street1
+					street2
+					city
+					state
+					zip
+				}
+				areas {
+					_id
+					name
+					icon
+					attributes {
+						_id
+						type
+						detail {
+							_id
+							key
+							value
+							date
+						}
+					}
+				}
+			}
+		}
+		transfers{
+			_id
+			transferer
+			receiver
+			home {
+				_id
+				address {
+					_id
+					street1
+					street2
+					city
+					state
+					zip
+				}
+			}
+		}
+    }
+  }
 `;
 
 export const EDIT_TRANSFER = gql`

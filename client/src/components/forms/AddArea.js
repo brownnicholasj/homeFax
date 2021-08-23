@@ -9,6 +9,9 @@ import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useMutation } from '@apollo/client';
 import { ADD_AREA } from '../../utils/mutations';
+import { useStoreContext } from '../../utils/GlobalState';
+import { UPDATE_HOME } from '../../utils/actions';
+
 
 import Snack from '../Snack';
 
@@ -34,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AddArea({ homeId, setHome, setHomeData, setAreaModalOpen }) {
-	// return <h1>Test</h1>;
+	const [state, dispatch] = useStoreContext();
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
 	const [formState, setFormState] = useState({
@@ -57,8 +60,10 @@ export default function AddArea({ homeId, setHome, setHomeData, setAreaModalOpen
 					},
 				});
 				if (mutationResponse) {
+					const stateHome = mutationResponse.data.addArea;
+					dispatch({ type: UPDATE_HOME, home: stateHome })
 					if (setHomeData) {
-						setHomeData(mutationResponse.data.addArea);
+						setHomeData(stateHome);
 					}
 					setSnack({
 						status: true,

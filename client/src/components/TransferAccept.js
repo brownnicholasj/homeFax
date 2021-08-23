@@ -16,6 +16,8 @@ import { red } from '@material-ui/core/colors';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import { TRANSFER_HOME } from '../utils/mutations';
 import HomeCard from './HomeCard';
+import { useStoreContext } from '../utils/GlobalState';
+import { UPDATE_TRANSFERS, UPDATE_USER } from '../utils/actions';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -40,47 +42,36 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function TransferAccept({ home, setTransferModalOpen }) {
-	const { email } = Auth.getProfile().data;
-
+function TransferAccept({ home, transfer, setTransferModalOpen }) {
 	const classes = useStyles();
-	const [formState, setFormState] = useState({
-		transferEmail: '',
-	});
+	const [state, dispatch] = useStoreContext();
 	// const [snack, setSnack] = useState({ status: false, message: '' });
 	const [acceptTransfer, { error }] = useMutation(TRANSFER_HOME);
 
-	if (home) {
-		console.log(home);
-	}
-
-	// NEED TO CATCH THE INPUT FROM SUBMIT
-	// const handleChange = (event) => {
-	// 	const { id, value } = event.target;
-	// 	setFormState({
-	// 		...formState,
-	// 		[id]: value,
-	// 	});
-	// };
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			console.log('transferer :>> ', 'test');
-			console.log('receiver :>> ', formState.transferEmail);
-			console.log('homeId :>> ', home._id);
+			console.log('transferer :>> ', transfer.transferer[0]);
+			console.log('receiver :>> ', transfer.receiver[0]);
+			console.log('homeId :>> ', transfer.home._id);
 			const mutationResponse = await acceptTransfer({
 				variables: {
-					receiver: email,
-					home: home.home._id,
+					transferer: transfer.transferer[0],
+					receiver: transfer.receiver[0],
+					home: transfer.home._id,
 				},
 			});
 			if (mutationResponse) {
-				console.log(mutationResponse);
+				const stateTransfers = mutationResponse.data.transferHome.transfers;
+				const stateUser = mutationResponse.data.transferHome.user;
+				console.log(stateUser);
 				setTransferModalOpen(false);
+				dispatch({ type: UPDATE_TRANSFERS, transfers: stateTransfers });
+				dispatch({ type: UPDATE_USER, user: stateUser });
 				// setSnack({
 				// 	status: true,
-				// 	message: `${formState.transferEmail} has been added to transfer`,
+				// 	message: `Welcome to your new home! ${transfer.transferer[0]} has been removed.`,
 				// });
 			}
 		} catch (e) {
@@ -98,8 +89,14 @@ function TransferAccept({ home, setTransferModalOpen }) {
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
-							{home ? <h3>Transfer</h3> : <h3>No Homes</h3>}
-							{home ? <HomeCard home={home.home} /> : ''}
+							{transfer ? (
+								<div>
+									<h3>Transfer</h3>
+									<HomeCard home={home} />
+								</div>
+							) : (
+								<h3>No Homes</h3>
+							)}
 							<Grid item xs={12}>
 								<Box
 									display='flex'

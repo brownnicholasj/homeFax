@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import { Divider } from '@material-ui/core';
-
-import TextField from '@material-ui/core/TextField';
-import { useQuery, useMutation } from '@apollo/client';
+import { Card, CardContent, Button, Grid, Divider, TextField } from '@material-ui/core';
+import { useMutation } from '@apollo/client';
 import { ADD_DETAIL } from '../../utils/mutations';
-
 import Snack from '../Snack';
+
+import { useStoreContext } from '../../utils/GlobalState';
+import { UPDATE_HOME } from '../../utils/actions';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -44,6 +40,7 @@ export default function AddDetail({
 	setHome,
 	setDetailModalOpen,
 }) {
+	const [state, dispatch] = useStoreContext();
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
 	const [formState, setFormState] = useState({
@@ -68,7 +65,8 @@ export default function AddDetail({
 					},
 				});
 				if (mutationResponse) {
-					console.log(mutationResponse);
+					const stateHome = mutationResponse.data.addDetail;
+					dispatch({ type: UPDATE_HOME, home: stateHome})
 					setSnack({
 						status: true,
 						message: `${formState.key} has been added to ${attributeName}`,
