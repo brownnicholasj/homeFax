@@ -254,10 +254,11 @@ const resolvers = {
 				{
 				$pull: { homes: home },
 			});
-			const newHomeUser = await User.findOneAndUpdate(
+			await User.findOneAndUpdate(
 				{ email: receiver },
 				{ $addToSet: { homes: home } },
-				{ new: true }).populate('homes');
+			);
+			const newHomeUser = User.findOne({ email: receiver }).populate('homes');
 			console.log(newHomeUser)
 
 			await Transfer.findOneAndDelete({ 'home._id': home._id });

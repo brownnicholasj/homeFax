@@ -72,7 +72,7 @@ function Header(props) {
 
 
 	const handleTransferAcceptModal = () => {
-		setTransferAcceptModalOpen(true);
+		setTransferAcceptModalOpen(!transferAcceptModalOpen);
 	};
 
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -166,7 +166,7 @@ function Header(props) {
 									alignContent: 'center',
 									alignItems: 'center',
 								}}
-								onClose={() => setTransferAcceptModalOpen(false)}
+								onClose={handleTransferAcceptModal}
 								open={transferAcceptModalOpen}
 							>
 								<TransferAccept

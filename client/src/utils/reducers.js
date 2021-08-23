@@ -56,6 +56,7 @@ export const reducer = (state, action) => {
         ...state,
         transfers: action.transfers
       };
+      idbPromise('transfers', 'clear');
       action.transfers.forEach((transfer) => {
         idbPromise('transfers', 'put', transfer)
       });

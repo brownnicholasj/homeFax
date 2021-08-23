@@ -16,6 +16,8 @@ import { red } from '@material-ui/core/colors';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import { TRANSFER_HOME } from '../utils/mutations';
 import HomeCard from './HomeCard';
+import { useStoreContext } from '../utils/GlobalState';
+import { UPDATE_TRANSFERS, ADD_HOME_TO_USER } from '../utils/actions';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -41,23 +43,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TransferAccept({ home, transfer, setTransferModalOpen }) {
-	const { email } = Auth.getProfile().data;
-
 	const classes = useStyles();
-	const [formState, setFormState] = useState({
-		transferEmail: '',
-	});
+	const [state, dispatch] = useStoreContext();
 	// const [snack, setSnack] = useState({ status: false, message: '' });
 	const [acceptTransfer, { error }] = useMutation(TRANSFER_HOME);
 
-	// NEED TO CATCH THE INPUT FROM SUBMIT
-	// const handleChange = (event) => {
-	// 	const { id, value } = event.target;
-	// 	setFormState({
-	// 		...formState,
-	// 		[id]: value,
-	// 	});
-	// };
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -73,11 +63,13 @@ function TransferAccept({ home, transfer, setTransferModalOpen }) {
 				},
 			});
 			if (mutationResponse) {
-				console.log(mutationResponse);
+				const stateTransfers = mutationResponse.data.transferHome.transfers;
 				setTransferModalOpen(false);
+				dispatch({ type: UPDATE_TRANSFERS, transfers: stateTransfers });
+				// dispatch({ type: ADD_HOME_TO_USER, transfers: stateTransfers });
 				// setSnack({
 				// 	status: true,
-				// 	message: `${formState.transferEmail} has been added to transfer`,
+				// 	message: `Welcome to your new home! ${transfer.transferer[0]} has been removed.`,
 				// });
 			}
 		} catch (e) {
@@ -95,8 +87,14 @@ function TransferAccept({ home, transfer, setTransferModalOpen }) {
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
-							{home ? <h3>Transfer</h3> : <h3>No Homes</h3>}
-							{home ? <HomeCard home={home} /> : ''}
+							{transfer ? (
+								<div>
+									<h3>Transfer</h3>
+									<HomeCard home={home} />
+								</div>
+							) : (
+								<h3>No Homes</h3>
+							)}
 							<Grid item xs={12}>
 								<Box
 									display='flex'
