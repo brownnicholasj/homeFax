@@ -267,7 +267,7 @@ const resolvers = {
 			await Transfer.findOneAndDelete({ 'home._id': home._id });
 			const transfers = await Transfer.find({ receiver: receiver }).populate('home');
 
-			return { newHomeUser, transfers };
+			return { user: newHomeUser, transfers };
 
 			// CODE USED FOR TESTING IN INSOMNIA - PLEASE DON'T DELETE.
 			// let transferUser;

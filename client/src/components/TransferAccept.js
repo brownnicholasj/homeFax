@@ -17,7 +17,7 @@ import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStatio
 import { TRANSFER_HOME } from '../utils/mutations';
 import HomeCard from './HomeCard';
 import { useStoreContext } from '../utils/GlobalState';
-import { UPDATE_TRANSFERS, ADD_HOME_TO_USER } from '../utils/actions';
+import { UPDATE_TRANSFERS, UPDATE_USER } from '../utils/actions';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -65,10 +65,10 @@ function TransferAccept({ home, transfer, setTransferModalOpen }) {
 			if (mutationResponse) {
 				const stateTransfers = mutationResponse.data.transferHome.transfers;
 				const stateUser = mutationResponse.data.transferHome.user;
+				console.log(stateUser);
 				setTransferModalOpen(false);
 				dispatch({ type: UPDATE_TRANSFERS, transfers: stateTransfers });
-				console.log(stateUser)
-				// dispatch({ type: ADD_HOME_TO_USER, transfers: stateTransfers });
+				dispatch({ type: UPDATE_USER, user: stateUser });
 				// setSnack({
 				// 	status: true,
 				// 	message: `Welcome to your new home! ${transfer.transferer[0]} has been removed.`,
