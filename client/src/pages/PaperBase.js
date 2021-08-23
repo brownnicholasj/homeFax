@@ -17,6 +17,8 @@ import { Grid } from '@material-ui/core';
 import Auth from '../utils/auth';
 import { QUERY_TRANSFERS } from '../utils/queries';
 import { useQuery } from '@apollo/client';
+import { useStoreContext } from '../utils/GlobalState';
+
 
 function Copyright() {
 	return (
@@ -173,33 +175,35 @@ const styles = {
 function Paperbase(props) {
 	const { classes, content } = props;
 	const [mobileOpen, setMobileOpen] = useState(false);
+	const [state, dispatch] = useStoreContext();
 	//create state for transferCount and set to 0
-	const [transferCount, setTransferCount] = useState(0);
+	// const [transferCount, setTransferCount] = useState(0);
 
+	const transferCount = state.transfers.length;
 	//deconstruct data from query (query all transfers)
-	const { data } = useQuery(QUERY_TRANSFERS);
+	// const { data } = useQuery(QUERY_TRANSFERS);
 
-	//Implement useEffect to evaluate changes
-	useEffect(() => {
-		//check if returned data from query && user logged in
-		if (data && Auth.loggedIn()) {
-			//deconstruct transfers from data
-			const { transfers } = data;
-			//set users email (already know we will get response because of Auth.loggedIn())
-			const receiverEmail = Auth.getProfile().data.email;
+	// //Implement useEffect to evaluate changes
+	// useEffect(() => {
+	// 	//check if returned data from query && user logged in
+	// 	if (transferCount && Auth.loggedIn()) {
+	// 		//deconstruct transfers from data
+	// 		// const { transfers } = data;
+	// 		//set users email (already know we will get response because of Auth.loggedIn())
+	// 		const receiverEmail = Auth.getProfile().data.email;
 
-			//if statement to find and count number of transfers
-			if (transfers?.length && receiverEmail) {
-				let count = 0;
-				for (var i = 0; i < transfers.length; i++) {
-					if (transfers[i].receiver === 'bryan@email.com') {
-						count++;
-						setTransferCount(count);
-					}
-				}
-			}
-		}
-	});
+	// 		//if statement to find and count number of transfers
+	// 		if (transfers?.length && receiverEmail) {
+	// 			let count = 0;
+	// 			for (var i = 0; i < transfers.length; i++) {
+	// 				if (transfers[i].receiver === 'bryan@email.com') {
+	// 					count++;
+	// 					setTransferCount(count);
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// });
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
