@@ -115,7 +115,7 @@ function Header(props) {
 									<Link
 										onClick={Auth.logout}
 										className={classes.link}
-										href='#'
+										to='#'
 										variant='body2'
 									>
 										<span className={classes.link}>Logout</span>

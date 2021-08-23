@@ -439,11 +439,39 @@ export const CREATE_TRANSFER = gql`
 export const TRANSFER_HOME = gql`
 mutation TransferHome($transferer: String, $receiver: String, $home: ID!) {
     transferHome(transferer: $transferer, receiver: $receiver, home: $home) {
-		user{
+		user {
 			_id
 			firstName
 			lastName
+			username
 			email
+			dob
+			homes {
+				_id
+				address {
+					_id
+					street1
+					street2
+					city
+					state
+					zip
+				}
+				areas {
+					_id
+					name
+					icon
+					attributes {
+						_id
+						type
+						detail {
+							_id
+							key
+							value
+							date
+						}
+					}
+				}
+			}
 		}
 		transfers{
 			_id

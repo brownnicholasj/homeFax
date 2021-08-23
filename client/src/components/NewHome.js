@@ -189,15 +189,16 @@ export default function HorizontalLinearStepper() {
             <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
               Back
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleNext}
-              className={classes.button}
-              href={`/myhomes/${homeData._id}`}
-            >
-              Take me to My Home
-            </Button>
+            <Link to={`/myhomes/${homeData._id}`}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleNext}
+                className={classes.button}
+              >
+                Take me to My Home
+              </Button>
+            </Link>
           </div>
         </div>
 			) : (

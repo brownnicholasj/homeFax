@@ -9,7 +9,7 @@ import {
  } from '../../utils/mutations';
  import { useStoreContext } from '../../utils/GlobalState';
  import { ADD_HOME_TO_USER } from '../../utils/actions';
- 
+ import Auth from '../../utils/auth';
 
 // This is for autocomplete testing.
 import { zipAutoComplete } from '../../utils/helpers';
@@ -302,7 +302,7 @@ export default function AddHome({ userId, handleNext, setHomeData }) {
                     setHomeData(stateHome);
                     const user = await assignHome({
                         variables: {
-                            receiver: userId,
+                            receiver: state.user.email,
                             home: stateHome._id
                         }
                     });

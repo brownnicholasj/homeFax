@@ -64,8 +64,10 @@ function TransferAccept({ home, transfer, setTransferModalOpen }) {
 			});
 			if (mutationResponse) {
 				const stateTransfers = mutationResponse.data.transferHome.transfers;
+				const stateUser = mutationResponse.data.transferHome.user;
 				setTransferModalOpen(false);
 				dispatch({ type: UPDATE_TRANSFERS, transfers: stateTransfers });
+				console.log(stateUser)
 				// dispatch({ type: ADD_HOME_TO_USER, transfers: stateTransfers });
 				// setSnack({
 				// 	status: true,

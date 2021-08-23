@@ -92,7 +92,6 @@ function Content(props) {
 				<Typography
 					color="textSecondary"
 					align="center"
-					lineHeight={2}
 				></Typography>
 			</div>
 		</Paper>

@@ -250,15 +250,18 @@ const resolvers = {
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
 			console.log("hit at transferHome")
-			await User.findOneAndUpdate({ email: transferer},
-				{
-				$pull: { homes: home },
-			});
+			console.log(receiver)
+			if (transferer) {
+				await User.findOneAndUpdate({ email: transferer},
+					{
+					$pull: { homes: home },
+				});
+			}
 			await User.findOneAndUpdate(
 				{ email: receiver },
 				{ $addToSet: { homes: home } },
 			);
-			const newHomeUser = User.findOne({ email: receiver }).populate('homes');
+			const newHomeUser = await User.findOne({ email: receiver }).populate('homes');
 			console.log(newHomeUser)
 
 			await Transfer.findOneAndDelete({ 'home._id': home._id });

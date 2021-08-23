@@ -17,7 +17,6 @@ import { LockOutlined, Visibility, VisibilityOff } from '@material-ui/icons';
 import { useMutation, useQuery } from '@apollo/client';
 import Auth from '../utils/auth';
 import { LOGIN } from '../utils/mutations';
-import { QUERY_ALL_USER_TRANSFERS } from '../utils/queries';
 import { useStoreContext } from '../utils/GlobalState';
 import { UPDATE_USER, UPDATE_TRANSFERS } from '../utils/actions';
 import { useHistory } from 'react-router-dom';
@@ -116,7 +115,6 @@ export default function SignIn() {
 				const { user, token, transfers } = mutationResponse.data.login;
 				dispatch({ type: UPDATE_USER, user });
 				dispatch({ type: UPDATE_TRANSFERS, transfers });
-				console.log(mutationResponse)
 				Auth.login(token);
 				history.push('/home');
 			} catch (e) {
