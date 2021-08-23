@@ -54,7 +54,9 @@ const styles = (theme) => ({
 function Header(props) {
 	const { classes, onDrawerToggle, transferCount } = props;
 
-	const transferHome = transferCount[0].home;
+	if (transferCount) {
+		const transferHome = transferCount[0].home;
+	}
 
 	const [anchorEl, setAnchorEl] = useState(null);
 	const handleMenu = (event) => {
