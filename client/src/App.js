@@ -21,6 +21,7 @@ import SignIn from './components/SignIn';
 
 import MyHome from './pages/MyHome.js';
 import Transfer from './components/Transfer.js';
+import TransferAccept from './components/TransferAccept';
 
 import { StoreProvider } from './utils/GlobalState';
 
@@ -66,6 +67,11 @@ function App(props) {
 						</Route>
 						<Route exact path='/transfer'>
 							<PaperBase content={<Transfer></Transfer>}></PaperBase>
+						</Route>
+						<Route exact path='/transferaccept'>
+							<PaperBase
+								content={<TransferAccept></TransferAccept>}
+							></PaperBase>
 						</Route>
 						<Route exact path='/createHome'>
 							<PaperBase content={<Misc></Misc>}></PaperBase>
