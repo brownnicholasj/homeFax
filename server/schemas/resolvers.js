@@ -243,19 +243,19 @@ const resolvers = {
 			);
 			return home;
 		},
-		transferHome: async (parent, { transferer, receiver, home }, context) => {
-			console.log('transferer :>> ', transferer);
+		transferHome: async (parent, { receiver, home }, context) => {
+			// console.log('transferer :>> ', transferer);
 			console.log('receiver :>> ', receiver);
 			console.log('home :>> ', home);
 			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
 			console.log('hit');
-			if (transferer) {
-				await User.findByIdAndUpdate(transferer, {
-					$pull: { homes: home },
-				});
-			}
+			// if (transferer) {
+			// 	await User.findByIdAndUpdate(transferer, {
+			// 		$pull: { homes: home },
+			// 	});
+			// }
 			if (receiver) {
-				await User.findByIdAndUpdate(receiver, {
+				await User.findByIdAndUpdate(context.user._id, {
 					$addToSet: { homes: home },
 				});
 			}

@@ -125,8 +125,8 @@ export const DELETE_HOME = gql`
 `;
 
 export const TRANSFER_HOME = gql`
-	mutation TransferHome($transferer: ID, $receiver: ID, $home: ID!) {
-		transferHome(transferer: $transferer, receiver: $receiver, home: $home) {
+	mutation TransferHome($receiver: ID, $home: ID!) {
+		transferHome(receiver: $receiver, home: $home) {
 			_id
 			firstName
 			lastName

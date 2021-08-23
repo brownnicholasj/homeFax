@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 // import Snack from './Snack';
 import Auth from '../utils/auth';
 import {
@@ -14,8 +14,7 @@ import {
 } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
-import { CREATE_TRANSFER } from '../utils/mutations';
-import { QUERY_GET_HOME } from '../utils/queries';
+import { TRANSFER_HOME } from '../utils/mutations';
 import HomeCard from './HomeCard';
 
 const useStyles = makeStyles((theme) => ({
@@ -49,46 +48,43 @@ function TransferAccept({ home, setTransferModalOpen }) {
 		transferEmail: '',
 	});
 	// const [snack, setSnack] = useState({ status: false, message: '' });
-	const [createTransfer, { error }] = useMutation(CREATE_TRANSFER);
+	const [acceptTransfer, { error }] = useMutation(TRANSFER_HOME);
 
 	if (home) {
-		console.log(home.home.address);
+		console.log(home);
 	}
 
 	// NEED TO CATCH THE INPUT FROM SUBMIT
-	const handleChange = (event) => {
-		const { id, value } = event.target;
-		setFormState({
-			...formState,
-			[id]: value,
-		});
-	};
+	// const handleChange = (event) => {
+	// 	const { id, value } = event.target;
+	// 	setFormState({
+	// 		...formState,
+	// 		[id]: value,
+	// 	});
+	// };
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		if (formState.transferEmail) {
-			try {
-				console.log('transferer :>> ', 'test');
-				console.log('receiver :>> ', formState.transferEmail);
-				console.log('homeId :>> ', home._id);
-				const mutationResponse = await createTransfer({
-					variables: {
-						transferer: email,
-						receiver: formState.transferEmail,
-						home: home._id,
-					},
-				});
-				if (mutationResponse) {
-					console.log(mutationResponse);
-					setTransferModalOpen(false);
-					// setSnack({
-					// 	status: true,
-					// 	message: `${formState.transferEmail} has been added to transfer`,
-					// });
-				}
-			} catch (e) {
-				console.log(e);
+		try {
+			console.log('transferer :>> ', 'test');
+			console.log('receiver :>> ', formState.transferEmail);
+			console.log('homeId :>> ', home._id);
+			const mutationResponse = await acceptTransfer({
+				variables: {
+					receiver: email,
+					home: home.home._id,
+				},
+			});
+			if (mutationResponse) {
+				console.log(mutationResponse);
+				setTransferModalOpen(false);
+				// setSnack({
+				// 	status: true,
+				// 	message: `${formState.transferEmail} has been added to transfer`,
+				// });
 			}
+		} catch (e) {
+			console.log(e);
 		}
 	};
 
@@ -102,9 +98,8 @@ function TransferAccept({ home, setTransferModalOpen }) {
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
-							<h3>Transfer</h3>
-							{home ? <HomeCard home={home.home} /> : 'No Homes'}
-
+							{home ? <h3>Transfer</h3> : <h3>No Homes</h3>}
+							{home ? <HomeCard home={home.home} /> : ''}
 							<Grid item xs={12}>
 								<Box
 									display='flex'
@@ -117,28 +112,6 @@ function TransferAccept({ home, setTransferModalOpen }) {
 									<TransferWithinAStationIcon fontSize='large' />
 								</Box>
 							</Grid>
-							{/* <Grid item xs={12}>
-								<Box
-									display='flex'
-									justifyContent='center'
-									alignItems='center'
-									ml={2}
-								>
-									<Card>
-										<CardContent>
-											<TextField
-												name='transferEmail'
-												variant='standard'
-												fullWidth
-												id='transferEmail'
-												label='Email of Receiver'
-												defaultValue=''
-												onChange={handleChange}
-											/>
-										</CardContent>
-									</Card>
-								</Box>
-							</Grid> */}
 
 							<Box mx={3} paddingTop={2} alignItems='center'>
 								<Button variant='contained' color='secondary'>
@@ -147,11 +120,15 @@ function TransferAccept({ home, setTransferModalOpen }) {
 									</Typography>
 								</Button>
 
-								<Button variant='contained' color='primary'>
-									<Typography variant='button' onClick={handleSubmit}>
-										Accept
-									</Typography>
-								</Button>
+								{home ? (
+									<Button variant='contained' color='primary'>
+										<Typography variant='button' onClick={handleSubmit}>
+											Accept
+										</Typography>
+									</Button>
+								) : (
+									''
+								)}
 							</Box>
 						</Grid>
 					</div>
