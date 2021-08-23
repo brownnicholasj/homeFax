@@ -65,8 +65,8 @@ const typeDefs = gql`
 
 	type Transfer {
 		_id: ID!
-		transferer: [String]
-		receiver: [String]
+		transferer: String
+		receiver: String
 		home: ID!
 	}
 
@@ -103,7 +103,7 @@ const typeDefs = gql`
 		addDetail(attributeId: ID!, key: String!, value: String!, date: Date): Home
 		editDetail(detailId: ID!, key: String, value: String, date: Date): Home
 		deleteDetail(detailId: ID!): Home
-		transferHome(transferer: ID, receiver: ID, home: ID!): User
+		transferHome(receiver: ID, home: ID!): User
 
 		createTransfer(transferer: String, receiver: String, home: ID!): Transfer
 		editTransfer(transferer: String, receiver: String, home: ID!): Transfer
