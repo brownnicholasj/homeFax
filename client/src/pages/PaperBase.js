@@ -11,10 +11,12 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Navigator from '../components/Navigator';
 import Header from '../components/Header';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SignIn from '../components/SignIn';
 import { Grid } from '@material-ui/core';
 import Auth from '../utils/auth';
+import { QUERY_TRANSFERS } from '../utils/queries';
+import { useQuery } from '@apollo/client';
 
 function Copyright() {
 	return (
@@ -170,7 +172,34 @@ const styles = {
 
 function Paperbase(props) {
 	const { classes, content } = props;
-	const [mobileOpen, setMobileOpen] = React.useState(false);
+	const [mobileOpen, setMobileOpen] = useState(false);
+	//create state for transferCount and set to 0
+	const [transferCount, setTransferCount] = useState(0);
+
+	//deconstruct data from query (query all transfers)
+	const { data } = useQuery(QUERY_TRANSFERS);
+
+	//Implement useEffect to evaluate changes
+	useEffect(() => {
+		//check if returned data from query && user logged in
+		if (data && Auth.loggedIn()) {
+			//deconstruct transfers from data
+			const { transfers } = data;
+			//set users email (already know we will get response because of Auth.loggedIn())
+			const receiverEmail = Auth.getProfile().data.email;
+
+			//if statement to find and count number of transfers
+			if (transfers?.length && receiverEmail) {
+				let count = 0;
+				for (var i = 0; i < transfers.length; i++) {
+					if (transfers[i].receiver === 'bryan@email.com') {
+						count++;
+						setTransferCount(count);
+					}
+				}
+			}
+		}
+	});
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -196,7 +225,10 @@ function Paperbase(props) {
 					</Hidden>
 				</nav>
 				<div className={classes.app}>
-					<Header onDrawerToggle={handleDrawerToggle} transferCount={0} />
+					<Header
+						onDrawerToggle={handleDrawerToggle}
+						transferCount={transferCount}
+					/>
 					<main className={classes.main}>
 						{Auth.loggedIn() ? (
 							content
