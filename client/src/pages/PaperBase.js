@@ -179,31 +179,28 @@ function Paperbase(props) {
 	//deconstruct data from query (query all transfers)
 	const { data } = useQuery(QUERY_TRANSFERS);
 
+	console.log(data);
+	console.log('transferCount >> ' + transferCount);
+	console.log('transferCount length >> ' + transferCount.length);
 	//Implement useEffect to evaluate changes
 	useEffect(() => {
 		//check if returned data from query && user logged in
 		if (data && Auth.loggedIn()) {
-			checkTransfer();
-		}
-
-		function checkTransfer() {
 			//deconstruct transfers from data
 			const { transfers } = data;
 			//set users email (already know we will get response because of Auth.loggedIn())
 			const receiverEmail = Auth.getProfile().data.email;
 
-			//if statement to find and count number of transfers
+			//if statement to find and add transfers
 			if (transfers?.length && receiverEmail) {
-				let count = 0;
 				for (var i = 0; i < transfers.length; i++) {
 					if (transfers[i].receiver === receiverEmail) {
-						count++;
-						setTransferCount(count);
+						setTransferCount([transfers[i]]);
 					}
 				}
 			}
 		}
-	});
+	}, [content]);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);

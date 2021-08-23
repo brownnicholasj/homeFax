@@ -53,6 +53,9 @@ const styles = (theme) => ({
 
 function Header(props) {
 	const { classes, onDrawerToggle, transferCount } = props;
+
+	const transferHome = transferCount[0].home;
+
 	const [anchorEl, setAnchorEl] = useState(null);
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -117,12 +120,17 @@ function Header(props) {
 									<Link href='/transferaccept'>
 										<Tooltip
 											title={
-												transferCount > 0 ? 'Pending Transfer' : 'No Transfers'
+												transferCount.length > 0
+													? 'Pending Transfer'
+													: 'No Transfers'
 											}
 										>
 											<IconButton style={{ color: '#fff' }}>
-												<Badge badgeContent={transferCount} color='secondary'>
-													<NotificationsIcon onClick={handleClose} />
+												<Badge
+													badgeContent={transferCount.length}
+													color='secondary'
+												>
+													<NotificationsIcon />
 												</Badge>
 											</IconButton>
 										</Tooltip>
