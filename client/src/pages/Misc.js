@@ -1,5 +1,15 @@
 import React from 'react';
-import AddDetail from '../components/AddDetail';
+import AddDetail from '../components/forms/AddDetail';
+import EditDetail from '../components/forms/EditDetail';
+import AddAttribute from '../components/forms/AddAttribute';
+import EditAttribute from '../components/forms/EditAttribute';
+import AddArea from '../components/forms/AddArea';
+import EditArea from '../components/forms/EditArea';
+import AddHome from '../components/forms/AddHome';
+import GenericList from '../components/GenericList';
+import HomeCard from '../components/HomeCard';
+import NewHome from '../components/NewHome';
+
 
 import Card from '../components/Card';
 
@@ -9,27 +19,55 @@ import { useEffect } from 'react';
 import { useStoreContext } from '../utils/GlobalState';
 import { effectHelper } from '../utils/helpers';
 import { useQuery, useMutation } from '@apollo/client';
-import { QUERY_USER } from '../utils/queries';
+import {
+	QUERY_USER,
+	QUERY_GET_HOME,
+	QUERY_AREA,
+	QUERY_ATTRIBUTE,
+	QUERY_DETAIL
+ } from '../utils/queries';
 
 
 function Misc(props) {
-	const [state, dispatch] = useStoreContext();
-	const { user, homes, transfers } = state;
-	const { loading, data } = useQuery(QUERY_USER);
+
+	// const homes = user.homes;	
+	// const testHome = user.homes[0];
+	// const testArea = testHome.areas[0];
+	// const testAttribute = testArea.attributes[0];
+	// const testDetail = testAttribute.detail[0];
 
 
-	useEffect(() => {
-		effectHelper(data, dispatch, loading);
-	}, [data, loading, dispatch]);
 
-
+	// const testArea = selectArea();
+	// // const { data: areaData } = useQuery(QUERY_AREA, {
+	// 	variables: { areaId: testHome.area[0]._id}
+	// });
+	// let area;
+	// if (areaData) {
+	// 	area = areaData;
+	// };
 	return (
 		<React.Fragment>
-			<h1>Misc</h1>
-			{/* <AddDetail attributeName={'Attribute Name'} attributeId={'611d3a49f38c9d6718e4f856'}/> */}
+				<div>
+					<NewHome />
+					{/* <AddDetail attributeName={testAttribute.type} attributeId={testAttribute._id}/> */}
+					{/* <EditDetail detailId={testDetail._id} detailKey={testDetail.key} detailValue={testDetail.value} detailDate={testDetail.date} /> */}
+					{/* <GenericList items={testAttribute.detail} itemsKey={'key'} />
+		
+					{/* <AddAttribute areaName={testArea.name} areaId={testArea._id} areaAttributes={testArea.attributes} />
+					<EditAttribute attId={testAttribute._id} attType={testAttribute.type} />
+					<GenericList items={testArea.attributes} itemsKey={'type'} subItems={'detail'} subItemsKey={'key'} /> */}
+					
+					{/* <AddArea homeId={testHome._id} />
+					<EditArea areaId={testArea._id} areaName={testArea.name} areaIcon={testArea.icon} />
+					<GenericList items={testHome.areas} itemsKey={'name'} /> */}
 
-			<Card />
-
+					{/* <AddHome userId={user._id} />
+					<GenericList items={homes} itemsKey={'_id'} /> */}
+		
+					{/* <Card /> */}
+					{/* <HomeCard home={homes[0]} /> */}
+				</div>
 		</React.Fragment>
 	);
 }

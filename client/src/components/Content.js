@@ -41,7 +41,7 @@ function Content(props) {
 
 	return (
 		<Paper className={classes.paper}>
-			<AppBar
+			{/* <AppBar
 				className={classes.searchBar}
 				position="static"
 				color="default"
@@ -74,11 +74,26 @@ function Content(props) {
 						</Grid>
 					</Grid>
 				</Toolbar>
-			</AppBar>
+			</AppBar> */}
 			<div className={classes.contentWrapper}>
-				<Typography color="textSecondary" align="center">
-					No users for this project yet
+				<Typography style={{ textAlign: 'center', fontWeight: 600 }}>
+					Welcome to HomeFax!
 				</Typography>
+				<Typography color="textSecondary" align="center">
+					What Is HomeFax? - Bacon ipsum dolor amet pork drumstick pork chop
+					andouille. Pork belly sirloin shank, venison drumstick landjaeger ground
+					round pork. Filet mignon ham hock kevin tri-tip buffalo short loin. Flank
+					jowl tenderloin bacon beef ribs short ribs t-bone tri-tip. Shoulder alcatra
+					jerky, cupim picanha turducken hamburger tenderloin meatloaf beef ribs
+					landjaeger tri-tip sausage pig chicken. Salami biltong picanha tri-tip
+					turkey. Sausage corned beef tenderloin, ham hock drumstick meatball beef
+					ribs flank shankle ribeye.
+				</Typography>
+				<Typography
+					color="textSecondary"
+					align="center"
+					lineHeight={2}
+				></Typography>
 			</div>
 		</Paper>
 	);

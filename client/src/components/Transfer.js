@@ -1,31 +1,21 @@
-import React, { useEffect } from 'react';
-import Content from './Content';
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+// import Snack from './Snack';
 import Auth from '../utils/auth';
-import { Card } from '@material-ui/core';
-import { CardHeader } from '@material-ui/core';
-import { IconButton } from '@material-ui/core';
-import { CardContent } from '@material-ui/core';
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core';
+import {
+	Card,
+	CardContent,
+	Typography,
+	makeStyles,
+	Grid,
+	TextField,
+	Box,
+	Button,
+} from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import { Grid } from '@material-ui/core';
-import { TextField } from '@material-ui/core';
-import { useState } from 'react';
-import { Box } from '@material-ui/core';
-import { Button } from '@material-ui/core';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
-import HomeIcon from '@material-ui/icons/Home';
-
-// These imports are for bringing in data from the globalState
-// They're only here for testing, as components will receive them as props.
-// import { useStoreContext } from '../utils/GlobalState';
-// import { effectHelper } from '../utils/helpers';
-// import { useQuery, useMutation } from '@apollo/client';
-// import { QUERY_USER } from '../utils/queries';
-
-
-
-
+import { CREATE_TRANSFER } from '../utils/mutations';
+import HomeCard from '../components/HomeCard';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -50,124 +40,118 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Transfer({ user, homes, transfers }) {
-	const { email, username, firstName, lastName } = Auth.getProfile().data;
+function Transfer({ home, setTransferModalOpen }) {
+	const { email } = Auth.getProfile().data;
+
 	const classes = useStyles();
-	// const [expanded, setExpanded] = useState(false);
-	// const [contactExpanded, setContactExpanded] = useState(false);
-	// const [passwordExpanded, setPasswordExpanded] = useState(false);
-	// const [deleteExpanded, setDeleteExpanded] = useState(false);
-
-	// const [state, dispatch] = useStoreContext();
-	// const { user, homes, transfers } = state;
-	// const { loading, data } = useQuery(QUERY_USER);
-
-
-	// useEffect(() => {
-	// 	effectHelper(data, dispatch, loading);
-	// }, [data, loading, dispatch]);
-	// console.log(user);
-
-	// NEED TO RECEIVE THE INPUT FROM THE TRANSFER BUTTON ACTION
 	const [formState, setFormState] = useState({
-		street1: '1 Main St',
-		street2: 'PO BOX',
-		city: 'Kansas City',
-		state: 'KS',
-		zip: '65432',
 		transferEmail: '',
 	});
+	// const [snack, setSnack] = useState({ status: false, message: '' });
+	const [createTransfer, { error }] = useMutation(CREATE_TRANSFER);
 
 	// NEED TO CATCH THE INPUT FROM SUBMIT
-	const handleSubmit = (event) => {
-		console.log('handle save and submit action');
-		// const { name, value } = event.target;
+	const handleChange = (event) => {
+		const { id, value } = event.target;
+		setFormState({
+			...formState,
+			[id]: value,
+		});
+	};
 
-		// setFormState({
-		// 	...formState,
-		// 	[name]: value,
-		// });
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		if (formState.transferEmail) {
+			try {
+				console.log('transferer :>> ', 'test');
+				console.log('receiver :>> ', formState.transferEmail);
+				console.log('homeId :>> ', home._id);
+				const mutationResponse = await createTransfer({
+					variables: {
+						transferer: email,
+						receiver: formState.transferEmail,
+						home: home._id,
+					},
+				});
+				if (mutationResponse) {
+					console.log(mutationResponse);
+					setTransferModalOpen(false);
+					// setSnack({
+					// 	status: true,
+					// 	message: `${formState.transferEmail} has been added to transfer`,
+					// });
+				}
+			} catch (e) {
+				console.log(e);
+			}
+		}
 	};
 
 	const handleCancel = (event) => {
-		console.log('send user back to homes?');
+		setTransferModalOpen(false);
 	};
 
 	return (
-		<Grid container spacing={4}>
-			<Grid item xs={12}>
-				<Typography variant='h2'>Transfer Home</Typography>
-			</Grid>
-			<Grid item xs={2} md={2} lg={2}>
-				<Box></Box>
-			</Grid>
-			<Grid item xs={12} md={4} lg={3}>
-				{homes.map(home => (
-					<Card key={home._id}>
-						<CardContent>
-							<Typography className={classes.title} color="textSecondary" gutterBottom>
-								<HomeIcon />
-							</Typography>
-							<Typography variant="h5" component="h2">
-								{home.address.street1}
-							</Typography>
-							<Typography className={classes.pos} color="textSecondary">
-								{home.address.street2}
-							</Typography>
-							<Typography variant="body2" component="p">
-								{home.address.city}, {home.address.state} {home.address.zip}
-							</Typography>
-						</CardContent>
-					</Card>
-				))}
-			</Grid>
-			<Box
-				display='flex'
-				justifyContent='center'
-				alignItems='center'
-				xs={12}
-				md={2}
-				lg={3}
-			>
-				<TransferWithinAStationIcon fontSize='large' />
-			</Box>
-			<Box
-				display='flex'
-				justifyContent='center'
-				alignItems='center'
-				ml={2}
-			>
-				<Card>
-					<CardContent>
-						<TextField
-							name='transferEmail'
-							variant='standard'
-							fullWidth
-							id='transferEmail'
-							label='Email of Receiver'
-							defaultValue=''
-						/>
-					</CardContent>
-				</Card>
-			</Box>
-			<Grid item xs={2} md={2} lg={4}>
-				<Box></Box>
-			</Grid>
-			<Grid container justifyContent='center'>
-				<Box mx={3}>
-					<Button variant='contained' color='secondary'>
-						<Typography variant='button' onClick={handleCancel}>
-							Cancel
-						</Typography>
-					</Button>
-				</Box>
-				<Button variant='contained' color='primary'>
-					<Typography variant='button' onClick={handleSubmit}>
-						Save & Close
-					</Typography>
-				</Button>
-			</Grid>
-		</Grid>
+		<>
+			<Card key={'homeId'} className={classes.root} variant='outlined'>
+				<CardContent>
+					<div className={classes.gridRoot}>
+						<Grid container spacing={1}>
+							<h3>Transfer</h3>
+							<HomeCard home={home} />
+							<Grid item xs={12}>
+								<Box
+									display='flex'
+									justifyContent='center'
+									alignItems='center'
+									xs={12}
+									md={2}
+									lg={3}
+								>
+									<TransferWithinAStationIcon fontSize='large' />
+								</Box>
+							</Grid>
+							<Grid item xs={12}>
+								<Box
+									display='flex'
+									justifyContent='center'
+									alignItems='center'
+									ml={2}
+								>
+									<Card>
+										<CardContent>
+											<TextField
+												name='transferEmail'
+												variant='standard'
+												fullWidth
+												id='transferEmail'
+												label='Email of Receiver'
+												defaultValue=''
+												onChange={handleChange}
+											/>
+										</CardContent>
+									</Card>
+								</Box>
+							</Grid>
+
+							<Box mx={3} paddingTop={2} alignItems='center'>
+								<Button variant='contained' color='secondary'>
+									<Typography variant='button' onClick={handleCancel}>
+										Cancel
+									</Typography>
+								</Button>
+
+								<Button variant='contained' color='primary'>
+									<Typography variant='button' onClick={handleSubmit}>
+										Save & Close
+									</Typography>
+								</Button>
+							</Box>
+						</Grid>
+					</div>
+				</CardContent>
+			</Card>
+		</>
 	);
 }
 

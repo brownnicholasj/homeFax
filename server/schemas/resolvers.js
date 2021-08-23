@@ -2,7 +2,7 @@ const { AuthenticationError } = require('apollo-server-express');
 const { User, Home, Transfer } = require('../models');
 const { signToken } = require('../utils/auth');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
-const bcrypt = require("bcrypt")
+const bcrypt = require('bcrypt');
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
 const dayjs = require('dayjs');
@@ -12,6 +12,7 @@ const resolvers = {
 		name: 'Date',
 		description: 'Custom Date Scalar type',
 		parseValue(value) {
+			console.log('value :>> ', value);
 			return dayjs(value);
 		},
 		serialize(value) {
@@ -39,10 +40,22 @@ const resolvers = {
 			return await Home.findById(homeId);
 		},
 		transfers: async () => {
-			return await Transfer.find({}).populate('home');
+			return await Transfer.find({});
 		},
 		transfer: async (parent, { transferId }) => {
 			return await Home.findById(transferId);
+		},
+		userTransfer: async (parent, { useremail }) => {
+			return await Transfer.findOne({ receiver: useremail });
+		},
+		area: async (parent, { areaId }) => {
+			return await Home.findOne({ 'areas._id': areaId });
+		},
+		attribute: async (parent, { attributeId }) => {
+			return await Home.findOne({ 'areas.attributes._id': attributeId });
+		},
+		detail: async (parent, { detailId }) => {
+			return await Home.findOne({ 'areas.attributes.detail._id': detailId });
 		},
 	},
 	Mutation: {
@@ -115,12 +128,17 @@ const resolvers = {
 			);
 			return updatedHome;
 		},
-		deleteArea: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const area = await Home.findOneAndDelete({ 'areas._id': args.areaId });
-				return area;
-			}
-			return;
+		deleteArea: async (parent, { areaId }) => {
+			const home = await Home.findOne({ 'areas._id': areaId });
+			const areas = home.areas.filter((area) => area._id != areaId);
+			const updatedHome = await Home.findOneAndUpdate(
+				{ 'areas._id': areaId },
+				{
+					areas: areas,
+				},
+				{ new: true }
+			);
+			return updatedHome;
 		},
 		addAttribute: async (parent, { areaId, type }) => {
 			const home = await Home.findOne({ 'areas._id': areaId });
@@ -160,14 +178,13 @@ const resolvers = {
 
 			return updatedHome;
 		},
-		deleteAttribute: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const attribute = await Home.findOneAndDelete({
-					'areas.attributes._id': args.attributeId,
-				});
-				return attribute;
-			}
-			return;
+		deleteAttribute: async (parent, { attributeId }) => {
+			const home = await Home.findOneAndUpdate(
+				{ 'areas.attributes._id': attributeId },
+				{ $pull: { 'areas.$[].attributes': { _id: attributeId } } },
+				{ new: true }
+			);
+			return home;
 		},
 		addDetail: async (parent, { attributeId, key, value, date }) => {
 			const home = await Home.findOne({ 'areas.attributes._id': attributeId });
@@ -218,17 +235,20 @@ const resolvers = {
 
 			return updatedHome;
 		},
-		deleteDetail: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const detail = await Home.findOneAndDelete({
-					'areas.attributes.detail._id': args.detailId,
-				});
-				return detail;
-			}
-			return;
+		deleteDetail: async (parent, { detailId }) => {
+			const home = await Home.findOneAndUpdate(
+				{ 'areas.attributes.detail._id': detailId },
+				{ $pull: { 'areas.$[].attributes.$[].detail': { _id: detailId } } },
+				{ new: true }
+			);
+			return home;
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
+			console.log('transferer :>> ', transferer);
+			console.log('receiver :>> ', receiver);
+			console.log('home :>> ', home);
 			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
+			console.log('hit');
 			if (transferer) {
 				await User.findByIdAndUpdate(transferer, {
 					$pull: { homes: home },
@@ -260,16 +280,19 @@ const resolvers = {
 		},
 		updateUser: async (parent, args, context) => {
 			if (context.user) {
-				const user = await User.findByIdAndUpdate(context.user._id, args, { new: true });
-				const token = signToken(user)
+				const user = await User.findByIdAndUpdate(context.user._id, args, {
+					new: true,
+				});
+				const token = signToken(user);
 
-				return { token, user }
+				return { token, user };
 			}
 
 			throw new AuthenticationError('Not logged in');
 		},
 		createTransfer: async (parent, args) => {
-			return await Transfer.create(args);
+			console.log('hit');
+			return await await Transfer.create(args);
 		},
 		editTransfer: async (parent, args) => {
 			return await Transfer.findOneAndUpdate({ home: args.home }, args, {
@@ -280,7 +303,9 @@ const resolvers = {
 			const email = identifier;
 			const username = identifier;
 			console.log('logging in');
-			const user = await User.findOne({ email }) || await User.findOne({ username });
+			const user =
+				(await User.findOne({ email }).populate('homes')) ||
+				(await User.findOne({ username }).populate('homes'));
 			if (!user) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
@@ -303,40 +328,49 @@ const resolvers = {
 		// 	throw new AuthenticationError('Not logged in');
 		// },
 		updatePassword: async (parent, args, context) => {
-
 			if (context.user) {
-				const foundUser = await User.findById(context.user._id)
-				const passwordMatch = await bcrypt.compareSync(args.password, foundUser.password);
+				const foundUser = await User.findById(context.user._id);
+				const passwordMatch = await bcrypt.compareSync(
+					args.password,
+					foundUser.password
+				);
 
-				if (!passwordMatch) throw new AuthenticationError("Password does not match")
+				if (!passwordMatch)
+					throw new AuthenticationError('Password does not match');
 				const hashedPassword = await bcrypt.hash(args.currentPassword, 10);
-				foundUser.password = hashedPassword
+				foundUser.password = hashedPassword;
 				const updatedUser = {
 					...foundUser,
-					password: hashedPassword
-				}
-				console.log(args.currentPassword)
-				const user = await User.findByIdAndUpdate(context.user._id, foundUser, { new: true });
-				const token = signToken(user)
+					password: hashedPassword,
+				};
+				console.log(args.currentPassword);
+				const user = await User.findByIdAndUpdate(context.user._id, foundUser, {
+					new: true,
+				});
+				const token = signToken(user);
 
-				return { token, user }
+				return { token, user };
 			}
 
 			throw new AuthenticationError('Not logged in');
 		},
 		deleteProfile: async (parent, args, context) => {
 			if (context.user) {
-				const user = await User.findById(context.user._id)
-				const passwordMatch = await bcrypt.compareSync(args.password, user.password);
+				const user = await User.findById(context.user._id);
+				const passwordMatch = await bcrypt.compareSync(
+					args.password,
+					user.password
+				);
 
-				if (!passwordMatch) throw new AuthenticationError("Password does not match!")
+				if (!passwordMatch)
+					throw new AuthenticationError('Password does not match!');
 
 				await User.findByIdAndDelete(context.user._id);
-				return true
+				return true;
 			}
 
 			throw new AuthenticationError('Not logged in');
-		}
+		},
 	},
 };
 

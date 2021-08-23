@@ -65,8 +65,8 @@ const typeDefs = gql`
 
 	type Transfer {
 		_id: ID!
-		transferer: [User]
-		receiver: [User]
+		transferer: [String]
+		receiver: [String]
 		home: ID!
 	}
 
@@ -75,6 +75,10 @@ const typeDefs = gql`
 		home(homeId: ID!): Home
 		transfers: [Transfer]
 		transfer(transferId: ID!): Transfer
+		userTransfer(useremail: String): Transfer
+		area(areaId: ID!): Area
+		attribute(attributeId: ID!): Attribute
+		detail(detailId: ID!): Detail
 	}
 
 	type Mutation {
@@ -100,7 +104,7 @@ const typeDefs = gql`
 		editDetail(detailId: ID!, key: String, value: String, date: Date): Home
 		deleteDetail(detailId: ID!): Home
 		transferHome(transferer: ID, receiver: ID, home: ID!): User
-		
+
 		createTransfer(transferer: String, receiver: String, home: ID!): Transfer
 		editTransfer(transferer: String, receiver: String, home: ID!): Transfer
 

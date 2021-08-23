@@ -21,10 +21,14 @@ export const reducer = (state, action) => {
   switch (action.type) {
     // Returns a copy of state with an update products array. We use the action.products property and spread it's contents into the new array.
     case UPDATE_USER:
-      return {
+      console.log('hit at reducer')
+      const test = {
         ...state,
         user: action.user,
-      };
+        homes: action.user.homes
+      }
+      console.log(test);
+      return test;
 
     case UPDATE_HOMES:
       return {

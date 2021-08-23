@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
@@ -10,24 +10,28 @@ import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-// import Tab from '@material-ui/core/Tab';
-// import Tabs from '@material-ui/core/Tabs';
+import Badge from '@material-ui/core/Badge';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Auth from '../utils/auth';
-import { MenuItem } from '@material-ui/core';
+import { MenuItem, Menu } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { useState } from 'react';
-import { Menu } from '@material-ui/core';
+
+import HomeIcon from '@material-ui/icons/Home';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+
+// import Tab from '@material-ui/core/Tab';
+// import Tabs from '@material-ui/core/Tabs';
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
 const styles = (theme) => ({
 	secondaryBar: {
 		zIndex: 0,
-		minHeight: '6.7vh',
+		paddingTop: theme.spacing(2),
+		paddingBottom: theme.spacing(1.25),
 	},
 	menuButton: {
 		marginLeft: -theme.spacing(1),
@@ -36,8 +40,8 @@ const styles = (theme) => ({
 		padding: 4,
 	},
 	link: {
-		textDecoration: 'none',
-		color: lightColor,
+		'textDecoration': 'none',
+		'color': lightColor,
 		'&:hover': {
 			color: theme.palette.common.white,
 		},
@@ -48,7 +52,7 @@ const styles = (theme) => ({
 });
 
 function Header(props) {
-	const { classes, onDrawerToggle } = props;
+	const { classes, onDrawerToggle, transferCount } = props;
 	const [anchorEl, setAnchorEl] = useState(null);
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -67,15 +71,15 @@ function Header(props) {
 
 	return (
 		<React.Fragment>
-			<AppBar color="primary" position="sticky" elevation={0}>
+			<AppBar color='primary' position='sticky' elevation={0}>
 				{Auth.loggedIn() && (
 					<Toolbar className={classes.secondaryBar}>
-						<Grid container spacing={1} alignItems="center">
+						<Grid container spacing={1} alignItems='center'>
 							<Hidden smUp>
 								<Grid item>
 									<IconButton
-										color="inherit"
-										aria-label="open drawer"
+										color='inherit'
+										aria-label='open drawer'
 										onClick={onDrawerToggle}
 										className={classes.menuButton}
 									>
@@ -87,22 +91,40 @@ function Header(props) {
 							<Grid item>
 								{Auth.loggedIn() ? (
 									<Link
-										onClick={Auth.logout}
-										className={classes.link}
-										href="#"
-										variant="body2"
+									onClick={Auth.logout}
+									className={classes.link}
+									href='#'
+									variant='body2'
 									>
 										Logout
 									</Link>
 								) : (
 									<Link></Link>
-								)}
+									)}
 							</Grid>
 							{Auth.loggedIn() && (
 								<Grid item>
-									<Tooltip title="Alerts • No alerts">
-										<IconButton color="inherit">
-											<NotificationsIcon />
+									<Link href='/createHome'>
+										<Button
+											variant='contained'
+											>
+											<AddCircleIcon />
+											<HomeIcon />
+										</Button>
+									</Link>
+								</Grid>
+							)}
+							{Auth.loggedIn() && (
+								<Grid item>
+									<Tooltip
+										title={
+											transferCount > 0 ? 'Pending Transfer' : 'No Transfers'
+										}
+									>
+										<IconButton color='inherit'>
+											<Badge badgeContent={transferCount} color='secondary'>
+												<NotificationsIcon />
+											</Badge>
 										</IconButton>
 									</Tooltip>
 								</Grid>
@@ -110,20 +132,23 @@ function Header(props) {
 							{Auth.loggedIn() && (
 								<Grid item>
 									<div>
-										<IconButton
-											aria-label="account of current user"
-											aria-controls="menu-appbar"
-											aria-haspopup="true"
+									<IconButton
+											aria-label='account of current user'
+											aria-controls='menu-appbar'
+											aria-haspopup='true'
 											onClick={handleMenu}
-											color="inherit"
+											color='inherit'
 											className={classes.iconButtonAvatar}
 										>
-											<Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
+											<Avatar
+												src='/static/images/avatar/1.jpg'
+												alt='My Avatar'
+											/>
 
 											{/* <AccountCircle /> */}
 										</IconButton>
 										<Menu
-											id="menu-appbar"
+											id='menu-appbar'
 											anchorEl={anchorEl}
 											anchorOrigin={{
 												vertical: 'top',
@@ -137,10 +162,10 @@ function Header(props) {
 											open={open}
 											onClose={handleClose}
 										>
-											<MenuItem id="profile" onClick={handleClose}>
+											<MenuItem id='profile' onClick={handleClose}>
 												Profile
 											</MenuItem>
-											<MenuItem id="logout" onClick={handleClose}>
+											<MenuItem id='logout' onClick={handleClose}>
 												Logout
 											</MenuItem>
 										</Menu>

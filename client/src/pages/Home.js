@@ -17,13 +17,15 @@ import { QUERY_USER } from '../utils/queries';
 function Home() {
 	const [state, dispatch] = useStoreContext();
 	const { user, homes, transfers } = state;
-	const { loading, data } = useQuery(QUERY_USER);
-	
-	useEffect(() => {
-		effectHelper(data, dispatch, loading);
-	  }, [data, loading, dispatch]);
-	  
-
+	// const { data } = useQuery(QUERY_USER);
+	// let user;
+	// let homes;
+	// const handleState = () => {
+	// 	user = data?.user ?? {};
+	// 	homes = user.homes;
+	// 	dispatch({ type: UPDATE_USER, user });
+	// }
+	console.log(user);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
 	const handleClick = (event) => {
@@ -39,13 +41,20 @@ function Home() {
 		<React.Fragment>
 			<h1>Home</h1>
 			<div>
-				<Button
+			<Button
 					aria-controls="simple-menu"
 					aria-haspopup="true"
 					onClick={handleClick}
 				>
 					Open Menu
 				</Button>
+				{/* <Button
+					aria-controls="simple-menu"
+					aria-haspopup="true"
+					onClick={handleState}
+				>
+					Test Reducer
+				</Button> */}
 				<Menu
 					id="simple-menu"
 					anchorEl={anchorEl}

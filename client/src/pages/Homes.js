@@ -1,11 +1,39 @@
 import React from 'react';
-import Content from '../components/Content';
+import Auth from '../utils/auth';
+import { useState, useEffect } from 'react';
+import { useQuery } from '@apollo/client';
+import { QUERY_USER } from '../utils/queries';
+import { Card, CardActionArea, Typography } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import HomeCard from '../components/HomeCard';
 
 function Homes(props) {
+	const { loading, data } = useQuery(QUERY_USER);
+	let user;
+	if (!loading) {
+		user = data.user;
+	}
+
 	return (
 		<React.Fragment>
-			<h1>Homes</h1>
-			<Content></Content>
+			{loading ? (
+				<h1>Loading...</h1>
+			) : (
+				<React.Fragment>
+					<h1>Homes</h1>
+					<Grid container spacing={4}>
+						{user.homes.map((home) => (
+							<Grid item xs={12} key={`home_${home._id}`}>
+								<CardActionArea
+									href={'/myhomes/' + home._id}
+								>
+									<HomeCard home={home} />
+								</CardActionArea>
+							</Grid>
+						))}
+					</Grid>
+				</React.Fragment>
+			)}
 		</React.Fragment>
 	);
 }
