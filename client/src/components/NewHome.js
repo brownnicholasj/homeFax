@@ -107,7 +107,6 @@ export default function HorizontalLinearStepper() {
     setActiveStep(0);
   };
 
-  console.log(homeData);
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
@@ -139,6 +138,12 @@ export default function HorizontalLinearStepper() {
 				<div className={classes.instructions}>
 					<HomeCard home={homeData} />
 					<Modal
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
+            }}
 						open={areaModalOpen}
 						onClose={handleAddAreaModal}
 						aria-labelledby="simple-modal-title"

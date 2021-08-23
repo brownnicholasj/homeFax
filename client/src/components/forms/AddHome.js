@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import { Divider } from '@material-ui/core';
+import { Divider, Card, CardContent, Button, Grid, TextField, Select, MenuItem, InputLabel } from '@material-ui/core';
 
-import TextField from '@material-ui/core/TextField';
 import { useMutation } from '@apollo/client';
 import {
     ADD_HOME,
@@ -18,7 +13,244 @@ import Snack from '../Snack';
 // This is for autocomplete testing.
 import { zipAutoComplete } from '../../utils/helpers';
 
-
+const unitedStates = [
+    {
+        name: "Alabama",
+        abbreviation: "AL"
+    },
+    {
+        name: "Alaska",
+        abbreviation: "AK"
+    },
+    {
+        name: "American Samoa",
+        abbreviation: "AS"
+    },
+    {
+        name: "Arizona",
+        abbreviation: "AZ"
+    },
+    {
+        name: "Arkansas",
+        abbreviation: "AR"
+    },
+    {
+        name: "California",
+        abbreviation: "CA"
+    },
+    {
+        name: "Colorado",
+        abbreviation: "CO"
+    },
+    {
+        name: "Connecticut",
+        abbreviation: "CT"
+    },
+    {
+        name: "Delaware",
+        abbreviation: "DE"
+    },
+    {
+        name: "District Of Columbia",
+        abbreviation: "DC"
+    },
+    {
+        name: "Federated States Of Micronesia",
+        abbreviation: "FM"
+    },
+    {
+        name: "Florida",
+        abbreviation: "FL"
+    },
+    {
+        name: "Georgia",
+        abbreviation: "GA"
+    },
+    {
+        name: "Guam",
+        abbreviation: "GU"
+    },
+    {
+        name: "Hawaii",
+        abbreviation: "HI"
+    },
+    {
+        name: "Idaho",
+        abbreviation: "ID"
+    },
+    {
+        name: "Illinois",
+        abbreviation: "IL"
+    },
+    {
+        name: "Indiana",
+        abbreviation: "IN"
+    },
+    {
+        name: "Iowa",
+        abbreviation: "IA"
+    },
+    {
+        name: "Kansas",
+        abbreviation: "KS"
+    },
+    {
+        name: "Kentucky",
+        abbreviation: "KY"
+    },
+    {
+        name: "Louisiana",
+        abbreviation: "LA"
+    },
+    {
+        name: "Maine",
+        abbreviation: "ME"
+    },
+    {
+        name: "Marshall Islands",
+        abbreviation: "MH"
+    },
+    {
+        name: "Maryland",
+        abbreviation: "MD"
+    },
+    {
+        name: "Massachusetts",
+        abbreviation: "MA"
+    },
+    {
+        name: "Michigan",
+        abbreviation: "MI"
+    },
+    {
+        name: "Minnesota",
+        abbreviation: "MN"
+    },
+    {
+        name: "Mississippi",
+        abbreviation: "MS"
+    },
+    {
+        name: "Missouri",
+        abbreviation: "MO"
+    },
+    {
+        name: "Montana",
+        abbreviation: "MT"
+    },
+    {
+        name: "Nebraska",
+        abbreviation: "NE"
+    },
+    {
+        name: "Nevada",
+        abbreviation: "NV"
+    },
+    {
+        name: "New Hampshire",
+        abbreviation: "NH"
+    },
+    {
+        name: "New Jersey",
+        abbreviation: "NJ"
+    },
+    {
+        name: "New Mexico",
+        abbreviation: "NM"
+    },
+    {
+        name: "New York",
+        abbreviation: "NY"
+    },
+    {
+        name: "North Carolina",
+        abbreviation: "NC"
+    },
+    {
+        name: "North Dakota",
+        abbreviation: "ND"
+    },
+    {
+        name: "Northern Mariana Islands",
+        abbreviation: "MP"
+    },
+    {
+        name: "Ohio",
+        abbreviation: "OH"
+    },
+    {
+        name: "Oklahoma",
+        abbreviation: "OK"
+    },
+    {
+        name: "Oregon",
+        abbreviation: "OR"
+    },
+    {
+        name: "Palau",
+        abbreviation: "PW"
+    },
+    {
+        name: "Pennsylvania",
+        abbreviation: "PA"
+    },
+    {
+        name: "Puerto Rico",
+        abbreviation: "PR"
+    },
+    {
+        name: "Rhode Island",
+        abbreviation: "RI"
+    },
+    {
+        name: "South Carolina",
+        abbreviation: "SC"
+    },
+    {
+        name: "South Dakota",
+        abbreviation: "SD"
+    },
+    {
+        name: "Tennessee",
+        abbreviation: "TN"
+    },
+    {
+        name: "Texas",
+        abbreviation: "TX"
+    },
+    {
+        name: "Utah",
+        abbreviation: "UT"
+    },
+    {
+        name: "Vermont",
+        abbreviation: "VT"
+    },
+    {
+        name: "Virgin Islands",
+        abbreviation: "VI"
+    },
+    {
+        name: "Virginia",
+        abbreviation: "VA"
+    },
+    {
+        name: "Washington",
+        abbreviation: "WA"
+    },
+    {
+        name: "West Virginia",
+        abbreviation: "WV"
+    },
+    {
+        name: "Wisconsin",
+        abbreviation: "WI"
+    },
+    {
+        name: "Wyoming",
+        abbreviation: "WY"
+    }
+];
 const useStyles = makeStyles((theme) => ({
     root: {
         // minWidth: 275,
@@ -35,6 +267,10 @@ const useStyles = makeStyles((theme) => ({
           width: '25ch',
         },
     },
+    select: {
+        margin: theme.spacing(1),
+        width: '25ch',
+    },
     gridRoot: {
         flexGrow: 1,
     }
@@ -47,9 +283,10 @@ export default function AddHome({ userId, handleNext, setHomeData }) {
     const [formState, setFormState] = useState({ street1: '', street2: '', city: '', state: '', zip: '' });
 	const [addHome, { addError }] = useMutation(ADD_HOME);
 	const [assignHome, { assignError }] = useMutation(TRANSFER_HOME);
+
 	const handleFormSubmit = async (event) => {
         event.preventDefault();
-        if (userId && formState.street1) {
+        if (userId && formState.zip.length == 5 && /^[0-9]+$/.test(formState.zip)) {
             try {
                 const mutationResponse = await addHome({
                     variables: {
@@ -72,6 +309,8 @@ export default function AddHome({ userId, handleNext, setHomeData }) {
             } catch (e) {
                 console.log(e);
             }
+        } else {
+            setSnack({ status: true, message: 'Something went wrong. Please check your information and try again.'})
         }
 	};
 
@@ -81,13 +320,25 @@ export default function AddHome({ userId, handleNext, setHomeData }) {
 			...formState,
 			[id]: value,
 		});
-        // This is from autocomplete testing.
-        // if (id === 'zip') {
-        //     const data = zipAutoComplete(value);
-        // }
 	};
 
+    const [open, setOpen] = useState();
+    const handleClose = () => {
+        setOpen(false);
+    };
 
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    
+    const handleHomeState = (event) => {
+        // console.log(event.target.value);
+        // setHomeState(event.target.value);
+        setFormState({
+            ...formState,
+            state: event.target.value
+        })
+    };
   return (
     <>
         <Card className={classes.root} variant="outlined">
@@ -121,13 +372,29 @@ export default function AddHome({ userId, handleNext, setHomeData }) {
                                     variant="standard"
                                     onChange={handleChange}
                                 />
-                                <TextField
+                                {/* <TextField
                                     required
                                     id="state"
                                     label="State"
                                     variant="standard"
                                     onChange={handleChange}
-                                />
+                                /> */}
+                                {/* <InputLabel required id="stateLabel">State</InputLabel> */}
+                                <TextField
+                                    required
+                                    id="state"
+                                    label="State"
+                                    open={open}
+                                    onChange={handleHomeState}
+                                    value={formState.state}
+                                    select
+                                    >
+                                    <MenuItem value="">
+                                    Select a State
+                                    </MenuItem>
+                                    {unitedStates.map((state, index) => <MenuItem key={index} value={state.abbreviation}>{state.name}</MenuItem>)}
+                                </TextField>
+ 
                                 <TextField
                                     required
                                     id="zip"
