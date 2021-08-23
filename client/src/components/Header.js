@@ -16,8 +16,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Auth from '../utils/auth';
-import { MenuItem, Menu } from '@material-ui/core';
+import { MenuItem, Menu, Modal } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import TransferAccept from './TransferAccept';
+import { QUERY_GET_HOME } from '../utils/queries';
+import { useLazyQuery } from '@apollo/client';
 
 import HomeIcon from '@material-ui/icons/Home';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -54,9 +57,22 @@ const styles = (theme) => ({
 function Header(props) {
 	const { classes, onDrawerToggle, transferCount } = props;
 
+	const [transferAcceptModalOpen, setTransferAcceptModalOpen] = useState(false);
+
+	const [getTransfer, { data }] = useLazyQuery(QUERY_GET_HOME);
+
+	const transferAddress = data;
+	console.log('header data >> ' + transferAddress);
+
+	var transferHome = '';
 	if (transferCount) {
-		const transferHome = transferCount[0].home;
+		transferHome = transferCount[0].home;
 	}
+
+	const handleTransferAcceptModal = () => {
+		setTransferAcceptModalOpen(true);
+		getTransfer({ variables: { homeId: transferHome } });
+	};
 
 	const [anchorEl, setAnchorEl] = useState(null);
 	const handleMenu = (event) => {
@@ -119,26 +135,42 @@ function Header(props) {
 							)}
 							{Auth.loggedIn() && (
 								<Grid item>
-									<Link href='/transferaccept'>
-										<Tooltip
-											title={
-												transferCount.length > 0
-													? 'Pending Transfer'
-													: 'No Transfers'
-											}
+									<Tooltip
+										title={
+											transferCount.length > 0
+												? 'Pending Transfer'
+												: 'No Transfers'
+										}
+									>
+										<IconButton
+											style={{ color: '#fff' }}
+											onClick={handleTransferAcceptModal}
 										>
-											<IconButton style={{ color: '#fff' }}>
-												<Badge
-													badgeContent={transferCount.length}
-													color='secondary'
-												>
-													<NotificationsIcon />
-												</Badge>
-											</IconButton>
-										</Tooltip>
-									</Link>
+											<Badge
+												badgeContent={transferCount.length}
+												color='secondary'
+											>
+												<NotificationsIcon />
+											</Badge>
+										</IconButton>
+									</Tooltip>
 								</Grid>
 							)}
+							<Modal
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignContent: 'center',
+									alignItems: 'center',
+								}}
+								onClose={() => setTransferAcceptModalOpen(false)}
+								open={transferAcceptModalOpen}
+							>
+								<TransferAccept
+									home={transferAddress}
+									setTransferModalOpen={setTransferAcceptModalOpen}
+								></TransferAccept>
+							</Modal>
 							{Auth.loggedIn() && (
 								<Grid item>
 									<div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 // import Snack from './Snack';
 import Auth from '../utils/auth';
 import {
@@ -15,6 +15,7 @@ import {
 import { red } from '@material-ui/core/colors';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import { CREATE_TRANSFER } from '../utils/mutations';
+import { QUERY_GET_HOME } from '../utils/queries';
 import HomeCard from './HomeCard';
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Transfer({ home, setTransferModalOpen }) {
+function TransferAccept({ home, setTransferModalOpen }) {
 	const { email } = Auth.getProfile().data;
 
 	const classes = useStyles();
@@ -49,6 +50,10 @@ function Transfer({ home, setTransferModalOpen }) {
 	});
 	// const [snack, setSnack] = useState({ status: false, message: '' });
 	const [createTransfer, { error }] = useMutation(CREATE_TRANSFER);
+
+	if (home) {
+		console.log(home.home.address);
+	}
 
 	// NEED TO CATCH THE INPUT FROM SUBMIT
 	const handleChange = (event) => {
@@ -98,7 +103,8 @@ function Transfer({ home, setTransferModalOpen }) {
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
 							<h3>Transfer</h3>
-							{/* <HomeCard home={home} /> */}
+							{home ? <HomeCard home={home.home} /> : 'No Homes'}
+
 							<Grid item xs={12}>
 								<Box
 									display='flex'
@@ -111,7 +117,7 @@ function Transfer({ home, setTransferModalOpen }) {
 									<TransferWithinAStationIcon fontSize='large' />
 								</Box>
 							</Grid>
-							<Grid item xs={12}>
+							{/* <Grid item xs={12}>
 								<Box
 									display='flex'
 									justifyContent='center'
@@ -132,7 +138,7 @@ function Transfer({ home, setTransferModalOpen }) {
 										</CardContent>
 									</Card>
 								</Box>
-							</Grid>
+							</Grid> */}
 
 							<Box mx={3} paddingTop={2} alignItems='center'>
 								<Button variant='contained' color='secondary'>
@@ -143,7 +149,7 @@ function Transfer({ home, setTransferModalOpen }) {
 
 								<Button variant='contained' color='primary'>
 									<Typography variant='button' onClick={handleSubmit}>
-										Save & Close
+										Accept
 									</Typography>
 								</Button>
 							</Box>
@@ -155,4 +161,4 @@ function Transfer({ home, setTransferModalOpen }) {
 	);
 }
 
-export default Transfer;
+export default TransferAccept;
