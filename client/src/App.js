@@ -76,7 +76,7 @@ function App(props) {
 						<Route exact path='/createHome'>
 							<PaperBase content={<Misc></Misc>}></PaperBase>
 						</Route>
-						<Route exact path='/zillow'>
+						{/* <Route exact path='/zillow'>
 							<PaperBase content={<Zillow></Zillow>}></PaperBase>
 						</Route>
 						<Route exact path='/twitter'>
@@ -87,7 +87,7 @@ function App(props) {
 						</Route>
 						<Route exact path='/settings'>
 							<PaperBase content={<Settings></Settings>}></PaperBase>
-						</Route>
+						</Route> */}
 					</Switch>
 				</StoreProvider>
 			</Router>

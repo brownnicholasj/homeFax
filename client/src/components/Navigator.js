@@ -10,12 +10,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
-import DnsRoundedIcon from '@material-ui/icons/DnsRounded';
+// import DnsRoundedIcon from '@material-ui/icons/DnsRounded';
 import PermMediaOutlinedIcon from '@material-ui/icons/PhotoSizeSelectActual';
-import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
-import TimerIcon from '@material-ui/icons/Timer';
-import SettingsIcon from '@material-ui/icons/Settings';
-import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
+// import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
+// import TimerIcon from '@material-ui/icons/Timer';
+// import SettingsIcon from '@material-ui/icons/Settings';
+// import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
 import { Link } from 'react-router-dom';
 import Auth from '../utils/auth';
 
@@ -66,24 +66,12 @@ const categories = [
 	{
 		id: 'Home Section',
 		children: [
-			// {
-			// 	id: 'Settings',
-			// 	icon: <DnsRoundedIcon />,
-			// 	path: '/settings',
-			// 	active: false,
-			// },
 			{
 				id: 'My Homes',
 				icon: <PermMediaOutlinedIcon />,
 				path: '/myhomes',
 				active: false,
 			},
-			// {
-			// 	id: 'Misc',
-			// 	icon: <SettingsInputComponentIcon />,
-			// 	path: '/misc',
-			// 	active: false,
-			// },
 			{
 				id: 'Profile',
 				icon: <PeopleIcon />,
@@ -92,35 +80,15 @@ const categories = [
 			},
 		],
 	},
-	// {
-	// 	id: 'Social',
-	// 	children: [
-	// 		{
-	// 			id: 'Friends',
-	// 			icon: <SettingsIcon />,
-	// 			path: '/friends',
-	// 			active: false,
-	// 		},
-	// 		{ id: 'Zillow', icon: <TimerIcon />, path: '/zillow', active: false },
-	// 		{
-	// 			id: 'Twitter',
-	// 			icon: <PhonelinkSetupIcon />,
-	// 			path: '/twitter',
-	// 			active: false,
-	// 		},
-	// 	],
-	// },
 ];
 
 function Navigator(props) {
 	const { classes, ...other } = props;
 
 	const isActive = (value) => {
-		// console.log('value :>> ', value);
 		return window.location.pathname === value;
 	};
-	const [isLoggedIn, setIsLoggedIn] = useState(true);
-	console.log('isLoggedIn :>> ', isLoggedIn);
+	// const [isLoggedIn, setIsLoggedIn] = useState(true);
 
 	return (
 		<Drawer variant='permanent' {...other}>
@@ -128,15 +96,15 @@ function Navigator(props) {
 				<ListItem
 					className={clsx(classes.firebase, classes.item, classes.itemCategory)}
 				>
-					<ListItemIcon className={classes.itemIcon}>
-						<Link
-							to={'/home'}
-							style={{ color: 'inherit', textDecoration: 'inherit' }}
-						>
-							<HomeIcon></HomeIcon>
-						</Link>
-					</ListItemIcon>
-					HomeFax
+					<Link
+						to={'/home'}
+						style={{ color: 'inherit', textDecoration: 'inherit' }}
+					>
+						<ListItemIcon className={classes.itemIcon}>
+							<HomeIcon />
+						</ListItemIcon>
+						HomeFax
+					</Link>
 				</ListItem>
 
 				{categories.map(({ id, children }) =>
