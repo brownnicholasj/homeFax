@@ -91,23 +91,21 @@ function Header(props) {
 							<Grid item>
 								{Auth.loggedIn() ? (
 									<Link
-									onClick={Auth.logout}
-									className={classes.link}
-									href='#'
-									variant='body2'
+										onClick={Auth.logout}
+										className={classes.link}
+										href='#'
+										variant='body2'
 									>
 										Logout
 									</Link>
 								) : (
 									<Link></Link>
-									)}
+								)}
 							</Grid>
 							{Auth.loggedIn() && (
 								<Grid item>
 									<Link href='/createHome'>
-										<Button
-											variant='contained'
-											>
+										<Button variant='contained'>
 											<AddCircleIcon />
 											<HomeIcon />
 										</Button>
@@ -116,23 +114,25 @@ function Header(props) {
 							)}
 							{Auth.loggedIn() && (
 								<Grid item>
-									<Tooltip
-										title={
-											transferCount > 0 ? 'Pending Transfer' : 'No Transfers'
-										}
-									>
-										<IconButton color='inherit'>
-											<Badge badgeContent={transferCount} color='secondary'>
-												<NotificationsIcon />
-											</Badge>
-										</IconButton>
-									</Tooltip>
+									<Link href='/transferaccept'>
+										<Tooltip
+											title={
+												transferCount > 0 ? 'Pending Transfer' : 'No Transfers'
+											}
+										>
+											<IconButton style={{ color: '#fff' }}>
+												<Badge badgeContent={transferCount} color='secondary'>
+													<NotificationsIcon onClick={handleClose} />
+												</Badge>
+											</IconButton>
+										</Tooltip>
+									</Link>
 								</Grid>
 							)}
 							{Auth.loggedIn() && (
 								<Grid item>
 									<div>
-									<IconButton
+										<IconButton
 											aria-label='account of current user'
 											aria-controls='menu-appbar'
 											aria-haspopup='true'
