@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import HelpIcon from '@material-ui/icons/Help';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import Link from '@material-ui/core/Link';
+// import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
@@ -18,6 +18,8 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Auth from '../utils/auth';
 import { MenuItem, Menu } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+
+import { Link } from 'react-router-dom';
 
 import HomeIcon from '@material-ui/icons/Home';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -92,19 +94,19 @@ function Header(props) {
 								{Auth.loggedIn() ? (
 									<Link
 									onClick={Auth.logout}
-									className={classes.link}
-									href='#'
+									// className={classes.link}
+									to='#'
 									variant='body2'
 									>
-										Logout
+										<span className={classes.link}>Logout</span>
 									</Link>
 								) : (
-									<Link></Link>
+									null
 									)}
 							</Grid>
 							{Auth.loggedIn() && (
 								<Grid item>
-									<Link href='/createHome'>
+									<Link to='/createHome'>
 										<Button
 											variant='contained'
 											>
