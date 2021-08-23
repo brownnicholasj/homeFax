@@ -59,6 +59,28 @@ export function idbPromise(storeName, method, object) {
       };
     };
   });
+};
+
+export async function zipAutoComplete(zip) {
+  const clientKey = '24TxL9GRYiAWdpNYg7zXY65gjY1h39sJTg518kT6EoZLoGfLM95vUbKsQKBrbZmc'
+  if (zip.length == 5 && /^[0-9]+$/.test(zip)) {
+    const url = `https://www.zipcodeapi.com/rest/${clientKey}/info.json/${zip}/radians`;
+    try {
+      console.log(url)
+      const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'https://www.zipcodeapi.com/',
+        },
+        mode: 'cors'
+      });
+      const data = await response.json();
+      console.log(data);
+      return { city: data.city, state: data.state };
+    } catch (err) {
+      console.log(err)
+    }
+  }
 }
 
 export function effectHelper(data, dispatch, loading) {

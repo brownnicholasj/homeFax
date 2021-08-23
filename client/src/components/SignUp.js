@@ -91,7 +91,15 @@ export default function SignUp() {
 			if (formState.password === formState.password2) {
 				try {
 					const { data } = await addUser({
-						variables: { ...formState },
+						variables: {
+							email: formState.email.toLowerCase(),
+							firstName: formState.firstName,
+							lastName: formState.lastName,
+							dob: formState.dob,
+							username: formState.username.toLowerCase(),
+							password: formState.password,
+							password2: formState.password2,
+						},
 					});
 					Auth.login(data.addUser.token);
 					history.push('/home');

@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { Divider } from '@material-ui/core';
 
 import TextField from '@material-ui/core/TextField';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { ADD_AREA } from '../../utils/mutations';
-import { QUERY_GET_HOME } from '../../utils/queries';
 
 import Snack from '../Snack';
 
@@ -35,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function AddArea({ homeId, setHome, setAreaModalOpen }) {
+export default function AddArea({ homeId, setHome, setHomeData, setAreaModalOpen }) {
 	// return <h1>Test</h1>;
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
@@ -59,6 +57,9 @@ export default function AddArea({ homeId, setHome, setAreaModalOpen }) {
 					},
 				});
 				if (mutationResponse) {
+					if (setHomeData) {
+						setHomeData(mutationResponse.data.addArea);
+					}
 					setSnack({
 						status: true,
 						message: `${formState.name} has been added to your home`,
@@ -69,8 +70,12 @@ export default function AddArea({ homeId, setHome, setAreaModalOpen }) {
 							...mutationResponse.data.addArea,
 						},
 					};
-					setHome(newHome);
-					setAreaModalOpen(false);
+					if (setHome) {
+						setHome(newHome);
+					}
+					if (setAreaModalOpen) {
+						setAreaModalOpen(false);
+					}
 				}
 			} catch (e) {
 				console.log(e);
