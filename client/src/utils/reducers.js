@@ -1,58 +1,59 @@
 import { useReducer } from 'react';
 import {
   UPDATE_USER,
-  UPDATE_HOMES,
-  ADD_HOME,
-  EDIT_HOME,
-  DELETE_HOME,
-  ADD_AREA,
-  EDIT_AREA,
-  DELETE_AREA,
-  ADD_ATTRIBUTE,
-  EDIT_ATTRIBUTE,
-  DELETE_ATTRIBUTE,
-  ADD_DETAIL,
-  EDIT_DETAIL,
-  DELETE_DETAIL
+  UPDATE_TRANSFERS
 } from './actions';
+import { idbPromise } from './helpers'
 
 // The reducer is a function that accepts the current state and an action. It returns a new state based on that action.
 export const reducer = (state, action) => {
   switch (action.type) {
     // Returns a copy of state with an update products array. We use the action.products property and spread it's contents into the new array.
     case UPDATE_USER:
-      console.log('hit at reducer')
-      const test = {
+      const updatedState = {
         ...state,
         user: action.user,
         homes: action.user.homes
       }
-      console.log(test);
-      return test;
+      idbPromise('user', 'put', action.user);
+      action.user.homes.forEach((home) => {
+        idbPromise('homes', 'put', home);
+      });
 
-    case UPDATE_HOMES:
-      return {
+      console.log(updatedState);
+      return updatedState;
+    
+    case UPDATE_TRANSFERS:
+      const updatedUserTransfers = {
         ...state,
-        homes: [...action.homes],
+        transfers: action.transfers
       };
+      action.transfers.forEach((transfer) => {
+        idbPromise('transfers', 'put', transfer)
+      });
+    // case UPDATE_HOMES:
+    //   return {
+    //     ...state,
+    //     homes: [...action.homes],
+    //   };
   
-    case ADD_HOME:
-      return {
-        ...state,
-        products: [...action.products],
-      };
+    // case ADD_HOME:
+    //   return {
+    //     ...state,
+    //     products: [...action.products],
+    //   };
 
-      case EDIT_HOME:
-      return {
-        ...state,
-        cartOpen: true,
-        cart: [...state.cart, action.product],
-      };
-    case DELETE_HOME:
-      return {
-        ...state,
-        cart: [...state.cart, ...action.products],
-      };
+    //   case EDIT_HOME:
+    //   return {
+    //     ...state,
+    //     cartOpen: true,
+    //     cart: [...state.cart, action.product],
+    //   };
+    // case DELETE_HOME:
+    //   return {
+    //     ...state,
+    //     cart: [...state.cart, ...action.products],
+    //   };
     // Returns a copy of state, sets the cartOpen to true and maps through the items in the cart.
     // If the item's `id` matches the `id` that was provided in the action.payload, we update the purchase quantity.
     // case UPDATE_CART_QUANTITY:
