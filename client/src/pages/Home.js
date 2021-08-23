@@ -6,26 +6,15 @@ import { MenuItem } from '@material-ui/core';
 
 // CODE ADDED FOR USE STATE TESTING
 import { useStoreContext } from '../utils/GlobalState';
-import { idbPromise, effectHelper } from '../utils/helpers';
-import {
-	UPDATE_USER,
-	UPDATE_HOMES
-} from '../utils/actions';
+import Auth from '../utils/auth';
+import { UPDATE_TRANSFERS } from '../utils/actions';
 import { useQuery } from '@apollo/client';
-import { QUERY_USER } from '../utils/queries';
+import { QUERY_ALL_USER_TRANSFERS } from '../utils/queries';
 
 function Home() {
 	const [state, dispatch] = useStoreContext();
 	const { user, homes, transfers } = state;
-	// const { data } = useQuery(QUERY_USER);
-	// let user;
-	// let homes;
-	// const handleState = () => {
-	// 	user = data?.user ?? {};
-	// 	homes = user.homes;
-	// 	dispatch({ type: UPDATE_USER, user });
-	// }
-	console.log(user);
+
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
 	const handleClick = (event) => {

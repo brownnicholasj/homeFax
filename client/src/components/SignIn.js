@@ -14,15 +14,14 @@ import {
 	makeStyles
  } from '@material-ui/core';
 import { LockOutlined, Visibility, VisibilityOff } from '@material-ui/icons';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Auth from '../utils/auth';
 import { LOGIN } from '../utils/mutations';
+import { QUERY_ALL_USER_TRANSFERS } from '../utils/queries';
 import { useStoreContext } from '../utils/GlobalState';
-import { UPDATE_USER } from '../utils/actions';
+import { UPDATE_USER, UPDATE_TRANSFERS } from '../utils/actions';
 import { useHistory } from 'react-router-dom';
 import SignUp from '../components/SignUp';
-
-import { idbPromise } from '../utils/helpers';
 
 
 function Copyright() {
@@ -102,6 +101,7 @@ export default function SignIn() {
 	const handleClickShowPassword = () => setShowPassword(!showPassword);
 	const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
+
 	const [login] = useMutation(LOGIN);
 
 	const handleFormSubmit = async (event) => {
@@ -113,9 +113,10 @@ export default function SignIn() {
 						password: formState.password,
 					},
 				});
-				const { user, token } = mutationResponse.data.login;
+				const { user, token, transfers } = mutationResponse.data.login;
 				dispatch({ type: UPDATE_USER, user });
-
+				dispatch({ type: UPDATE_TRANSFERS, transfers });
+			
 				Auth.login(token);
 				history.push('/home');
 			} catch (e) {
@@ -217,8 +218,8 @@ export default function SignIn() {
 								}}
 							>
 								<Grid
-									xs={10}
-									md={8}
+									// xs={10}
+									// md={8}
 									container
 									style={{
 										justifyContent: 'center',

@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Transfer({ home, setTransferModalOpen }) {
 	const { email } = Auth.getProfile().data;
-
 	const classes = useStyles();
 	const [formState, setFormState] = useState({
 		transferEmail: '',
@@ -63,7 +62,7 @@ function Transfer({ home, setTransferModalOpen }) {
 		event.preventDefault();
 		if (formState.transferEmail) {
 			try {
-				console.log('transferer :>> ', 'test');
+				console.log('transferer :>> ', email);
 				console.log('receiver :>> ', formState.transferEmail);
 				console.log('homeId :>> ', home._id);
 				const mutationResponse = await createTransfer({

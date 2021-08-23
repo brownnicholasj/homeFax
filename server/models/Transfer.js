@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const transferSchema = new Schema({
-	transferer: {
+	transferer: [{
 		type: String,
 		trim: true,
-	},
-	receiver: {
+	}],
+	receiver: [{
 		type: String,
 		trim: true,
-	},
+	}],
 	home: {
 		type: String,
 		required: true,

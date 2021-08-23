@@ -3,6 +3,7 @@ const { User, Home, Transfer } = require('../models');
 
 db.once('open', async () => {
 	await Home.deleteMany();
+	await Transfer.deleteMany();
 
 	const homes = await Home.insertMany([
 		//PAMELA WASHINGTON HOME -- SIMPLE EXAMPLE

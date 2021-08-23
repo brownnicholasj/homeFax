@@ -90,6 +90,17 @@ export const QUERY_USER_TRANSFERS = gql`
 	}
 `;
 
+export const QUERY_ALL_USER_TRANSFERS = gql`
+query Transfers($userEmail: String!) {
+	userTransfers(userEmail: $userEmail) {
+		_id
+		transferer
+		receiver
+		home
+	}
+}
+`;
+
 export const QUERY_SINGLE_TRANSFER = gql`
 	query Transfer($transferId: ID!) {
 		transfer(transferId: $transferId) {

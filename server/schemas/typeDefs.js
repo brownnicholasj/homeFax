@@ -61,6 +61,7 @@ const typeDefs = gql`
 	type Auth {
 		token: ID
 		user: User
+		transfers: [Transfer]
 	}
 
 	type Transfer {
@@ -74,6 +75,7 @@ const typeDefs = gql`
 		user: User
 		home(homeId: ID!): Home
 		transfers: [Transfer]
+		userTransfers(userEmail: String!): [Transfer]
 		transfer(transferId: ID!): Transfer
 		userTransfer(useremail: String): Transfer
 		area(areaId: ID!): Area

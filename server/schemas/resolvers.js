@@ -48,6 +48,9 @@ const resolvers = {
 		userTransfer: async (parent, { useremail }) => {
 			return await Transfer.findOne({ receiver: useremail });
 		},
+		userTransfers: async (parent, { userEmail }) => {
+			return await Transfer.find({ receiver: userEmail });
+		},
 		area: async (parent, { areaId }) => {
 			return await Home.findOne({ 'areas._id': areaId });
 		},
@@ -292,7 +295,7 @@ const resolvers = {
 		},
 		createTransfer: async (parent, args) => {
 			console.log('hit');
-			return await await Transfer.create(args);
+			return await Transfer.create(args);
 		},
 		editTransfer: async (parent, args) => {
 			return await Transfer.findOneAndUpdate({ home: args.home }, args, {
@@ -309,16 +312,17 @@ const resolvers = {
 			if (!user) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
-
 			const correctPw = await user.isCorrectPassword(password);
-
+			
 			if (!correctPw) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
-
 			const token = signToken(user);
-
-			return { token, user };
+			console.log(user)
+			// const transfers = [{ _id: '4684as635f4a68s4ef354as6f', transferer: ['bryan@email.com'], receiver: ['pam@gmail.com'], home: '46+a4sd6f846as4d64f68as7df'}];
+			const receiverEmail = user.email;
+			const transfers = await Transfer.find({ receiver: receiverEmail });
+			return { token, user, transfers };
 		},
 		// updateEmail: async (parent, args, context) => {
 		// 	if (context.user) {
@@ -343,7 +347,6 @@ const resolvers = {
 					...foundUser,
 					password: hashedPassword,
 				};
-				console.log(args.currentPassword);
 				const user = await User.findByIdAndUpdate(context.user._id, foundUser, {
 					new: true,
 				});
