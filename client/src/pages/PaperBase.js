@@ -183,6 +183,10 @@ function Paperbase(props) {
 	useEffect(() => {
 		//check if returned data from query && user logged in
 		if (data && Auth.loggedIn()) {
+			checkTransfer();
+		}
+
+		function checkTransfer() {
 			//deconstruct transfers from data
 			const { transfers } = data;
 			//set users email (already know we will get response because of Auth.loggedIn())
@@ -192,7 +196,7 @@ function Paperbase(props) {
 			if (transfers?.length && receiverEmail) {
 				let count = 0;
 				for (var i = 0; i < transfers.length; i++) {
-					if (transfers[i].receiver === 'bryan@email.com') {
+					if (transfers[i].receiver === receiverEmail) {
 						count++;
 						setTransferCount(count);
 					}
