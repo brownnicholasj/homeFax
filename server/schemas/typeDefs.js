@@ -68,7 +68,7 @@ const typeDefs = gql`
 		_id: ID!
 		transferer: [String]
 		receiver: [String]
-		home: ID!
+		home: Home!
 	}
 
 	type TransferReturn {

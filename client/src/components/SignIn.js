@@ -116,7 +116,7 @@ export default function SignIn() {
 				const { user, token, transfers } = mutationResponse.data.login;
 				dispatch({ type: UPDATE_USER, user });
 				dispatch({ type: UPDATE_TRANSFERS, transfers });
-			
+				console.log(mutationResponse)
 				Auth.login(token);
 				history.push('/home');
 			} catch (e) {

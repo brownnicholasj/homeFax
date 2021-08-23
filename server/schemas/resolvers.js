@@ -37,7 +37,9 @@ const resolvers = {
 			throw new AuthenticationError('Not logged in');
 		},
 		home: async (parent, { homeId }) => {
-			return await Home.findById(homeId);
+			const home = await Home.findById(homeId);
+			console.log(home);
+			return home;
 		},
 		transfers: async () => {
 			return await Transfer.find({});
@@ -49,7 +51,7 @@ const resolvers = {
 			return await Transfer.findOne({ receiver: useremail });
 		},
 		userTransfers: async (parent, { userEmail }) => {
-			return await Transfer.find({ receiver: userEmail });
+			return await Transfer.find({ receiver: userEmail }).populate('home');
 		},
 		area: async (parent, { areaId }) => {
 			return await Home.findOne({ 'areas._id': areaId });
@@ -247,16 +249,19 @@ const resolvers = {
 			return home;
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
+			console.log("hit at transferHome")
 			await User.findOneAndUpdate({ email: transferer},
 				{
 				$pull: { homes: home },
 			});
-			const newHomeUser = await User.findOneAndUpdate({ email: receiver }, {
-					$addToSet: { homes: home },
-				}).populate('homes');
-			
-			await Transfer.findOneAndDelete({ home: home });
-			const transfers = await Transfer.find({ receiver: receiver });
+			const newHomeUser = await User.findOneAndUpdate(
+				{ email: receiver },
+				{ $addToSet: { homes: home } },
+				{ new: true }).populate('homes');
+			console.log(newHomeUser)
+
+			await Transfer.findOneAndDelete({ 'home._id': home._id });
+			const transfers = await Transfer.find({ receiver: receiver }).populate('home');
 
 			return { newHomeUser, transfers };
 
@@ -289,8 +294,10 @@ const resolvers = {
 			throw new AuthenticationError('Not logged in');
 		},
 		createTransfer: async (parent, args) => {
-			console.log('hit');
-			return await Transfer.create(args);
+			const createTransfer = await Transfer.create(args);
+			const newTransferId = createTransfer._id;
+			const newTransfer = await Transfer.findById(newTransferId).populate('home');
+			return newTransfer;
 		},
 		editTransfer: async (parent, args) => {
 			return await Transfer.findOneAndUpdate({ home: args.home }, args, {
@@ -314,16 +321,9 @@ const resolvers = {
 			}
 			const token = signToken(user);
 			const receiverEmail = user.email;
-			const transfers = await Transfer.find({ receiver: receiverEmail });
+			const transfers = await Transfer.find({ receiver: receiverEmail }).populate('home');
 			return { token, user, transfers };
 		},
-		// updateEmail: async (parent, args, context) => {
-		// 	if (context.user) {
-		// 		return await User.findByIdAndUpdate(context.user._id, args, { new: true });
-		// 	}
-
-		// 	throw new AuthenticationError('Not logged in');
-		// },
 		updatePassword: async (parent, args, context) => {
 			if (context.user) {
 				const foundUser = await User.findById(context.user._id);

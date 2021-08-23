@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function TransferAccept({ home, setTransferModalOpen }) {
+function TransferAccept({ home, transfer, setTransferModalOpen }) {
 	const { email } = Auth.getProfile().data;
 
 	const classes = useStyles();
@@ -49,10 +49,6 @@ function TransferAccept({ home, setTransferModalOpen }) {
 	});
 	// const [snack, setSnack] = useState({ status: false, message: '' });
 	const [acceptTransfer, { error }] = useMutation(TRANSFER_HOME);
-
-	if (home) {
-		console.log(home);
-	}
 
 	// NEED TO CATCH THE INPUT FROM SUBMIT
 	// const handleChange = (event) => {
@@ -66,13 +62,14 @@ function TransferAccept({ home, setTransferModalOpen }) {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			console.log('transferer :>> ', 'test');
-			console.log('receiver :>> ', formState.transferEmail);
-			console.log('homeId :>> ', home._id);
+			console.log('transferer :>> ', transfer.transferer[0]);
+			console.log('receiver :>> ', transfer.receiver[0]);
+			console.log('homeId :>> ', transfer.home._id);
 			const mutationResponse = await acceptTransfer({
 				variables: {
-					receiver: email,
-					home: home.home._id,
+					transferer: transfer.transferer[0],
+					receiver: transfer.receiver[0],
+					home: transfer.home._id,
 				},
 			});
 			if (mutationResponse) {

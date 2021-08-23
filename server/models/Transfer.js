@@ -12,9 +12,10 @@ const transferSchema = new Schema({
 		trim: true,
 	}],
 	home: {
-		type: String,
+		type: Schema.Types.ObjectId,
 		required: true,
 		unique: true,
+		ref: 'Home'
 	},
 });
 

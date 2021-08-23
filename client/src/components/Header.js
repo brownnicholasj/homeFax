@@ -61,30 +61,15 @@ const styles = (theme) => ({
 function Header(props) {
 	const { classes, onDrawerToggle, transferCount } = props;
 	const [state, dispatch] = useStoreContext();
-	// const [getTransfer, { data }] = useLazyQuery(QUERY_GET_HOME);
-	console.log(state.transfers)
-	let transferHome;
+	let transferHome = {};
 	if (state.transfers.length) {
-		const transferHomeId = state.transfers[0].home;
-		console.log(transferHomeId)
-		// getTransfer({ variables: { homeId: transferHomeId } });
-		// transferHome = data?.;
-		// console.log(transferHome)
-	} else {
-		transferHome = {}
-	};
+		transferHome = state.transfers[0].home;
+	}
 
 	
 	const [transferAcceptModalOpen, setTransferAcceptModalOpen] = useState(false);
 
 
-	// const transferAddress = data;
-	// console.log('header data >> ' + transferAddress);
-
-	// var transferHome = '';
-	// if (transferCount) {
-	// 	transferHome = transferCount[0].home;
-	// }
 
 	const handleTransferAcceptModal = () => {
 		setTransferAcceptModalOpen(true);
