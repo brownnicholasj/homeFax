@@ -42,56 +42,51 @@ function Content(props) {
 	const [state] = useStoreContext();
 
 	const homeData = state.user.homes[0];
-
-	// homeData.map((address) => {
-	// 	return [
-	// 		{ text: address.street1 },
-	// 		{ text: address.street2 },
-	// 		{ text: address.city },
-	// 		{ text: address.state },
-	// 		{ text: address.zip },
-	// 	];
-	// });
-
-	// function getAddress(data) {
-	// 	return [
-	// 		{ text: data.address.street1 },
-	// 		{ text: data.address.street2 },
-	// 		{ text: data.address.city },
-	// 		{ text: data.address.state },
-	// 		{ text: data.address.zip },
-	// 	];
-	// }
-	// console.log(homeData.map(getAddress));
-	console.log(homeData.areas);
 	const areaData = homeData.areas;
 	const addressData = homeData.address;
 	const _formatAddress = (data) => {
 		return [
-			{ text: data.street1 },
-			{ text: data.street2 },
-			{ text: data.city },
-			{ text: data.state },
-			{ text: data.zip },
+			{ text: data.street1, style: 'address' },
+			{ text: data.street2, style: 'address' },
+			{ text: `${data.city}, ${data.state}, ${data.zip}`, style: 'address' },
 		];
 	};
 	const _formatArea = (data) => {
 		let formattedData = [];
 		for (let i = 0; i < data.length; i++) {
-			console.log(data[i].name);
-			formattedData.push({ text: data[i].name });
+			formattedData.push({
+				text: `Area -- ${data[i].name}`,
+				style: 'areaHeader',
+				margin: [5, 2, 0, 0],
+			});
 			for (let j = 0; j < data[i].attributes.length; j++) {
-				console.log(data[i].attributes[j].type);
-				formattedData.push({ text: data[i].attributes[j].type });
+				formattedData.push({
+					text: `${data[i].attributes[j].type}`,
+					style: 'attributeHeader',
+					margin: [20, 2, 0, 0],
+				});
 				for (let k = 0; k < data[i].attributes[j].detail.length; k++) {
-					console.log(data[i].attributes[j].detail[k].key);
 					if (data[i].attributes[j].detail[k].date) {
 						formattedData.push({
 							text: `${data[i].attributes[j].detail[k].date}`,
+							style: 'detailDate',
+							margin: [20, 2, 0, 0],
 						});
 					}
 					formattedData.push({
-						text: `${data[i].attributes[j].detail[k].key} -- ${data[i].attributes[j].detail[k].value}`,
+						text: [
+							{
+								text: `${data[i].attributes[j].detail[k].key}:`,
+								bold: true,
+								alignment: 'right',
+							},
+							'\n',
+							{
+								text: `${data[i].attributes[j].detail[k].value}`,
+								style: 'detailValue',
+								margin: [20, 2, 20, 2],
+							},
+						],
 					});
 				}
 			}
@@ -109,7 +104,41 @@ function Content(props) {
 		const documentDefinition = {
 			pageSize: 'A4',
 			pageOrientation: 'portiat',
-			content: [{ text: 'HomeFax Report' }, '\n', homeAddress, '\n', homeArea],
+			styles: {
+				header: {
+					fontSize: 22,
+					bold: true,
+					alignment: 'center',
+				},
+				address: {
+					fontSize: 16,
+					alignment: 'left',
+				},
+				areaHeader: {
+					fontSize: 14,
+					alignment: 'left',
+					bold: true,
+				},
+				attributeHeader: {
+					fontSize: 14,
+					alignment: 'center',
+				},
+				detailDate: {
+					fontSize: 12,
+					alignment: 'right',
+				},
+				detailValue: {
+					fontSize: 12,
+					alignment: 'right',
+				},
+			},
+			content: [
+				{ text: 'HomeFax Report', style: 'header' },
+				'\n',
+				homeAddress,
+				'\n',
+				homeArea,
+			],
 		};
 
 		pdfMake.createPdf(documentDefinition).open();
