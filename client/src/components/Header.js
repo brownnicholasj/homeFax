@@ -4,33 +4,23 @@ import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import HelpIcon from '@material-ui/icons/Help';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-// import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Auth from '../utils/auth';
 import { MenuItem, Menu, Modal } from '@material-ui/core';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import TransferAccept from './TransferAccept';
-import { QUERY_GET_HOME } from '../utils/queries';
-import { useLazyQuery } from '@apollo/client';
 
 import { Link } from 'react-router-dom';
 
 import HomeIcon from '@material-ui/icons/Home';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { useStoreContext } from '../utils/GlobalState';
-
-
-// import Tab from '@material-ui/core/Tab';
-// import Tabs from '@material-ui/core/Tabs';
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
@@ -66,13 +56,12 @@ function Header(props) {
 		transferHome = state.transfers[0].home;
 	}
 
-	
 	const [transferAcceptModalOpen, setTransferAcceptModalOpen] = useState(false);
 
-
-
 	const handleTransferAcceptModal = () => {
-		setTransferAcceptModalOpen(!transferAcceptModalOpen);
+		if (state.transfers.length) {
+			setTransferAcceptModalOpen(!transferAcceptModalOpen);
+		}
 	};
 
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -120,16 +109,12 @@ function Header(props) {
 									>
 										<span className={classes.link}>Logout</span>
 									</Link>
-								) : (
-									null
-									)}
+								) : null}
 							</Grid>
 							{Auth.loggedIn() && (
 								<Grid item>
 									<Link to='/createHome'>
-										<Button
-											variant='contained'
-											>
+										<Button variant='contained'>
 											<AddCircleIcon />
 											<HomeIcon />
 										</Button>
@@ -149,10 +134,7 @@ function Header(props) {
 											style={{ color: '#fff' }}
 											onClick={handleTransferAcceptModal}
 										>
-											<Badge
-												badgeContent={transferCount}
-												color='secondary'
-											>
+											<Badge badgeContent={transferCount} color='secondary'>
 												<NotificationsIcon />
 											</Badge>
 										</IconButton>

@@ -99,11 +99,8 @@ const resolvers = {
 			return home;
 		},
 		deleteHome: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const home = await Home.findOneAndDelete({ _id: args.homeId });
-				return home;
-			}
-			return;
+			const home = await Home.findOneAndDelete({ _id: args.homeId });
+			return home;
 		},
 		addArea: async (parent, { homeId, name, icon }) => {
 			const home = await Home.findByIdAndUpdate(
@@ -249,23 +246,29 @@ const resolvers = {
 			return home;
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
-			console.log("hit at transferHome")
-			console.log(receiver)
+			console.log('hit at transferHome');
+			console.log(receiver);
 			if (transferer) {
-				await User.findOneAndUpdate({ email: transferer},
+				await User.findOneAndUpdate(
+					{ email: transferer },
 					{
-					$pull: { homes: home },
-				});
+						$pull: { homes: home },
+					}
+				);
 			}
 			await User.findOneAndUpdate(
 				{ email: receiver },
-				{ $addToSet: { homes: home } },
+				{ $addToSet: { homes: home } }
 			);
-			const newHomeUser = await User.findOne({ email: receiver }).populate('homes');
-			console.log(newHomeUser)
+			const newHomeUser = await User.findOne({ email: receiver }).populate(
+				'homes'
+			);
+			console.log(newHomeUser);
 
 			await Transfer.findOneAndDelete({ 'home._id': home._id });
-			const transfers = await Transfer.find({ receiver: receiver }).populate('home');
+			const transfers = await Transfer.find({ receiver: receiver }).populate(
+				'home'
+			);
 
 			return { user: newHomeUser, transfers };
 
@@ -300,7 +303,9 @@ const resolvers = {
 		createTransfer: async (parent, args) => {
 			const createTransfer = await Transfer.create(args);
 			const newTransferId = createTransfer._id;
-			const newTransfer = await Transfer.findById(newTransferId).populate('home');
+			const newTransfer = await Transfer.findById(newTransferId).populate(
+				'home'
+			);
 			return newTransfer;
 		},
 		editTransfer: async (parent, args) => {
@@ -319,13 +324,15 @@ const resolvers = {
 				throw new AuthenticationError('Incorrect credentials');
 			}
 			const correctPw = await user.isCorrectPassword(password);
-			
+
 			if (!correctPw) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
 			const token = signToken(user);
 			const receiverEmail = user.email;
-			const transfers = await Transfer.find({ receiver: receiverEmail }).populate('home');
+			const transfers = await Transfer.find({
+				receiver: receiverEmail,
+			}).populate('home');
 			return { token, user, transfers };
 		},
 		updatePassword: async (parent, args, context) => {

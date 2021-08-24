@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardContent, Button, Grid, Divider, TextField } from '@material-ui/core';
+import {
+	Card,
+	CardContent,
+	Button,
+	Grid,
+	Divider,
+	TextField,
+} from '@material-ui/core';
 import { useMutation } from '@apollo/client';
 import { ADD_DETAIL } from '../../utils/mutations';
 import Snack from '../Snack';
@@ -50,11 +57,9 @@ export default function AddDetail({
 		date: '',
 	});
 	const [addDetail, { error }] = useMutation(ADD_DETAIL);
-	// const [editDetail, { error }] = useMutation(EDIT_DETAIL);
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
 		if (formState.key && formState.value) {
-			console.log('here');
 			try {
 				const mutationResponse = await addDetail({
 					variables: {
@@ -66,7 +71,7 @@ export default function AddDetail({
 				});
 				if (mutationResponse) {
 					const stateHome = mutationResponse.data.addDetail;
-					dispatch({ type: UPDATE_HOME, home: stateHome})
+					dispatch({ type: UPDATE_HOME, home: stateHome });
 					setSnack({
 						status: true,
 						message: `${formState.key} has been added to ${attributeName}`,
@@ -76,7 +81,6 @@ export default function AddDetail({
 							...mutationResponse.data.addDetail,
 						},
 					};
-					console.log('newHome :>> ', newHome);
 					setHome(newHome);
 					setDetailModalOpen(false);
 				}
@@ -96,7 +100,7 @@ export default function AddDetail({
 
 	return (
 		<>
-			<Card className={classes.root} variant="outlined">
+			<Card className={classes.root} variant='outlined'>
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
@@ -105,37 +109,41 @@ export default function AddDetail({
 								<Divider />
 							</Grid>
 							<Grid item xs={12} s={6}>
-								<form className={classes.inputRoot} noValidate autoComplete="off">
+								<form
+									className={classes.inputRoot}
+									noValidate
+									autoComplete='off'
+								>
 									<div>
 										<TextField
 											required
-											id="key"
-											label="Detail"
-											helperText="Attribute detail"
-											variant="standard"
+											id='key'
+											label='Detail'
+											helperText='Attribute detail'
+											variant='standard'
 											onChange={handleChange}
 										/>
 										<TextField
 											required
-											id="value"
-											label="Value"
-											helperText="Attribute detail value"
+											id='value'
+											label='Value'
+											helperText='Attribute detail value'
 											onChange={handleChange}
-											variant="standard"
+											variant='standard'
 										/>
 										<TextField
-											id="date"
-											type="date"
-											helperText="Associated date"
-											variant="standard"
+											id='date'
+											type='date'
+											helperText='Associated date'
+											variant='standard'
 											onChange={handleChange}
 										/>
 									</div>
 									<Button
-										color="primary"
-										variant="outlined"
-										size="large"
-										type="submit"
+										color='primary'
+										variant='outlined'
+										size='large'
+										type='submit'
 										onClick={handleFormSubmit}
 									>
 										Save Detail

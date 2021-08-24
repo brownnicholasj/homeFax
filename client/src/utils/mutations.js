@@ -58,20 +58,6 @@ export const LOGIN = gql`
 	}
 `;
 
-// export const LOGIN = gql`
-// 	mutation login($identifier: String!, $password: String!) {
-// 		login(identifier: $identifier, password: $password) {
-// 			token
-// 			user {
-// 				_id
-// 				homes {
-// 					_id
-// 				}
-// 			}
-// 		}
-// 	}
-// `;
-
 export const ADD_USER = gql`
 	mutation addUser(
 		$firstName: String!
@@ -437,60 +423,60 @@ export const CREATE_TRANSFER = gql`
 `;
 
 export const TRANSFER_HOME = gql`
-mutation TransferHome($transferer: String, $receiver: String, $home: ID!) {
-    transferHome(transferer: $transferer, receiver: $receiver, home: $home) {
-		user {
-			_id
-			firstName
-			lastName
-			username
-			email
-			dob
-			homes {
+	mutation TransferHome($transferer: String, $receiver: String, $home: ID!) {
+		transferHome(transferer: $transferer, receiver: $receiver, home: $home) {
+			user {
 				_id
-				address {
+				firstName
+				lastName
+				username
+				email
+				dob
+				homes {
 					_id
-					street1
-					street2
-					city
-					state
-					zip
-				}
-				areas {
-					_id
-					name
-					icon
-					attributes {
+					address {
 						_id
-						type
-						detail {
+						street1
+						street2
+						city
+						state
+						zip
+					}
+					areas {
+						_id
+						name
+						icon
+						attributes {
 							_id
-							key
-							value
-							date
+							type
+							detail {
+								_id
+								key
+								value
+								date
+							}
 						}
 					}
 				}
 			}
-		}
-		transfers{
-			_id
-			transferer
-			receiver
-			home {
+			transfers {
 				_id
-				address {
+				transferer
+				receiver
+				home {
 					_id
-					street1
-					street2
-					city
-					state
-					zip
+					address {
+						_id
+						street1
+						street2
+						city
+						state
+						zip
+					}
 				}
 			}
 		}
-    }
-  }
+	}
 `;
 
 export const EDIT_TRANSFER = gql`

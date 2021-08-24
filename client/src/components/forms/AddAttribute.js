@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardContent, Button, Grid, Divider, TextField } from '@material-ui/core';
+import {
+	Card,
+	CardContent,
+	Button,
+	Grid,
+	Divider,
+	TextField,
+} from '@material-ui/core';
 import { useMutation } from '@apollo/client';
 import { ADD_ATTRIBUTE } from '../../utils/mutations';
 import Snack from '../Snack';
@@ -56,7 +63,7 @@ export default function AddAttribute({
 				});
 				if (mutationResponse) {
 					const stateHome = mutationResponse.data.addAttribute;
-					dispatch({ type: UPDATE_HOME, home: stateHome })
+					dispatch({ type: UPDATE_HOME, home: stateHome });
 					setSnack({
 						status: true,
 						message: `${formState.type} added to ${areaName}`,
@@ -66,7 +73,6 @@ export default function AddAttribute({
 							...mutationResponse.data.addAttribute,
 						},
 					};
-					console.log('newHome :>> ', newHome);
 					setHome(newHome);
 					setAttributeModalOpen(false);
 				}
@@ -86,7 +92,7 @@ export default function AddAttribute({
 
 	return (
 		<>
-			<Card className={classes.root} variant="outlined">
+			<Card className={classes.root} variant='outlined'>
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
@@ -95,22 +101,26 @@ export default function AddAttribute({
 								<Divider />
 							</Grid>
 							<Grid item xs={12} s={6}>
-								<form className={classes.inputRoot} noValidate autoComplete="off">
+								<form
+									className={classes.inputRoot}
+									noValidate
+									autoComplete='off'
+								>
 									<div>
 										<TextField
 											required
-											id="type"
-											label="Type"
-											helperText="Attribute detail"
-											variant="standard"
+											id='type'
+											label='Type'
+											helperText='Attribute detail'
+											variant='standard'
 											onChange={handleChange}
 										/>
 									</div>
 									<Button
-										color="primary"
-										variant="outlined"
-										size="large"
-										type="submit"
+										color='primary'
+										variant='outlined'
+										size='large'
+										type='submit'
 										onClick={handleFormSubmit}
 									>
 										Save Attribute
@@ -126,13 +136,13 @@ export default function AddAttribute({
 							</Grid>
 							<Grid item xs={12} s={6}>
 								<p>
-									An attribute is part of an area. For instance in your kitchen there are
-									many different things - appliances, dishes, paint color, etc. - and
-									these are what we call "attributes".
+									An attribute is part of an area. For instance in your kitchen
+									there are many different things - appliances, dishes, paint
+									color, etc. - and these are what we call "attributes".
 								</p>
 								<p>
-									An attribute has a type. Your toaster is an attribute with "type"
-									"toaster".
+									An attribute has a type. Your toaster is an attribute with
+									"type" "toaster".
 								</p>
 							</Grid>
 						</Grid>

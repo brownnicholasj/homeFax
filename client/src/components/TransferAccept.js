@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useMutation } from '@apollo/client';
-// import Snack from './Snack';
-import Auth from '../utils/auth';
 import {
 	Card,
 	CardContent,
 	Typography,
 	makeStyles,
 	Grid,
-	TextField,
 	Box,
 	Button,
 } from '@material-ui/core';
@@ -40,21 +37,20 @@ const useStyles = makeStyles((theme) => ({
 	avatar: {
 		backgroundColor: red[500],
 	},
+	margin: {
+		margin: theme.spacing(1),
+	},
 }));
 
 function TransferAccept({ home, transfer, setTransferModalOpen }) {
 	const classes = useStyles();
 	const [state, dispatch] = useStoreContext();
-	// const [snack, setSnack] = useState({ status: false, message: '' });
-	const [acceptTransfer, { error }] = useMutation(TRANSFER_HOME);
 
+	const [acceptTransfer, { error }] = useMutation(TRANSFER_HOME);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			console.log('transferer :>> ', transfer.transferer[0]);
-			console.log('receiver :>> ', transfer.receiver[0]);
-			console.log('homeId :>> ', transfer.home._id);
 			const mutationResponse = await acceptTransfer({
 				variables: {
 					transferer: transfer.transferer[0],
@@ -65,14 +61,9 @@ function TransferAccept({ home, transfer, setTransferModalOpen }) {
 			if (mutationResponse) {
 				const stateTransfers = mutationResponse.data.transferHome.transfers;
 				const stateUser = mutationResponse.data.transferHome.user;
-				console.log(stateUser);
 				setTransferModalOpen(false);
 				dispatch({ type: UPDATE_TRANSFERS, transfers: stateTransfers });
 				dispatch({ type: UPDATE_USER, user: stateUser });
-				// setSnack({
-				// 	status: true,
-				// 	message: `Welcome to your new home! ${transfer.transferer[0]} has been removed.`,
-				// });
 			}
 		} catch (e) {
 			console.log(e);
@@ -80,6 +71,10 @@ function TransferAccept({ home, transfer, setTransferModalOpen }) {
 	};
 
 	const handleCancel = (event) => {
+		setTransferModalOpen(false);
+	};
+
+	const handleReject = (event) => {
 		setTransferModalOpen(false);
 	};
 
@@ -110,17 +105,41 @@ function TransferAccept({ home, transfer, setTransferModalOpen }) {
 								</Box>
 							</Grid>
 
-							<Box mx={3} paddingTop={2} alignItems='center'>
-								<Button variant='contained' color='secondary'>
+							<Box mx={2} paddingTop={2} alignItems='center'>
+								<Button
+									variant='contained'
+									color='secondary'
+									size='small'
+									className={classes.margin}
+								>
 									<Typography variant='button' onClick={handleCancel}>
 										Cancel
 									</Typography>
 								</Button>
 
 								{home ? (
-									<Button variant='contained' color='primary'>
+									<Button
+										variant='contained'
+										color='primary'
+										size='small'
+										className={classes.margin}
+									>
 										<Typography variant='button' onClick={handleSubmit}>
 											Accept
+										</Typography>
+									</Button>
+								) : (
+									''
+								)}
+								{home ? (
+									<Button
+										variant='contained'
+										color='primary'
+										size='small'
+										className={classes.margin}
+									>
+										<Typography variant='button' onClick={handleReject}>
+											Reject
 										</Typography>
 									</Button>
 								) : (
