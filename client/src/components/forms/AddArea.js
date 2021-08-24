@@ -12,7 +12,6 @@ import { ADD_AREA } from '../../utils/mutations';
 import { useStoreContext } from '../../utils/GlobalState';
 import { UPDATE_HOME } from '../../utils/actions';
 
-
 import Snack from '../Snack';
 
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +35,12 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function AddArea({ homeId, setHome, setHomeData, setAreaModalOpen }) {
+export default function AddArea({
+	homeId,
+	setHome,
+	setHomeData,
+	setAreaModalOpen,
+}) {
 	const [state, dispatch] = useStoreContext();
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
@@ -61,7 +65,7 @@ export default function AddArea({ homeId, setHome, setHomeData, setAreaModalOpen
 				});
 				if (mutationResponse) {
 					const stateHome = mutationResponse.data.addArea;
-					dispatch({ type: UPDATE_HOME, home: stateHome })
+					dispatch({ type: UPDATE_HOME, home: stateHome });
 					if (setHomeData) {
 						setHomeData(stateHome);
 					}
@@ -98,10 +102,7 @@ export default function AddArea({ homeId, setHome, setHomeData, setAreaModalOpen
 
 	return (
 		<>
-			<Card
-				// className={classes.root}
-				variant="outlined"
-			>
+			<Card variant='outlined'>
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
@@ -110,30 +111,34 @@ export default function AddArea({ homeId, setHome, setHomeData, setAreaModalOpen
 								<Divider />
 							</Grid>
 							<Grid item xs={12} s={6}>
-								<form className={classes.inputRoot} noValidate autoComplete="off">
+								<form
+									className={classes.inputRoot}
+									noValidate
+									autoComplete='off'
+								>
 									<div>
 										<TextField
 											required
-											id="name"
-											label="Name"
-											helperText="Area name"
-											variant="standard"
+											id='name'
+											label='Name'
+											helperText='Area name'
+											variant='standard'
 											onChange={handleChange}
 										/>
 										<TextField
 											disabled
-											id="icon"
-											label="Icon"
-											helperText="Area icon"
-											variant="standard"
+											id='icon'
+											label='Icon'
+											helperText='Area icon'
+											variant='standard'
 											onChange={handleChange}
 										/>
 									</div>
 									<Button
-										color="primary"
-										variant="outlined"
-										size="large"
-										type="submit"
+										color='primary'
+										variant='outlined'
+										size='large'
+										type='submit'
 										onClick={handleFormSubmit}
 									>
 										Save Area

@@ -51,9 +51,6 @@ function TransferAccept({ home, transfer, setTransferModalOpen }) {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			console.log('transferer :>> ', transfer.transferer[0]);
-			console.log('receiver :>> ', transfer.receiver[0]);
-			console.log('homeId :>> ', transfer.home._id);
 			const mutationResponse = await acceptTransfer({
 				variables: {
 					transferer: transfer.transferer[0],

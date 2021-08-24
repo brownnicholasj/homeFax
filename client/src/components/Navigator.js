@@ -10,12 +10,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
-// import DnsRoundedIcon from '@material-ui/icons/DnsRounded';
 import PermMediaOutlinedIcon from '@material-ui/icons/PhotoSizeSelectActual';
-// import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
-// import TimerIcon from '@material-ui/icons/Timer';
-// import SettingsIcon from '@material-ui/icons/Settings';
-// import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
 import { Link } from 'react-router-dom';
 import Auth from '../utils/auth';
 
