@@ -2,46 +2,32 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import vfsFonts from 'pdfmake/build/vfs_fonts';
 
 const _format = (data) => {
-	return data.map((item) => {
+	if (data.length) {
 		return [
-			{ text: item.name },
-			{ text: item.username },
-			{ text: item.email },
-			{ text: item.phone },
-			{ text: item.website },
+			{ text: data.address.street1 },
+			{ text: data.address.street2 },
+			{ text: data.address.city },
+			{ text: data.address.state },
+			{ text: data.address.zip },
 		];
-	});
+	} else {
+		return [{}];
+	}
 };
 
-export default function GenerateReport(rows) {
+export default function GenerateReport(homeData) {
 	const { vfs } = vfsFonts.pdfMake;
 	pdfMake.vfs = vfs;
 
-	// const data = fakeData(rows);
-	// const formattedData = _format(data);
+	const formattedData = _format(homeData);
 
-	const homeFaxReport = {
-		content: [
-			{ text: 'HomeFax Report' },
-			'\n',
-			{
-				table: {
-					headerRows: 1,
-					dontBreakRows: true,
-					body: [
-						[
-							{ text: 'Name', style: 'tableHeader' },
-							{ text: 'Username', style: 'tableHeader' },
-							{ text: 'Email', style: 'tableHeader' },
-							{ text: 'Phone', style: 'tableHeader' },
-							{ text: 'Website', style: 'tableHeader' },
-						],
-						// ...formattedData,
-					],
-				},
-			},
-		],
+	const data = [{ text: 'street1' }, { text: 'street2' }];
+
+	const documentDefinition = {
+		pageSize: 'A4',
+		pageOrientation: 'portiat',
+		content: [{ text: 'HomeFax Report' }, '\n', formattedData],
 	};
 
-	pdfMake.createPdf(homeFaxReport).open();
+	pdfMake.createPdf(documentDefinition).open();
 }
