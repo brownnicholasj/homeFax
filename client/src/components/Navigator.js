@@ -88,7 +88,6 @@ function Navigator(props) {
 	const isActive = (value) => {
 		return window.location.pathname === value;
 	};
-	// const [isLoggedIn, setIsLoggedIn] = useState(true);
 
 	return (
 		<Drawer variant='permanent' {...other}>

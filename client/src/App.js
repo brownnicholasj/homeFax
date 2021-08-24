@@ -10,14 +10,9 @@ import { setContext } from '@apollo/client/link/context';
 import PaperBase from './pages/PaperBase.js';
 import Content from './components/Content';
 import Home from './pages/Home';
-import Settings from './pages/Settings.js';
 import Homes from './pages/Homes.js';
 import Misc from './pages/Misc.js';
 import Profile from './pages/Profile.js';
-import Friends from './pages/Friends.js';
-import Zillow from './pages/Zillow.js';
-import Twitter from './pages/Twitter.js';
-import SignIn from './components/SignIn';
 
 import MyHome from './pages/MyHome.js';
 import Transfer from './components/Transfer.js';
@@ -76,18 +71,6 @@ function App(props) {
 						<Route exact path='/createHome'>
 							<PaperBase content={<Misc></Misc>}></PaperBase>
 						</Route>
-						{/* <Route exact path='/zillow'>
-							<PaperBase content={<Zillow></Zillow>}></PaperBase>
-						</Route>
-						<Route exact path='/twitter'>
-							<PaperBase content={<Twitter></Twitter>}></PaperBase>
-						</Route>
-						<Route exact path='/misc'>
-							<PaperBase content={<Misc></Misc>}></PaperBase>
-						</Route>
-						<Route exact path='/settings'>
-							<PaperBase content={<Settings></Settings>}></PaperBase>
-						</Route> */}
 					</Switch>
 				</StoreProvider>
 			</Router>
