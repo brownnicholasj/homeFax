@@ -190,9 +190,9 @@ function Header(props) {
 											open={open}
 											onClose={handleClose}
 										>
-											<MenuItem id='profile' onClick={handleClose}>
-												Profile
-											</MenuItem>
+											<Link to='/profile'>
+												<MenuItem id='profile'>Profile</MenuItem>
+											</Link>
 											<MenuItem id='logout' onClick={handleClose}>
 												Logout
 											</MenuItem>
