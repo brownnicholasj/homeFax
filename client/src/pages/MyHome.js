@@ -263,12 +263,11 @@ function MyHome(props) {
 														<ExpandMoreIcon></ExpandMoreIcon>
 													</IconButton>
 												) : (
-													<IconButton>
-														<ExpandLessIcon
-															onClick={() => {
-																handleExpandClick(i);
-															}}
-														></ExpandLessIcon>
+													<IconButton
+														onClick={() => {
+															handleExpandClick(i);
+														}}
+>														<ExpandLessIcon></ExpandLessIcon>
 													</IconButton>
 												)
 											}
