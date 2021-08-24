@@ -5,6 +5,8 @@ import { useQuery } from '@apollo/client';
 import { QUERY_USER } from '../utils/queries';
 import { Card, CardActionArea, Typography } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
+import HomeCard from '../components/HomeCard';
+import { Link } from 'react-router-dom';
 
 function Homes(props) {
 	const { loading, data } = useQuery(QUERY_USER);
@@ -22,20 +24,12 @@ function Homes(props) {
 					<h1>Homes</h1>
 					<Grid container spacing={4}>
 						{user.homes.map((home) => (
-							<Grid item xs={12}>
-								<CardActionArea
-									style={{ textDecoration: 'none' }}
-									href={'/myhomes/' + home._id}
+							<Grid item xs={12} key={`home_${home._id}`}>
+								<Link
+									to={'/myhomes/' + home._id}
 								>
-									<Card>
-										<Typography>{home.address.street1}</Typography>
-										<Typography>{home.address.street2}</Typography>
-										<Typography>
-											{home.address.city + ', ' + home.address.state}
-										</Typography>
-										<Typography>{home.address.zip}</Typography>
-									</Card>
-								</CardActionArea>
+									<HomeCard home={home} />
+								</Link>
 							</Grid>
 						))}
 					</Grid>

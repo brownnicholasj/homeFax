@@ -1,9 +1,3 @@
-import {
-	UPDATE_USER,
-	UPDATE_HOMES
-} from '../utils/actions';
-
-
 export function pluralize(name, count) {
   if (count === 1) {
     return name;
@@ -19,7 +13,7 @@ export function idbPromise(storeName, method, object) {
       const db = request.result;
       db.createObjectStore('user', { keyPath: '_id' });
       db.createObjectStore('homes', { keyPath: '_id' });
-      // db.createObjectStore('transfers', { keyPath: '_id' });
+      db.createObjectStore('transfers', { keyPath: '_id' });
     };
 
     request.onerror = function(e) {
@@ -49,6 +43,9 @@ export function idbPromise(storeName, method, object) {
         case 'delete':
           store.delete(object._id);
           break;
+        case 'clear':
+          store.clear();
+          break;
         default:
           console.log('No valid method');
           break;
@@ -59,34 +56,27 @@ export function idbPromise(storeName, method, object) {
       };
     };
   });
+};
+
+export async function zipAutoComplete(zip) {
+  const clientKey = '24TxL9GRYiAWdpNYg7zXY65gjY1h39sJTg518kT6EoZLoGfLM95vUbKsQKBrbZmc'
+  if (zip.length == 5 && /^[0-9]+$/.test(zip)) {
+    const url = `https://www.zipcodeapi.com/rest/${clientKey}/info.json/${zip}/radians`;
+    try {
+      console.log(url)
+      const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'https://www.zipcodeapi.com/',
+        },
+        mode: 'cors'
+      });
+      const data = await response.json();
+      console.log(data);
+      return { city: data.city, state: data.state };
+    } catch (err) {
+      console.log(err)
+    }
+  }
 }
 
-export function effectHelper(data, dispatch, loading) {
-  if (data) {
-    dispatch({
-      type: UPDATE_USER,
-      user: data.user,
-    });
-    idbPromise('user', 'put', data.user);
-    dispatch({
-      type: UPDATE_HOMES,
-      homes: data.user.homes,
-    });
-    data.user.homes.forEach((home) => {
-      idbPromise('homes', 'put', home);
-      });
-  } else if (!loading) {
-    idbPromise('user', 'get').then((user) => {
-      dispatch({
-        type: UPDATE_USER,
-        user: user,
-      });
-    });
-    idbPromise('homes', 'get').then((homes) => {
-      dispatch({
-        type: UPDATE_HOMES,
-        homes: homes,
-      });
-    });
-  };
-};

@@ -1,38 +1,26 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { Modal, InputAdornment, IconButton } from '@material-ui/core';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { useState } from 'react';
-import SignUp from '../components/SignUp';
+import React, { useState } from 'react';
+import {
+	Avatar,
+	Button,
+	CssBaseline,
+	TextField,
+	Link,
+	Grid,
+	Typography,
+	Modal,
+	InputAdornment,
+	IconButton,
+	useTheme,
+	makeStyles,
+} from '@material-ui/core';
+import { LockOutlined, Visibility, VisibilityOff } from '@material-ui/icons';
 import { useMutation } from '@apollo/client';
 import Auth from '../utils/auth';
 import { LOGIN } from '../utils/mutations';
 import { useStoreContext } from '../utils/GlobalState';
-import { UPDATE_USER, UPDATE_HOMES } from '../utils/actions';
+import { UPDATE_USER, UPDATE_TRANSFERS } from '../utils/actions';
 import { useHistory } from 'react-router-dom';
-
-function Copyright() {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{'Copyright © '}
-			<Link color="inherit" href="/">
-				HomeFax
-			</Link>{' '}
-			{new Date().getFullYear()}
-			{'.'}
-		</Typography>
-	);
-}
+import SignUp from '../components/SignUp';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -55,18 +43,13 @@ const useStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
-	modal: {
-		width: '50%',
-		justifyContent: 'center',
-		backgroundColor: theme.palette.background.paper,
-		borderRadius: '1rem',
-	},
 }));
 
 export default function SignIn() {
 	const classes = useStyles();
 	const history = useHistory();
 	const [state, dispatch] = useStoreContext();
+	const theme = useTheme();
 
 	const handleOpen = () => {
 		setOpen(true);
@@ -79,9 +62,18 @@ export default function SignIn() {
 	const [open, setOpen] = useState(false);
 
 	const modal = (
-		<div className={classes.modal}>
-			<SignUp></SignUp>
-		</div>
+		<Grid
+			container
+			style={{
+				justifyContent: 'center',
+				backgroundColor: theme.palette.background.paper,
+				borderRadius: '1rem',
+			}}
+		>
+			<Grid item xs={6}>
+				<SignUp></SignUp>
+			</Grid>
+		</Grid>
 	);
 
 	const [formState, setFormState] = useState({
@@ -105,9 +97,9 @@ export default function SignIn() {
 					password: formState.password,
 				},
 			});
-			const { user, token } = mutationResponse.data.login;
+			const { user, token, transfers } = mutationResponse.data.login;
 			dispatch({ type: UPDATE_USER, user });
-
+			dispatch({ type: UPDATE_TRANSFERS, transfers });
 			Auth.login(token);
 			history.push('/home');
 		} catch (e) {
@@ -130,42 +122,42 @@ export default function SignIn() {
 
 			<div className={classes.paper}>
 				<Avatar className={classes.avatar}>
-					<LockOutlinedIcon />
+					<LockOutlined />
 				</Avatar>
-				<Typography component="h1" variant="h5">
+				<Typography component='h1' variant='h5'>
 					Sign in
 				</Typography>
 				<form className={classes.form} noValidate>
 					<TextField
-						variant="outlined"
-						margin="normal"
+						variant='outlined'
+						margin='normal'
 						required
 						fullWidth
-						id="identifier"
-						label="Email/Username"
-						name="identifier"
-						autoComplete="identifier"
+						id='identifier'
+						label='Email/Username'
+						name='identifier'
+						autoComplete='identifier'
 						autoFocus
 						onChange={handleChange}
 					/>
 					<TextField
-						variant="outlined"
-						margin="normal"
+						variant='outlined'
+						margin='normal'
 						required
 						fullWidth
-						name="password"
-						label="Password"
+						name='password'
+						label='Password'
 						// showPassword state defaulted to false, will show text (showing) or password (hidden)
 						type={showPassword ? 'text' : 'password'}
-						id="password"
-						autoComplete="current-password"
+						id='password'
+						autoComplete='current-password'
 						onChange={handleChange}
 						InputProps={{
 							// This is where the toggle button is added.
 							endAdornment: (
-								<InputAdornment position="end">
+								<InputAdornment position='end'>
 									<IconButton
-										aria-label="toggle password visibility"
+										aria-label='toggle password visibility'
 										onClick={handleClickShowPassword}
 										onMouseDown={handleMouseDownPassword}
 									>
@@ -175,40 +167,55 @@ export default function SignIn() {
 							),
 						}}
 					/>
-					<Typography variant="body1" color="error">
+					<Typography variant='body1' color='error'>
 						{formState.errorMsg}
 					</Typography>
 					<br></br>
 					<Button
 						onClick={handleFormSubmit}
-						type="submit"
+						type='submit'
 						fullWidth
-						variant="contained"
-						color="primary"
+						variant='contained'
+						color='primary'
 						className={classes.submit}
 					>
 						Sign In
 					</Button>
-					<Grid container justifyContent="center">
+					<Grid container justifyContent='center'>
 						<Grid item>
-							<Link href="#" variant="body2" onClick={handleOpen}>
+							<Link href='#' variant='body2' onClick={handleOpen}>
 								Or Sign Up
 							</Link>
-							{/* <button type="button" onClick={handleOpen}>
-								Or Sign Up
-							</button> */}
 							<Modal
 								open={open}
 								onClose={handleClose}
-								aria-labelledby="simple-modal-title"
-								aria-describedby="simple-modal-description"
+								aria-labelledby='simple-modal-title'
+								aria-describedby='simple-modal-description'
 								style={{
 									display: 'flex',
 									alignItems: 'center',
 									justifyContent: 'center',
 								}}
 							>
-								{modal}
+								<Grid
+									container
+									style={{
+										justifyContent: 'center',
+										backgroundColor: theme.palette.background.paper,
+										borderRadius: '1rem',
+										maxHeight: '80vh',
+										maxWidth: '650px',
+										overflowY: 'auto',
+									}}
+								>
+									<Grid
+										item
+										style={{ maxHeight: '80vh', overflowY: 'auto' }}
+										xs={12}
+									>
+										<SignUp></SignUp>
+									</Grid>
+								</Grid>
 							</Modal>
 						</Grid>
 					</Grid>

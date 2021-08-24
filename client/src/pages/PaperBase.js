@@ -11,10 +11,13 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Navigator from '../components/Navigator';
 import Header from '../components/Header';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SignIn from '../components/SignIn';
 import { Grid } from '@material-ui/core';
 import Auth from '../utils/auth';
+import { QUERY_TRANSFERS } from '../utils/queries';
+import { useQuery } from '@apollo/client';
+import { useStoreContext } from '../utils/GlobalState';
 
 function Copyright() {
 	return (
@@ -170,13 +173,14 @@ const styles = {
 
 function Paperbase(props) {
 	const { classes, content } = props;
-	const [mobileOpen, setMobileOpen] = React.useState(false);
+	const [mobileOpen, setMobileOpen] = useState(false);
+	const [state, dispatch] = useStoreContext();
+
+	const transferCount = state.transfers.length;
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
 	};
-
-	const [isLoggedIn, setIsLoggedIn] = useState(true);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -196,7 +200,10 @@ function Paperbase(props) {
 					</Hidden>
 				</nav>
 				<div className={classes.app}>
-					<Header onDrawerToggle={handleDrawerToggle} transferCount={0} />
+					<Header
+						onDrawerToggle={handleDrawerToggle}
+						transferCount={transferCount}
+					/>
 					<main className={classes.main}>
 						{Auth.loggedIn() ? (
 							content
