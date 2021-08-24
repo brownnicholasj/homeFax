@@ -218,7 +218,7 @@ function MyHome(props) {
 			});
 
 			if (mutationResponse) {
-				console.log(mutationResponse.data.deleteHome._id);
+				// console.log(mutationResponse.data.deleteHome._id);
 				const stateHome = mutationResponse.data.deleteHome._id;
 				dispatch({ type: REMOVE_HOME_FROM_USER, home: stateHome });
 				history.push('/home');
