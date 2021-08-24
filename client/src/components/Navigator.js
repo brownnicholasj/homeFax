@@ -4,15 +4,18 @@ import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
+import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
+import DescriptionIcon from '@material-ui/icons/Description';
 import PermMediaOutlinedIcon from '@material-ui/icons/PhotoSizeSelectActual';
 import { Link } from 'react-router-dom';
 import Auth from '../utils/auth';
+import GenerateReport from './Report';
 
 const token = null;
 
@@ -55,6 +58,17 @@ const styles = (theme) => ({
 	},
 	divider: {
 		marginTop: theme.spacing(2),
+	},
+	button: {
+		'fontSize': 'inherit',
+		'paddingTop': 1,
+		'paddingBottom': 1,
+		'color': 'rgba(255, 255, 255, 0.7)',
+		'&:hover,&:focus': {
+			backgroundColor: 'rgba(255, 255, 255, 0.08)',
+		},
+		'marginLeft': theme.spacing(1),
+		'marginTop': theme.spacing(2),
 	},
 });
 const categories = [
@@ -138,6 +152,11 @@ function Navigator(props) {
 							))}
 
 							<Divider className={classes.divider} />
+
+							<Button onClick={GenerateReport} className={clsx(classes.button)}>
+								<DescriptionIcon className={classes.itemIcon} />
+								Generate Report
+							</Button>
 						</React.Fragment>
 					) : null
 				)}
