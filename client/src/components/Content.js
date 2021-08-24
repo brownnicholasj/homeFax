@@ -55,7 +55,7 @@ function Content(props) {
 		let formattedData = [];
 		for (let i = 0; i < data.length; i++) {
 			formattedData.push({
-				text: `Area -- ${data[i].name}`,
+				text: `${data[i].name}`,
 				style: 'areaHeader',
 				margin: [5, 2, 0, 0],
 			});
@@ -63,14 +63,14 @@ function Content(props) {
 				formattedData.push({
 					text: `${data[i].attributes[j].type}`,
 					style: 'attributeHeader',
-					margin: [20, 2, 0, 0],
+					margin: [25, 2, 0, 0],
 				});
 				for (let k = 0; k < data[i].attributes[j].detail.length; k++) {
 					if (data[i].attributes[j].detail[k].date) {
 						formattedData.push({
 							text: `${data[i].attributes[j].detail[k].date}`,
 							style: 'detailDate',
-							margin: [20, 2, 0, 0],
+							margin: [50, 2, 0, 0],
 						});
 					}
 					formattedData.push({
@@ -78,15 +78,17 @@ function Content(props) {
 							{
 								text: `${data[i].attributes[j].detail[k].key}:`,
 								bold: true,
-								alignment: 'right',
+								alignment: 'left',
+								color: 'white',
+								background: 'black',
 							},
-							'\n',
+
 							{
-								text: `${data[i].attributes[j].detail[k].value}`,
+								text: `  ${data[i].attributes[j].detail[k].value}`,
 								style: 'detailValue',
-								margin: [20, 2, 20, 2],
 							},
 						],
+						margin: [75, 2, 0, 2],
 					});
 				}
 			}
@@ -115,21 +117,23 @@ function Content(props) {
 					alignment: 'left',
 				},
 				areaHeader: {
-					fontSize: 14,
+					fontSize: 16,
 					alignment: 'left',
 					bold: true,
+					background: '#AAB7B8',
 				},
 				attributeHeader: {
-					fontSize: 14,
-					alignment: 'center',
+					fontSize: 16,
+					alignment: 'left',
+					background: '#D5DBDB',
 				},
 				detailDate: {
 					fontSize: 12,
-					alignment: 'right',
+					alignment: 'left',
 				},
 				detailValue: {
 					fontSize: 12,
-					alignment: 'right',
+					alignment: 'left',
 				},
 			},
 			content: [
