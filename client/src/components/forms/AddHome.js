@@ -14,6 +14,7 @@ import { useMutation } from '@apollo/client';
 import { ADD_HOME, TRANSFER_HOME } from '../../utils/mutations';
 import { useStoreContext } from '../../utils/GlobalState';
 import { ADD_HOME_TO_USER } from '../../utils/actions';
+import Auth from '../../utils/auth';
 
 const unitedStates = [
 	{
@@ -306,9 +307,10 @@ export default function AddHome({ userId, handleNext, setHomeData }) {
 					const stateHome = mutationResponse.data.addHome;
 					dispatch({ type: ADD_HOME_TO_USER, home: stateHome });
 					setHomeData(stateHome);
+					const userEmail = Auth.getProfile().data.email
 					const user = await assignHome({
 						variables: {
-							receiver: state.user.email,
+							receiver: userEmail,
 							home: stateHome._id,
 						},
 					});
