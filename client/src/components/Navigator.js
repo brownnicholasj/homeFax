@@ -56,6 +56,17 @@ const styles = (theme) => ({
 	divider: {
 		marginTop: theme.spacing(2),
 	},
+	button: {
+		'fontSize': 'inherit',
+		'paddingTop': 1,
+		'paddingBottom': 1,
+		'color': 'rgba(255, 255, 255, 0.7)',
+		'&:hover,&:focus': {
+			backgroundColor: 'rgba(255, 255, 255, 0.08)',
+		},
+		'marginLeft': theme.spacing(1),
+		'marginTop': theme.spacing(2),
+	},
 });
 const categories = [
 	{
