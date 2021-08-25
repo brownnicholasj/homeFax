@@ -103,7 +103,7 @@ export default function SignIn() {
 			Auth.login(token);
 			history.push('/home');
 		} catch (e) {
-			setFormState({ errorMsg: 'Incorrect Credentials' });
+			setFormState({ ...formState, errorMsg: 'Incorrect Credentials' });
 			console.log(e);
 		}
 	};

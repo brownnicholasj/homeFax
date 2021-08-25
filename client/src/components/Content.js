@@ -41,7 +41,7 @@ function Content(props) {
 
 	const [state] = useStoreContext();
 
-	const homeData = state.user.homes[0];
+	const homeData = state.user.homes;
 	const areaData = homeData.areas;
 	const addressData = homeData.address;
 	const _formatAddress = (data) => {
@@ -53,43 +53,58 @@ function Content(props) {
 	};
 	const _formatArea = (data) => {
 		let formattedData = [];
-		for (let i = 0; i < data.length; i++) {
-			formattedData.push({
-				text: `${data[i].name}`,
-				style: 'areaHeader',
-				margin: [5, 2, 0, 0],
-			});
-			for (let j = 0; j < data[i].attributes.length; j++) {
+		console.log(data);
+		for (let a = 0; a < data.length; a++) {
+			formattedData.push([
+				{ text: data[a].address.street1, style: 'address' },
+				{ text: data[a].address.street2, style: 'address' },
+				{
+					text: `${data[a].address.city}, ${data[a].address.state}, ${data[a].address.zip}`,
+					style: 'address',
+				},
+			]);
+			for (let i = 0; i < data[a].areas.length; i++) {
 				formattedData.push({
-					text: `${data[i].attributes[j].type}`,
-					style: 'attributeHeader',
-					margin: [25, 2, 0, 0],
+					text: `${data[a].areas[i].name}`,
+					style: 'areaHeader',
+					margin: [5, 2, 0, 0],
 				});
-				for (let k = 0; k < data[i].attributes[j].detail.length; k++) {
-					if (data[i].attributes[j].detail[k].date) {
+				for (let j = 0; j < data[a].areas[i].attributes.length; j++) {
+					formattedData.push({
+						text: `${data[a].areas[i].attributes[j].type}`,
+						style: 'attributeHeader',
+						margin: [25, 2, 0, 0],
+					});
+					for (
+						let k = 0;
+						k < data[a].areas[i].attributes[j].detail.length;
+						k++
+					) {
+						if (data[a].areas[i].attributes[j].detail[k].date) {
+							formattedData.push({
+								text: `${data[a].areas[i].attributes[j].detail[k].date}`,
+								style: 'detailDate',
+								margin: [50, 2, 0, 0],
+							});
+						}
 						formattedData.push({
-							text: `${data[i].attributes[j].detail[k].date}`,
-							style: 'detailDate',
-							margin: [50, 2, 0, 0],
+							text: [
+								{
+									text: `${data[a].areas[i].attributes[j].detail[k].key}:`,
+									bold: true,
+									alignment: 'left',
+									color: 'white',
+									background: 'black',
+								},
+
+								{
+									text: `  ${data[a].areas[i].attributes[j].detail[k].value}`,
+									style: 'detailValue',
+								},
+							],
+							margin: [75, 2, 0, 2],
 						});
 					}
-					formattedData.push({
-						text: [
-							{
-								text: `${data[i].attributes[j].detail[k].key}:`,
-								bold: true,
-								alignment: 'left',
-								color: 'white',
-								background: 'black',
-							},
-
-							{
-								text: `  ${data[i].attributes[j].detail[k].value}`,
-								style: 'detailValue',
-							},
-						],
-						margin: [75, 2, 0, 2],
-					});
 				}
 			}
 		}
@@ -100,8 +115,8 @@ function Content(props) {
 		const { vfs } = vfsFonts.pdfMake;
 		pdfMake.vfs = vfs;
 
-		const homeAddress = _formatAddress(addressData);
-		const homeArea = _formatArea(areaData);
+		// const homeAddress = _formatAddress(homeData);
+		const homeArea = _formatArea(homeData);
 
 		const documentDefinition = {
 			pageSize: 'A4',
@@ -139,7 +154,7 @@ function Content(props) {
 			content: [
 				{ text: 'HomeFax Report', style: 'header' },
 				'\n',
-				homeAddress,
+				// homeAddress,
 				'\n',
 				homeArea,
 			],
