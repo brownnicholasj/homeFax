@@ -42,6 +42,9 @@ import EditAttribute from '../components/forms/EditAttribute';
 import EditDetail from '../components/forms/EditDetail';
 import SettingsIcon from '@material-ui/icons/Settings';
 import EditArea from '../components/forms/EditArea';
+import DescriptionIcon from '@material-ui/icons/Description';
+import pdfMake from 'pdfmake/build/pdfmake';
+import vfsFonts from 'pdfmake/build/vfs_fonts';
 
 import { useStoreContext } from '../utils/GlobalState';
 import { UPDATE_HOME, REMOVE_HOME_FROM_USER } from '../utils/actions';
@@ -228,6 +231,108 @@ function MyHome(props) {
 		}
 	};
 
+	const homeData = home.home;
+
+	const _formatArea = (data) => {
+		let formattedData = [];
+		formattedData.push([
+			{ text: data.address.street1, style: 'address' },
+			{ text: data.address.street2, style: 'address' },
+			{
+				text: `${data.address.city}, ${data.address.state}, ${data.address.zip}`,
+				style: 'address',
+			},
+		]);
+		for (let i = 0; i < data.areas.length; i++) {
+			formattedData.push({
+				text: `${data.areas[i].name}`,
+				style: 'areaHeader',
+				margin: [5, 2, 0, 0],
+			});
+			for (let j = 0; j < data.areas[i].attributes.length; j++) {
+				formattedData.push({
+					text: `${data.areas[i].attributes[j].type}`,
+					style: 'attributeHeader',
+					margin: [25, 2, 0, 0],
+				});
+				for (let k = 0; k < data.areas[i].attributes[j].detail.length; k++) {
+					if (data.areas[i].attributes[j].detail[k].date) {
+						formattedData.push({
+							text: `${data.areas[i].attributes[j].detail[k].date}`,
+							style: 'detailDate',
+							margin: [50, 2, 0, 0],
+						});
+					}
+					formattedData.push({
+						text: [
+							{
+								text: `${data.areas[i].attributes[j].detail[k].key}:`,
+								bold: true,
+								alignment: 'left',
+								color: 'white',
+								background: 'black',
+							},
+
+							{
+								text: `  ${data.areas[i].attributes[j].detail[k].value}`,
+								style: 'detailValue',
+							},
+						],
+						margin: [75, 2, 0, 2],
+					});
+				}
+			}
+		}
+
+		return formattedData;
+	};
+
+	function GenerateReport() {
+		const { vfs } = vfsFonts.pdfMake;
+		pdfMake.vfs = vfs;
+
+		// const homeAddress = _formatAddress(homeData);
+		const homeArea = _formatArea(homeData);
+
+		const documentDefinition = {
+			pageSize: 'A4',
+			pageOrientation: 'portrait',
+			styles: {
+				header: {
+					fontSize: 22,
+					bold: true,
+					alignment: 'center',
+				},
+				address: {
+					fontSize: 16,
+					alignment: 'left',
+				},
+				areaHeader: {
+					fontSize: 16,
+					alignment: 'left',
+					bold: true,
+					background: '#AAB7B8',
+				},
+				attributeHeader: {
+					fontSize: 16,
+					alignment: 'left',
+					background: '#D5DBDB',
+				},
+				detailDate: {
+					fontSize: 12,
+					alignment: 'left',
+				},
+				detailValue: {
+					fontSize: 12,
+					alignment: 'left',
+				},
+			},
+			content: [{ text: 'HomeFax Report', style: 'header' }, '\n', homeArea],
+		};
+
+		pdfMake.createPdf(documentDefinition).open();
+	}
+
 	return (
 		<React.Fragment>
 			{loading ? (
@@ -251,6 +356,15 @@ function MyHome(props) {
 										</Typography>
 									</Grid>
 								</Grid>
+								<Button
+									onClick={GenerateReport}
+									variant='contained'
+									color='primary'
+									startIcon={<DescriptionIcon />}
+									className={classes.button}
+								>
+									Generate Report
+								</Button>
 							</Grid>
 
 							{home.home?.areas.map((area, i) => (
@@ -267,7 +381,9 @@ function MyHome(props) {
 														onClick={() => {
 															handleExpandClick(i);
 														}}
->														<ExpandLessIcon></ExpandLessIcon>
+													>
+														{' '}
+														<ExpandLessIcon></ExpandLessIcon>
 													</IconButton>
 												)
 											}
