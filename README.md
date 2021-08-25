@@ -6,6 +6,8 @@
 
 Homefax is an application designed to help homeowners keep updated records of their homes and all maintenance involved.
 
+https://homefax.herokuapp.com/
+
 ## User Stories
 
 - AS A Home Owner/Renter, I want to log and retrieve details of the home
@@ -16,16 +18,10 @@ Homefax is an application designed to help homeowners keep updated records of th
 
 ## Table of Contents
 
-- [Installation](#installation)
 - [Usage](#usage)
 - [Contributions](#contributions)
-- [Testing Information](#testing)
 - [License](#license)
 - [Questions](#questions)
-
-## Installation
-
-User only needs a working browser to use this application. If the user wishes, they can download the application as a working PWA.
 
 ## Usage
 
@@ -72,10 +68,6 @@ Bryan Barnes
 Eddie Reed
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](code_of_conduct.md)
-
-## Testing
-
-No tests are necessary at the moment.
 
 ## License
 
